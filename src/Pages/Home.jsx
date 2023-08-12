@@ -1,30 +1,31 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../FirebaseConfig/firebaseConfig";
 import { useState, useEffect } from "react";
+import Car from "../Components/Home/Car";
 
 const Home = () => {
-  const [licenses, setLicenses] = useState([]);
+  const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const licensesRef = collection(db, "licenses");
+  const carsRef = collection(db, "cars");
 
-  const getLicenses = async () => {
+  const getCars = async () => {
     try {
-      const querySnapshot = await getDocs(licensesRef);
-      const licencesData = querySnapshot.docs.map((doc) => ({
+      const querySnapshot = await getDocs(carsRef);
+      const carsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setLoading(false);
-      setLicenses(licencesData);
+      setCars(carsData);
     } catch (error) {
       setLoading(false);
-      console.error("Error fetching licenses: ", error);
+      console.error("Error fetching cars: ", error);
     }
   };
 
   useEffect(() => {
-    getLicenses();
+    getCars();
   }, []);
 
   if (loading) {
@@ -38,14 +39,8 @@ const Home = () => {
   return (
     <div className="home-container">
       <main className="home-main">
-        {licenses.map((license) => (
-          <div className="card" key={license.id}>
-            <h4>License Number: {license.licenseNumber}</h4>
-            <p>Issue Date: {license.issueDate}</p>
-            <p>Expiry Date: {license.expiryDate}</p>
-            <p>License Type: {license.licenseType}</p>
-            <p>Price: {license.price}</p>
-          </div>
+        {cars.map((car) => (
+          <Car key={car.id} details={car} />
         ))}
       </main>
     </div>

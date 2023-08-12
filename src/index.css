@@ -54,6 +54,7 @@ body {
 
 img {
   display: block;
+  object-fit: cover;
 }
 /* VARIABLES */
 :root {
@@ -258,6 +259,46 @@ img {
 /*|||||||| Start Home PAGE |||||||||| */
 
 .home-container {
+  display: flex;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+@media screen and (min-width: 670px) {
+  .home-main {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+.car-card {
+  background-color: white;
+  color: #000;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(9, 1, 28, 0.1);
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 320px; /* You can adjust this for the desired card width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.car-image {
+  margin: 0.5rem 0;
+  width: 250px;
+  height: 250px;
+  object-fit: cover; /* To ensure the image covers the given width and height */
+}
+
+/* .home-container {
   flex: 1;
   color: #000;
   background-color: whitesmoke;
@@ -265,7 +306,7 @@ img {
 }
 .home-main {
   min-height: 100vh;
-}
+} */
 
 /*|||||||| End Home PAGE |||||||||| */
 
@@ -326,10 +367,107 @@ img {
   box-shadow: inset 0 -3px 0 var(--COLOR-HOVER); /* underline effect for active tab */
 }
 
-.tabs-content {
+/* .tabs-content {
   width: 100%;
   padding: 2px;
   background-color: whitesmoke;
+} */
+
+.tabs-content {
+  flex: 1;
+}
+
+.listing-car-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+@media screen and (min-width: 670px) {
+  .listing-car-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.listing-car-card {
+  background-color: transparent;
+  color: #000;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(9, 1, 28, 0.1);
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Adds spacing between elements inside the card */
+}
+
+.listing-car-card img {
+  border-radius: 0px; /* Make the image corners rounded */
+}
+
+/* If you want to set specific styles for other elements inside the card, you can target them like this: */
+
+.listing-car-card h4 {
+  /* styles for the car name */
+}
+
+.listing-car-card p {
+  /* styles for the description and other paragraphs */
+}
+
+.upload-form-container {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  max-width: 700px;
+  padding: 20px;
+  margin: 0.5rem auto;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds a light shadow for better depth */
+  border-radius: 10px; /* Optional: adds rounded corners to the container */
+}
+
+.upload-form-container input,
+.upload-form-container textarea,
+.upload-form-container button {
+  margin-bottom: 15px; /* Adds a gap between form fields */
+  padding: 10px; /* Makes the input, textarea, and button larger and more clickable */
+  border: 1px solid #e1e1e1; /* Gives a border to distinguish the form fields */
+  border-radius: 5px; /* Optional: Rounded corners for the input fields and button */
+}
+
+.upload-form-container button {
+  background-color: #007bff; /* Gives a blue background color to the button */
+  color: white; /* Text color of the button */
+  cursor: pointer; /* Changes cursor to hand icon when hovering over button */
+}
+
+.upload-form-container button:hover {
+  background-color: #0056b3; /* Darkens the button on hover for better user feedback */
+}
+
+.spinner-upload-form {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3; /* Light color for the spinner border */
+  border-top: 3px solid #007bff; /* Blue color for the top of the spinner */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .profile-section {
