@@ -31,7 +31,8 @@ const UploadForm = () => {
     setIsSubmitting(true);
 
     // First, we upload the image
-    const storageRef = ref(storage, "car_images/" + image.name);
+    // const storageRef = ref(storage, "car_images/" + image.name);
+    const storageRef = ref(storage, `car_images/${user.uid}/${image.name}`);
     const uploadTask = uploadBytesResumable(storageRef, image);
 
     uploadTask.on(
