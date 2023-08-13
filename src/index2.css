@@ -41,7 +41,8 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  color: var(--color);
+  color: var(--COLOR-PRIMARY);
+  background-color: var(--BG-PRIMARY);
 }
 
 .navbar,
@@ -58,11 +59,56 @@ img {
 }
 /* VARIABLES */
 :root {
-  --BG-PRIMARY: whitesmoke;
-  --COLOR-PRIMARY: #000;
-  --COLOR-HOVER: hsla(267, 61%, 13%, 0.902);
-  --BGCOLOR: hsla(242, 86%, 8%, 0.902);
-  --color: #f5f5f5;
+  /* colors */
+  --primary-100: #e2e0ff;
+  --primary-200: #c1beff;
+  --primary-300: #a29dff;
+  --primary-400: #837dff;
+  --primary-500: #645cff;
+  --primary-600: #504acc;
+  --primary-700: #3c3799;
+  --primary-800: #282566;
+  --primary-900: #141233;
+
+  /* grey */
+  --grey-50: #f8fafc;
+  --grey-100: #f1f5f9;
+  --grey-200: #e2e8f0;
+  --grey-300: #cbd5e1;
+  --grey-400: #94a3b8;
+  --grey-500: #64748b;
+  --grey-600: #475569;
+  --grey-700: #334155;
+  --grey-800: #1e293b;
+  --grey-900: #0f172a;
+  /* rest of the colors */
+  --black: #222;
+  --white: #fff;
+  --red-light: #f8d7da;
+  --red-dark: #842029;
+  --green-light: #d1e7dd;
+  --green-dark: #0f5132;
+  --whitesmoke: #f5f5f5;
+
+  --small-text: 0.875rem;
+  --extra-small-text: 0.7em;
+  /* rest of the vars */
+  --backgroundColor: var(--grey-50);
+  --textColor: var(--grey-900);
+  --borderRadius: 0px;
+  --letterSpacing: 0.25rem;
+  --transition: 0.3s ease-in-out all;
+  --max-width: 1120px;
+  --fixed-width: 800px;
+  --view-width: 90vw;
+  /* box shadow*/
+  --shadow-1: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /*||||||||||||||||Start Navbar|||||||||||||||||||*/
@@ -112,7 +158,7 @@ img {
 }
 
 .list-item:hover {
-  opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* Position the burger menu to the top right */
@@ -157,7 +203,7 @@ img {
   margin-bottom: 0.25rem;
 }
 .navbar-link :hover {
-  opacity: 0.8;
+  text-decoration: underline;
 }
 /* Adjust list items for better visibility and interaction in mobile view */
 .list-item {
@@ -227,9 +273,6 @@ img {
   align-items: center; /* Vertically centering the name with the avatar */
   cursor: pointer;
 }
-.user-info :hover {
-  opacity: 0.8;
-}
 
 /* Google SignIn button styling to make it more consistent with the navbar */
 .google-btn {
@@ -262,25 +305,17 @@ img {
 /*|||||||| Start Home PAGE |||||||||| */
 
 .home-container {
-  /* display: flex; */
+  display: flex;
   min-height: 100vh;
+  padding: 2rem 0;
 }
 
 .home-main {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-
-  width: 100%;
-}
-.test-div-home {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  height: 7rem;
-  color: black;
-  border: 1px hsla(0, 0%, 7%, 0.09) solid;
+  width: 100%;
 }
 @media screen and (min-width: 670px) {
   .home-main {
@@ -290,30 +325,23 @@ img {
 }
 .car-card {
   background-color: white;
-  overflow: hidden;
-  color: var(--COLOR-PRIMARY);
+  color: #000;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(9, 1, 28, 0.1);
   margin: 0.5rem;
-  padding: 0.25rem;
-  height: 20rem;
-  width: 250px;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 320px; /* You can adjust this for the desired card width */
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-
-.card-title {
-  text-transform: uppercase;
-  text-align: center;
+  align-items: center;
 }
 
 .car-image {
-  width: 100%;
-  height: 10rem;
-}
-.car-image :hover {
-  zoom: 10%;
+  margin: 0.5rem 0;
+  width: 250px;
+  height: 250px;
+  object-fit: cover; /* To ensure the image covers the given width and height */
 }
 
 /* .home-container {
@@ -340,7 +368,7 @@ img {
 /*|||||||| Start PROFILE PAGE |||||||||| */
 .profile-container {
   flex: 1;
-  color: var(--COLOR-PRIMARY);
+  color: #000;
   background-color: whitesmoke;
   min-height: 70vh;
 }
@@ -369,22 +397,20 @@ img {
   padding: 8px;
   margin-bottom: 10px;
   border-radius: 2px;
-  border: 1px solid rgb(182, 180, 180);
-  background-color: whitesmoke;
-  color: var(--COLOR-PRIMARY); /* default text color */
+  background-color: var(--COLOR-PRIMARY);
+  color: var(--color); /* default text color */
   transition: background-color 0.3s, color 0.3s; /* transition effect for both color and background-color */
 }
 
 .tab:hover {
-  background-color: var(
-    --COLOR-PRIMARY
-  ); /* slightly darker shade when hovered */
+  background-color: var(--COLOR-HOVER); /* slightly darker shade when hovered */
   color: whitesmoke;
 }
 
 .active-tab {
-  background-color: var(--COLOR-PRIMARY);
+  background-color: hsl(60, 91%, 18%);
   color: whitesmoke;
+  box-shadow: inset 0 -3px 0 var(--COLOR-HOVER); /* underline effect for active tab */
 }
 
 /* .tabs-content {
@@ -413,36 +439,33 @@ img {
 }
 
 .listing-car-card {
-  background-color: white;
-  overflow: hidden;
-  color: var(--COLOR-PRIMARY);
+  background-color: transparent;
+  color: #000;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(9, 1, 28, 0.1);
   margin: 0.5rem;
-  padding: 0.25rem;
-  height: 20rem;
-  width: 250px;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-.listing-car-title {
-  text-align: center;
-  text-transform: uppercase;
+  align-items: center;
+  gap: 1rem; /* Adds spacing between elements inside the card */
 }
 
 .listing-car-card img {
-  width: 100%;
-  height: 10rem;
+  border-radius: 0px; /* Make the image corners rounded */
 }
 
 /* If you want to set specific styles for other elements inside the card, you can target them like this: */
 
-/* .listing-car-card h4 {
+.listing-car-card h4 {
   /* styles for the car name */
+}
 
-/* .listing-car-card p {
+.listing-car-card p {
   /* styles for the description and other paragraphs */
+}
 
 .upload-form-container {
   display: flex;
@@ -541,7 +564,7 @@ img {
   max-width: 30rem;
   height: 80vh;
   max-height: 25rem;
-  border: transparent;
+  border: 1px solid var(--COLOR-PRIMARY);
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
@@ -552,7 +575,6 @@ img {
 }
 .login-main h1 {
   padding: 0.25rem;
-  color: var(--COLOR-PRIMARY);
 }
 
 .login-inputs {
@@ -774,7 +796,6 @@ img {
 
 .loading-container {
   min-height: 100vh;
-  background-color: whitesmoke;
 }
 
 @keyframes spinner {
@@ -786,9 +807,9 @@ img {
 .loading {
   width: 6rem;
   height: 6rem;
-  border: 5px solid lightgray;
+  border: 5px solid var(--COLOR-PRIMARY);
   border-radius: 50%;
-  border-top-color: darkorange;
+  border-top-color: red;
   animation: spinner 0.6s linear infinite;
   margin: 3rem auto;
 }

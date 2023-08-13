@@ -38,8 +38,12 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      <div className="test-div-home">
+        <h1>filter categories</h1>
+        <p>sub heading</p>
+      </div>
       <main className="home-main">
-        {cars.map((car) => (
+        {cars?.map((car) => (
           <Car key={car.id} details={car} />
         ))}
       </main>

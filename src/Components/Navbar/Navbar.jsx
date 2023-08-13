@@ -62,16 +62,18 @@ const Navbar = () => {
 
           {user.name ? (
             <>
-              <div className="navbar-link">
+              {/* <div className="navbar-link">
                 <Link to={`/${user.uid}`}>კაბინეტი</Link>
-              </div>
+              </div> */}
               <li className="user-info">
                 <img
                   src={user?.avatar || { DefaultAvatar }}
                   alt="User Avatar"
                   className="user-avatar"
                 />
-                <span>{user.name}</span>
+                <Link to={`/${user.uid}`}>
+                  <span>{user.name}</span>
+                </Link>
               </li>
               <li onClick={signOut} className="sign-out-btn">
                 Sign Out

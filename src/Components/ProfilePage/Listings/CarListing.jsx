@@ -3,7 +3,7 @@ import React from "react";
 const CarListing = ({ car }) => {
   return (
     <div className="listing-car-card">
-      <h4>{car.carName}</h4>
+      <h4 className="listing-car-title">{car.carName}</h4>
       <img width={250} height={250} src={car.imageUrl} alt={car.carName} />
       <p>
         <strong>Description:</strong> {car.description}
