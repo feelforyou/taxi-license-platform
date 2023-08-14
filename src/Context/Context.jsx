@@ -10,6 +10,7 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   GoogleAuthProvider,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 
 const GlobalContext = createContext();
@@ -23,6 +24,22 @@ const AppContext = ({ children }) => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  //email and password sign in
+  const signInEmailPassword = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      return user;
+    } catch (error) {
+      console.error("Error signing in with email/password:", error);
+      throw error; // Optionally throw the error to handle it on the UI side
+    }
+  };
 
   const googleProvider = new GoogleAuthProvider();
   googleProvider.setCustomParameters({ prompt: "select_account" });
@@ -67,6 +84,7 @@ const AppContext = ({ children }) => {
   const value = {
     user,
     signInWithGoogle,
+    signInEmailPassword,
     isLoading,
     isAuthenticated,
   };
