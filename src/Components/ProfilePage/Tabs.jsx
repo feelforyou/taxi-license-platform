@@ -4,11 +4,11 @@ import Listings from "./Listings/Listings";
 import UploadForm from "./UploadForm/UploadForm";
 
 function Tabs() {
-  const [activeTab, setActiveTab] = useState("listings"); // default to 'myprofile' tab
+  const [activeTab, setActiveTab] = useState("upload"); // default to 'myprofile' tab
 
   return (
     <div className="tabs-container">
-      <div className="tabs-sidebar">
+      <div className="tabs-bar">
         <div
           className={`tab ${activeTab === "listings" ? "active-tab" : ""}`}
           onClick={() => setActiveTab("listings")}

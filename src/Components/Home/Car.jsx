@@ -9,21 +9,19 @@ const Car = ({ details }) => {
         alt={details?.carName}
         className="car-image"
       />
-      <p>
-        <strong></strong> {details?.description}
-      </p>
-      <p>
-        <strong>Tel:</strong> {details?.phoneNumber}
-      </p>
-      <p>
-        <strong>Daily Rent:</strong> {details?.price}
-      </p>
-      <p>
-        <strong></strong> {details?.carType}
-      </p>
-      <p>
-        <strong></strong> {details?.location}
-      </p>
+      {details?.description && <p>{details?.description}</p>}
+      {details?.phoneNumber && (
+        <p>
+          <strong>Tel:</strong> {details?.phoneNumber}
+        </p>
+      )}
+      {details?.price && (
+        <p>
+          <strong>Daily Rent:</strong> {details?.price}
+        </p>
+      )}
+      {details?.carType && <p>{details?.carType}</p>}
+      {details?.location && <p>{details?.location}</p>}
     </div>
   );
 };

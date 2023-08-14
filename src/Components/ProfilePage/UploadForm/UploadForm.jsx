@@ -1,7 +1,7 @@
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
 import { storage } from "../../../FirebaseConfig/firebaseConfig";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useGlobalContext } from "../../../Context/Context";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -17,6 +17,8 @@ const UploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useGlobalContext();
 
+  const fileInputRef = useRef();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -28,11 +30,12 @@ const UploadForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const fileExtension = image.name.split(".").pop(); // Extracts 'jpg' or 'png' or any other extension
     const filenameWithoutExtension = image.name
       .split(".")
       .slice(0, -1)
       .join(".");
-    const resizedFilename = `${filenameWithoutExtension}_800x600.jpg`;
+    const resizedFilename = `${filenameWithoutExtension}_800x600.${fileExtension}`; // Maintain the original extension
 
     const storageRef = ref(storage, `car_images/${user.uid}/${image.name}`);
     const uploadTask = uploadBytesResumable(storageRef, image);
@@ -43,7 +46,10 @@ const UploadForm = () => {
       (error) => {
         console.error("Error uploading image: ", error);
       },
-      () => {
+      async () => {
+        // Adding a delay to give Firebase Extension time to resize the image
+        await new Promise((res) => setTimeout(res, 5000)); // 5 seconds delay
+
         const resizedImageRef = ref(
           storage,
           `car_images/${user.uid}/${resizedFilename}`
@@ -69,6 +75,12 @@ const UploadForm = () => {
             setCarType("");
             setLocation("");
             setImage(null);
+            if (fileInputRef.current) {
+              // I had to reset file input manually,
+              //issue is likely with the file input's internal state, not with the React state.
+              //The file input retains its selected file unless explicitly cleared.
+              fileInputRef.current.value = "";
+            }
           } catch (error) {
             console.error("Error adding car: ", error);
           } finally {
@@ -82,43 +94,59 @@ const UploadForm = () => {
   return (
     <form className="upload-form-container" onSubmit={handleAddCar}>
       <input
+        required
         type="text"
         placeholder="Car Name"
         value={carName}
         onChange={(e) => setCarName(e.target.value)}
       />
       <textarea
+        required
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       ></textarea>
       <input
+        required
         type="text"
         placeholder="Phone Number"
         value={phoneNumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
       />
       <input
+        required
         type="text"
         placeholder="Price per day (e.g. $100)"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />
       <input
+        required
         type="text"
         placeholder="Car Type (e.g. Sedan, SUV)"
         value={carType}
         onChange={(e) => setCarType(e.target.value)}
       />
       <input
+        required
         type="text"
         placeholder="Location"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
       />
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input
+        required
+        ref={fileInputRef}
+        type="file"
+        accept=".jpg, .jpeg, .png"
+        onChange={handleImageChange}
+      />
       <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Submitting..." : "Add Car"}
+        {isSubmitting ? (
+          <span className="spinner-upload-form"></span>
+        ) : (
+          "Add Car"
+        )}
       </button>
     </form>
   );
@@ -242,12 +270,8 @@ export default UploadForm;
 //       />
 //       <input type="file" accept="image/*" onChange={handleImageChange} />
 //       <button type="submit" disabled={isSubmitting}>
-//         {isSubmitting ? (
-//           <span className="spinner-upload-form"></span>
-//         ) : (
-//           "Add Car"
-//         )}
-//       </button>
+// {isSubmitting ? "Submitting..." : "Add Car"}
+// </button>
 //     </form>
 //   );
 // };
