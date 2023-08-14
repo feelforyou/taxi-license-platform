@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { GoogleSignIn } from "../Data/data";
 import { useGlobalContext } from "../Context/Context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -33,7 +33,10 @@ const LogIn = () => {
         </div>
 
         <button className="login-btn">Log In</button>
-        <button className="register-btn">Register</button>
+
+        <Link className="link-wrapper" to="/signup">
+          <button className="register-btn">Register</button>
+        </Link>
 
         <div className="google-btn" onClick={handleSignIn}>
           <GoogleSignIn />

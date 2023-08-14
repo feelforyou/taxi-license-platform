@@ -525,7 +525,6 @@ strong {
 
 /*START LOGIN PAGE*/
 .login-container {
-  flex: 1;
   color: #000;
   background-color: whitesmoke;
   min-height: 70vh;
@@ -582,10 +581,24 @@ strong {
 .register-btn:hover {
   opacity: 0.8;
 }
+.link-wrapper {
+  text-decoration: none; /* Removes the underline */
+  color: inherit; /* Inherits the color of its child, no blue link color */
+  display: inline-block; /* Allows width and height properties, if needed */
+  width: 80%;
+  background: none; /* No background for the link */
+  padding: 0; /* No padding */
+  margin: 0; /* No margin */
+  border: none; /* No border */
+  font: inherit; /* Inherits the font properties from its child or parent */
+  cursor: pointer; /* Pointer cursor, like a typical button or link */
+  line-height: normal;
+}
 
 .register-btn {
   background-color: #f0f0f0;
   color: var(--COLOR-PRIMARY);
+  width: 100%;
 }
 
 .google-btn {
@@ -597,9 +610,65 @@ strong {
 /*START SIGNUP PAGE*/
 .signup-container {
   color: #000;
-  background-color: whitesmoke;
   min-height: 70vh;
 }
+
+.signup-container-main {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.signup-input-group {
+  margin-bottom: 15px;
+}
+
+.signup-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.signup-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.signup-btn :hover {
+  opacity: 0.2;
+}
+
+.signup-error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+.signup-success-message {
+  color: green;
+  margin-bottom: 10px;
+}
+
 /*END SIGNUP PAGE*/
 
 /*START ERROR PAGE*/
