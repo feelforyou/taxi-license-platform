@@ -5,7 +5,9 @@ import { BiNetworkChart } from "react-icons/bi";
 import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import DefaultImage from "../../src/assets/default.png";
+import { FiUserCheck } from "react-icons/fi";
+import { HiUserCircle } from "react-icons/hi";
+import { BsFillTaxiFrontFill } from "react-icons/bs";
 
 export const links = [
   { id: "1", title: "მთავარი", url: "/" },
@@ -22,4 +24,6 @@ export const FooterIcon = BiNetworkChart;
 export const FaceBookIcon = FaFacebook;
 export const TwitterIcon = FaTwitter;
 export const InstagramIcon = FaInstagram;
-export const DefaultAvatar = DefaultImage;
+export const UserAvatar = FiUserCheck;
+export const ProfileAvatar = HiUserCircle;
+export const NavLogo = BsFillTaxiFrontFill;

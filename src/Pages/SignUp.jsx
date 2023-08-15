@@ -34,6 +34,7 @@ const SignUp = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       signOut(auth);
+
       setSignupSuccess(true); // Set signup success state when signup is successful
     } catch (err) {
       setError(err.message);

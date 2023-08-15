@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleSignIn, links } from "../../Data/data";
-import navLogo from "../../assets/yellow.png";
+import { GoogleSignIn, NavLogo, links } from "../../Data/data";
 import { BurgerMenu } from "../../Data/data";
 import { CloseIcon } from "../../Data/data";
 import { useGlobalContext } from "../../Context/Context";
 import { auth } from "../../FirebaseConfig/firebaseConfig"; // Adjust the path
-import { DefaultAvatar } from "../../Data/data";
+import { UserAvatar } from "../../Data/data";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +32,8 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <Link to={"/"} className="Link">
+        <NavLogo className="navlogo" />
         <h3>TAXI DRIVER's HUB</h3>
-        <img className="navlogo" src={navLogo} alt="Taxi Logo" />
       </Link>
       <div className="menu-icon" onClick={toggleMenu}>
         {isOpen ? (
@@ -60,19 +59,24 @@ const Navbar = () => {
             );
           })}
 
-          {user.name ? (
+          {user.name || user.uid ? (
             <>
-              {/* <div className="navbar-link">
-                <Link to={`/${user.uid}`}>კაბინეტი</Link>
-              </div> */}
               <li className="user-info">
-                <img
-                  src={user?.avatar || { DefaultAvatar }}
-                  alt="User Avatar"
-                  className="user-avatar"
-                />
-                <Link to={`/${user.uid}`}>
-                  <span>{user.name}</span>
+                <Link className="user-avatar-link" to={`/${user.uid}`}>
+                  {user.avatar ? (
+                    <img
+                      src={user?.avatar}
+                      alt="User Avatar"
+                      className="user-avatar"
+                    />
+                  ) : (
+                    <UserAvatar
+                      style={{ color: "lightgreen" }}
+                      className="user-avatar"
+                    />
+                  )}
+
+                  <span>{user.name || user.email}</span>
                 </Link>
               </li>
               <li onClick={signOut} className="sign-out-btn">

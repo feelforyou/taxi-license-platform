@@ -83,18 +83,22 @@ img {
   background-color: hsl(245, 93%, 12%);
   padding: 0.5rem 0rem;
   width: 100%;
-  height: auto;
+  height: 70px;
 }
 
 .navlogo {
   width: 50px;
   height: 50px;
+  color: lightgreen;
 }
 
 .Link {
   text-decoration: none;
   color: white;
   margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .navbar ul {
@@ -173,11 +177,13 @@ img {
     display: flex; /* Show the burger menu icon */
   }
 
-  .navbar > .Link h3 {
-    display: none;
-  }
   .sign-out-btn {
     margin-top: 7rem;
+  }
+}
+@media screen and (max-width: 840px) {
+  .navbar > .Link h3 {
+    display: none;
   }
 }
 
@@ -255,6 +261,10 @@ img {
 
 .sign-out-btn:hover {
   opacity: 0.8;
+}
+.user-avatar-link {
+  display: flex;
+  align-items: center;
 }
 
 /*|||||||||||||||||End Navbar|||||||||||||||||||*/
@@ -506,7 +516,8 @@ strong {
   height: 140px;
   border-radius: 50%;
   margin-bottom: 15px;
-  border: double #1d41f5;
+  color: lightgreen;
+  background-color: var(--BGCOLOR);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -733,6 +744,7 @@ strong {
 .footer-logo {
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: lightgreen;
 }
 
 .footer-nav,
@@ -852,7 +864,7 @@ strong {
   height: 6rem;
   border: 5px solid lightgray;
   border-radius: 50%;
-  border-top-color: darkorange;
+  border-top-color: lightgreen;
   animation: spinner 0.6s linear infinite;
   margin: 3rem auto;
 }
