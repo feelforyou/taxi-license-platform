@@ -639,11 +639,12 @@ strong {
 
 /*START SIGNUP PAGE*/
 .signup-container {
-  color: #000;
+  color: var(--BGCOLOR);
   min-height: 70vh;
 }
 
 .signup-container-main {
+  width: 95%;
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
