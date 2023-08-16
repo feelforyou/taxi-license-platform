@@ -83,11 +83,12 @@ const LogIn = () => {
             await refreshUser();
             setError("Email successfully verified! You can now log in.");
           } else {
-            setError(
-              data.error
-                ? data.error.message
-                : "There was an error verifying your email. Please try again."
-            );
+            console.log(data.error);
+            // setError(
+            //   data.error
+            //     ? data.error.message
+            //     : "There was an error verifying your email. Please try again."
+            // );
           }
         })
         .catch((error) => {
@@ -119,7 +120,17 @@ const LogIn = () => {
   return (
     <div className="login-container">
       <main className="login-main">
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div
+            className={`${
+              error === "Email successfully verified! You can now log in."
+                ? "error-message success-msg"
+                : "error-message"
+            }`}
+          >
+            {error}
+          </div>
+        )}
 
         <h1>Log In</h1>
 

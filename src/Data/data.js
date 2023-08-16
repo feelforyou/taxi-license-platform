@@ -11,7 +11,9 @@ import { BsFillTaxiFrontFill } from "react-icons/bs";
 
 export const links = [
   { id: "1", title: "main", url: "/" },
-  { id: "3", title: "project", url: "/about" },
+  { id: "2", title: "project", url: "/about" },
+  { id: "3", title: "about", url: "/about" },
+
   // { id: "2", title: "კაბინეტი", url: "/:userID" },
 
   // { id: "4", title: "შესვლა", url: "/login" },

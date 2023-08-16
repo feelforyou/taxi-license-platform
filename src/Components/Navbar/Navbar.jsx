@@ -47,53 +47,63 @@ const Navbar = () => {
         )}
       </div>
       <div className={`list-container ${isOpen ? "show" : ""}`}>
-        <ul className="ul">
-          {links.map((link) => {
-            const { id, url, title } = link;
-            return (
-              <li key={id} className="list-item">
-                <Link to={url}>
-                  <p>{title}</p>
-                </Link>
-              </li>
-            );
-          })}
-
+        <div className="horiz-navbar-container">
+          <ul className="ul">
+            {links.map((link) => {
+              const { id, url, title } = link;
+              return (
+                <li key={id} className="list-item">
+                  <Link className="link-hover" to={url}>
+                    <p>{title}</p>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
           {user.name || user.uid ? (
-            <>
-              <li className="user-info">
-                <Link className="user-avatar-link" to={`/${user.uid}`}>
-                  {user.avatar ? (
-                    <img
-                      src={user?.avatar}
-                      alt="User Avatar"
-                      className="user-avatar"
-                    />
-                  ) : (
-                    <UserAvatar
-                      style={{ color: "lightgreen" }}
-                      className="user-avatar"
-                    />
-                  )}
+            <div>
+              <div className="user-info">
+                <div className="login-horizontal-wrapper">
+                  <Link
+                    className="user-avatar-link link-hover"
+                    to={`/${user.uid}`}
+                  >
+                    {user.avatar ? (
+                      <img
+                        src={user?.avatar}
+                        alt="User Avatar"
+                        className="user-avatar"
+                      />
+                    ) : (
+                      <UserAvatar
+                        style={{ color: "lightgreen" }}
+                        className="user-avatar"
+                      />
+                    )}
 
-                  <span>{user.name || user.email}</span>
-                </Link>
-              </li>
-              <li onClick={signOut} className="sign-out-btn">
-                Sign Out
-              </li>
-            </>
+                    <span className="username-span">
+                      {user.name || user.email}
+                    </span>
+                  </Link>
+                  <li onClick={signOut} className="sign-out-btn ">
+                    <span className="span-hover">Sign Out</span>
+                  </li>
+                </div>
+              </div>
+            </div>
           ) : (
-            <>
+            <div className="login-container-navbar">
               <li className="navbar-link">
-                <Link to="/login">შესვლა</Link>
+                <Link className="link-hover" to="/login">
+                  log in
+                </Link>
               </li>
               <li className="google-btn" onClick={handleSignIn}>
                 <GoogleSignIn />
               </li>
-            </>
+            </div>
           )}
-        </ul>
+        </div>
       </div>
     </div>
   );
