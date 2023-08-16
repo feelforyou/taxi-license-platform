@@ -14,7 +14,7 @@ function ProtectedRoute() {
   }
 
   // Check if the user is authenticated and the UID from the route matches the user's UID
-  if (isAuthenticated && user.uid === userID) {
+  if (isAuthenticated && user.emailVerified && user.uid === userID) {
     return <ProfilePage />;
   } else {
     return <Navigate to="/login" replace />;

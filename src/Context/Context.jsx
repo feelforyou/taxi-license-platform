@@ -25,6 +25,10 @@ const AppContext = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const updateUserDetails = (userDetails) => {
+    setUser(userDetails);
+  };
+
   //email and password sign in
   const signInEmailPassword = async (email, password) => {
     try {
@@ -83,6 +87,7 @@ const AppContext = ({ children }) => {
 
   const value = {
     user,
+    updateUserDetails,
     signInWithGoogle,
     signInEmailPassword,
     isLoading,
