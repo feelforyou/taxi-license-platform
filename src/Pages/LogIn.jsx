@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { GoogleSignIn } from "../Data/data";
 import { useGlobalContext } from "../Context/Context";
 import { Link, useNavigate } from "react-router-dom";
-import { applyActionCode } from "firebase/auth";
-import { auth } from "../FirebaseConfig/firebaseConfig";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
@@ -16,10 +14,20 @@ const LogIn = () => {
     isAuthenticated,
     user,
     signInEmailPassword,
-    updateUserDetails,
+    isVerifying,
+    setIsVerifying,
+    refreshUser,
   } = useGlobalContext();
 
+  useEffect(() => {
+    // If the user is authenticated and their email is verified, redirect them
+    if (user.emailVerified) {
+      navigate(`/${user.uid}`);
+    }
+  }, [user.uid]);
+
   const handleEmailPasswordSignIn = async (e) => {
+    e.preventDefault();
     try {
       const loggedInUser = await signInEmailPassword(email, password);
 
@@ -30,12 +38,6 @@ const LogIn = () => {
       }
 
       if (loggedInUser) {
-        updateUserDetails({
-          name: loggedInUser.displayName,
-          email: loggedInUser.email,
-          avatar: loggedInUser.photoURL,
-          uid: loggedInUser.uid,
-        });
         navigate(`/${loggedInUser.uid}`);
       }
     } catch (error) {
@@ -45,22 +47,23 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && isVerifying) {
       if (user.emailVerified) {
         navigate(`/${user.uid}`);
       } else {
         setError("Please verify your email before accessing your profile.");
       }
     }
-  }, [navigate, isAuthenticated, user]);
+  }, [navigate, isAuthenticated, user, isVerifying]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get("mode");
     const actionCode = urlParams.get("oobCode");
-    const apiKey = urlParams.get("apiKey");
+    const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
 
     if (mode === "verifyEmail") {
+      setIsVerifying(true);
       fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${apiKey}`,
         {
@@ -74,9 +77,10 @@ const LogIn = () => {
         }
       )
         .then((response) => response.json())
-        .then((data) => {
+        .then(async (data) => {
           console.log("Firebase Response:", data);
           if (data.emailVerified) {
+            await refreshUser();
             setError("Email successfully verified! You can now log in.");
           } else {
             setError(
@@ -86,12 +90,14 @@ const LogIn = () => {
             );
           }
         })
-
         .catch((error) => {
           console.error("Fetch Error:", error);
           setError(
             "There was an error verifying your email. Please try again."
           );
+        })
+        .finally(() => {
+          setIsVerifying(false);
         });
     }
   }, []);
@@ -100,7 +106,9 @@ const LogIn = () => {
     try {
       const result = await signInWithGoogle();
       if (result && result.user) {
-        navigate(`/${result.user.uid}`);
+        setTimeout(() => {
+          navigate(`/${result.user.uid}`);
+        }, 100); // Delaying by half a second
       }
     } catch (error) {
       setError(error.message);
@@ -114,28 +122,33 @@ const LogIn = () => {
         {error && <div className="error-message">{error}</div>}
 
         <h1>Log In</h1>
-        <div className="login-inputs">
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            type="email"
-            placeholder="Email"
-            className="login-input"
-          />
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            type="password"
-            placeholder="Password"
-            className="login-input"
-          />
-        </div>
-        <button onClick={handleEmailPasswordSignIn} className="login-btn">
-          Log In
-        </button>
+
+        <form onSubmit={handleEmailPasswordSignIn} className="login-form">
+          <div className="login-inputs">
+            <input
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              type="email"
+              placeholder="Email"
+              className="login-input"
+            />
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              type="password"
+              placeholder="Password"
+              className="login-input"
+            />
+          </div>
+          <button type="submit" className="login-btn">
+            Log In
+          </button>
+        </form>
+
         <Link className="link-wrapper" to="/signup">
           <button className="register-btn">Register</button>
         </Link>
+
         <div className="google-btn" onClick={handleSignIn}>
           <GoogleSignIn />
         </div>

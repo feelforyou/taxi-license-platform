@@ -88,8 +88,8 @@ img {
 }
 
 .navlogo {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   color: lightgreen;
 }
 
@@ -366,18 +366,23 @@ strong {
   gap: 0.5rem;
   background-color: transparent;
   padding: 4px;
-  border: 3px whitesmoke;
+  border: 1px whitesmoke solid;
+  border-top: none;
   margin-top: 0.25rem;
 }
 
 .tab {
   cursor: pointer;
-  padding: 8px;
-  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
   border: 1px solid rgb(182, 180, 180);
   background-color: whitesmoke;
   color: var(--COLOR-PRIMARY); /* default text color */
   transition: background-color 0.3s, color 0.3s; /* transition effect for both color and background-color */
+  width: 80px;
+  height: 30px;
 }
 
 .tab:hover {
@@ -537,7 +542,7 @@ strong {
 
 /*START LOGIN PAGE*/
 .login-container {
-  color: #000;
+  color: var(--BGCOLOR);
   background-color: whitesmoke;
   min-height: 70vh;
   width: 100%;
@@ -561,6 +566,12 @@ strong {
 .login-main h1 {
   padding: 0.25rem;
   color: var(--COLOR-PRIMARY);
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .login-inputs {

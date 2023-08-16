@@ -21,12 +21,22 @@ const AppContext = ({ children }) => {
     email: "",
     avatar: "",
     uid: "",
+    emailVerified: false,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  const updateUserDetails = (userDetails) => {
-    setUser(userDetails);
+  const refreshUser = async () => {
+    await auth.currentUser.reload();
+    const currentUser = auth.currentUser;
+    setUser({
+      name: currentUser.displayName,
+      email: currentUser.email,
+      avatar: currentUser.photoURL,
+      uid: currentUser.uid,
+      emailVerified: currentUser.emailVerified,
+    });
   };
 
   //email and password sign in
@@ -37,11 +47,18 @@ const AppContext = ({ children }) => {
         email,
         password
       );
-      const user = userCredential.user;
-      return user;
+      const loggedInUser = userCredential.user;
+      setUser({
+        name: loggedInUser.displayName,
+        email: loggedInUser.email,
+        avatar: loggedInUser.photoURL,
+        uid: loggedInUser.uid,
+        emailVerified: loggedInUser.emailVerified,
+      });
+      return loggedInUser;
     } catch (error) {
       console.error("Error signing in with email/password:", error);
-      throw error; // Optionally throw the error to handle it on the UI side
+      throw error;
     }
   };
 
@@ -57,9 +74,12 @@ const AppContext = ({ children }) => {
           email: result.user.email,
           avatar: result.user.photoURL,
           uid: result.user.uid,
+          emailVerified: result.user.emailVerified, // adding the emailVerified field
         });
+
+        await refreshUser(); // Refresh for any additional updates
       }
-      return result; // return the result to handle redirection in the invoking component
+      return result;
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }
@@ -73,10 +93,17 @@ const AppContext = ({ children }) => {
           email: currentUser.email,
           avatar: currentUser.photoURL,
           uid: currentUser.uid,
+          emailVerified: currentUser.emailVerified,
         });
         setIsAuthenticated(true); // Set the flag here
       } else {
-        setUser({ name: "", email: "", avatar: "default image", uid: "" });
+        setUser({
+          name: "",
+          email: "",
+          avatar: "default image",
+          uid: "",
+          emailVerified: false,
+        });
         setIsAuthenticated(false); // Set the flag here
       }
       setIsLoading(false);
@@ -87,11 +114,13 @@ const AppContext = ({ children }) => {
 
   const value = {
     user,
-    updateUserDetails,
     signInWithGoogle,
     signInEmailPassword,
     isLoading,
     isAuthenticated,
+    isVerifying,
+    setIsVerifying,
+    refreshUser,
   };
 
   return (
