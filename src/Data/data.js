@@ -9,6 +9,7 @@ import { FiUserCheck } from "react-icons/fi";
 import { HiUserCircle } from "react-icons/hi";
 import { BsFillTaxiFrontFill } from "react-icons/bs";
 import { FaFacebookMessenger } from "react-icons/fa";
+import { FaImage } from "react-icons/fa";
 
 export const links = [
   { id: "1", title: "main", url: "/" },
@@ -31,3 +32,4 @@ export const UserAvatar = FiUserCheck;
 export const ProfileAvatar = HiUserCircle;
 export const NavLogo = BsFillTaxiFrontFill;
 export const Messenger = FaFacebookMessenger;
+export const DefaultImage = FaImage;
