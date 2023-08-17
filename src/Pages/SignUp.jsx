@@ -16,7 +16,8 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  const handleSignUp = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -66,48 +67,56 @@ const SignUp = () => {
       <div className="signup-container-main">
         {error && <p className="signup-error-message">{error}</p>}
         <h2 className="signup-heading">Sign Up</h2>
-        <div className="signup-input-group">
-          <label className="signup-label" htmlFor="email">
-            Email
-          </label>
-          <input
-            className="signup-input"
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-          />
-        </div>
-        <div className="signup-input-group">
-          <label className="signup-label" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="signup-input"
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-          />
-        </div>
-        <div className="signup-input-group">
-          <label className="signup-label" htmlFor="confirm-password">
-            Confirm Password
-          </label>
-          <input
-            className="signup-input"
-            type="password"
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Re-enter your password"
-          />
-        </div>
-        <button className="signup-btn" onClick={handleSignUp}>
-          Sign Up
-        </button>
+        <form onSubmit={handleSubmit}>
+          <div className="signup-input-group">
+            <label className="signup-label" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="signup-input"
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              autoComplete="new-email"
+            />
+          </div>
+          <div className="signup-input-group">
+            <label className="signup-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="signup-input"
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              autoComplete="new-password"
+            />
+          </div>
+          <div className="signup-input-group">
+            <label className="signup-label" htmlFor="confirm-password">
+              Confirm Password
+            </label>
+            <input
+              className="signup-input"
+              type="password"
+              id="confirm-password"
+              name="confirm-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter your password"
+              autoComplete="confirm-password"
+            />
+          </div>
+          <button className="signup-btn" type="submit">
+            Sign Up
+          </button>
+        </form>
       </div>
     </div>
   );

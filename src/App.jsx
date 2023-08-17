@@ -6,6 +6,7 @@ import About from "./Pages/About";
 import LogIn from "./Pages/LogIn";
 import SignUp from "./Pages/SignUp";
 import Error from "./Pages/Error";
+import CarDetail from "./Pages/CarDetail";
 import ProtectedRoute from "./Utilities/ProtectedRoute"; // Adjust this path
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route exact path="/about" element={<About />} />
         <Route exact path="/login" element={<LogIn />} />
         <Route exact path="/signup" element={<SignUp />} />
+        <Route path="/cardetail/:carID" element={<CarDetail />} />
         <Route path="/:userID" element={<ProtectedRoute />} />
         <Route path="*" element={<Error />} />
       </Routes>

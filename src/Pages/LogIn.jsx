@@ -103,7 +103,7 @@ const LogIn = () => {
     }
   }, []);
 
-  const handleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithGoogle();
       if (result && result.user) {
@@ -142,6 +142,7 @@ const LogIn = () => {
               type="email"
               placeholder="Email"
               className="login-input"
+              autoComplete="login-email"
             />
             <input
               onChange={(e) => setPassword(e.target.value)}
@@ -149,6 +150,7 @@ const LogIn = () => {
               type="password"
               placeholder="Password"
               className="login-input"
+              autoComplete="login-password"
             />
           </div>
           <button type="submit" className="login-btn">
@@ -160,7 +162,7 @@ const LogIn = () => {
           <button className="register-btn">Register</button>
         </Link>
 
-        <div className="google-btn" onClick={handleSignIn}>
+        <div className="google-btn" onClick={handleGoogleSignIn}>
           <GoogleSignIn />
         </div>
       </main>

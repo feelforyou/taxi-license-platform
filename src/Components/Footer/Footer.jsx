@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  FooterIcon,
   links,
   FaceBookIcon,
   TwitterIcon,
   InstagramIcon,
+  Messenger,
 } from "../../Data/data";
 
 const Footer = () => {
@@ -13,7 +13,13 @@ const Footer = () => {
     <div className="footer-container">
       <div className="footer-content">
         <div className="footer-logo">
-          <FooterIcon />
+          <a
+            href="https://www.facebook.com/groups/914945609916304"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Messenger />
+          </a>
         </div>
 
         <div className="footer-nav">

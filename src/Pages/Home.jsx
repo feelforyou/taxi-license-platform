@@ -1,32 +1,21 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../FirebaseConfig/firebaseConfig";
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Car from "../Components/Home/Car";
+import { db } from "../FirebaseConfig/firebaseConfig";
+import { collection } from "firebase/firestore";
+import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection";
+import { Link } from "react-router-dom";
+import { useGlobalContext } from "../Context/Context";
 
 const Home = () => {
-  const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const carsRef = collection(db, "cars");
-
-  const getCars = async () => {
-    try {
-      const querySnapshot = await getDocs(carsRef);
-      const carsData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setLoading(false);
-      setCars(carsData);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching cars: ", error);
-    }
-  };
+  const { data: cars, loading, error } = useFirestoreCollection(carsRef);
+  const { carsList, setCarsList } = useGlobalContext();
 
   useEffect(() => {
-    getCars();
-  }, []);
+    if (cars) {
+      setCarsList(cars);
+    }
+  }, [cars]);
 
   if (loading) {
     return (
@@ -34,6 +23,10 @@ const Home = () => {
         <div className="loading"></div>
       </div>
     );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -44,7 +37,9 @@ const Home = () => {
       </div>
       <main className="home-main">
         {cars?.map((car) => (
-          <Car key={car.id} details={car} />
+          <Link key={car.id} to={`/cardetail/${car.id}`}>
+            <Car details={car} />
+          </Link>
         ))}
       </main>
     </div>
