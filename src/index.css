@@ -353,13 +353,19 @@ img {
   box-shadow: 0 4px 16px rgba(9, 1, 28, 0.1);
   margin: 0.5rem;
   padding: 1rem;
-  height: 22rem;
+  height: 21rem;
   width: 250px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   position: relative;
   cursor: pointer;
+}
+.card-date {
+  font-size: 0.8rem;
+  color: rgb(83, 71, 161);
+  position: absolute;
+  bottom: 4px;
 }
 
 .card-title {
@@ -563,7 +569,8 @@ strong {
 
 .upload-form-container input,
 .upload-form-container textarea,
-.upload-form-container button {
+.upload-form-container button,
+.upload-form-container select {
   margin-bottom: 15px; /* Adds a gap between form fields */
   padding: 10px; /* Makes the input, textarea, and button larger and more clickable */
   border: 1px solid #e1e1e1; /* Gives a border to distinguish the form fields */
@@ -578,6 +585,14 @@ strong {
 
 .upload-form-container button:hover {
   background-color: #0056b3; /* Darkens the button on hover for better user feedback */
+}
+.formik-error {
+  color: red;
+  font-size: 0.7rem;
+}
+
+.radio-btn {
+  margin-right: 1rem;
 }
 
 .spinner-upload-form {

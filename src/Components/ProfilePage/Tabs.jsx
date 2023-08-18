@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProfileSection from "./ProfileSection";
 import Listings from "./Listings/Listings";
-import UploadForm from "./UploadForm/UploadForm";
+import FormikDummy from "./UploadForm/FormikDummy";
 
 function Tabs() {
   const [activeTab, setActiveTab] = useState("upload"); // default to 'myprofile' tab
@@ -44,7 +44,7 @@ function Tabs() {
       <div className="tabs-content">
         {activeTab === "myprofile" && <ProfileSection />}
         {activeTab === "listings" && <Listings />}
-        {activeTab === "upload" && <UploadForm />}
+        {activeTab === "upload" && <FormikDummy />}
         {/* {activeTab === "reviews" && (
           <div>Reviews from other users will appear here.</div>
         )}
