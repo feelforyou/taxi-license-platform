@@ -4,7 +4,7 @@ import { DefaultImage } from "../../Data/data";
 const CarFetched = ({ details }) => {
   return (
     <div className="carddetail-car-card">
-      <h4 className="carddetail-card-title">{details?.carName}</h4>
+      <h4 className="carddetail-card-title">{details?.brand}</h4>
       {details?.imageUrl ? (
         <img
           src={details?.imageUrl}
@@ -18,20 +18,30 @@ const CarFetched = ({ details }) => {
         />
       )}
 
-      {details?.description && <p>{details?.description}</p>}
-      {details?.phoneNumber && (
-        <p>
-          <strong className="carddetail-strong">Tel:</strong>{" "}
-          {details?.phoneNumber}
+      <div>
+        <span style={{ fontWeight: "bold" }}>
+          Model: {details?.model && details?.model}
+        </span>
+
+        <span style={{ marginLeft: "0.5rem" }}>
+          Year: {details?.year && details?.year}
+        </span>
+      </div>
+      {details?.fuelType && <p>Fuel Type: {details?.fuelType}</p>}
+      {details?.mileage && <p>Mileage: {details?.mileage}KM</p>}
+      {details?.price && <p>Daily Rent: {details?.price}$</p>}
+      {details?.location && <p>Location: {details?.location}</p>}
+      {details?.name && <p>Owner's name: {details?.name}</p>}
+      {details?.phoneNumber && <p>Phone: {details?.phoneNumber}</p>}
+      <p>Description:</p>
+      {details?.description && (
+        <div className="carfetched-description">{details?.description}</div>
+      )}
+      {details?.submissionDate && (
+        <p className="card-date position-static">
+          Added at: {details?.submissionDate}
         </p>
       )}
-      {details?.price && (
-        <p>
-          <strong>Daily Rent:</strong> {details?.price}
-        </p>
-      )}
-      {details?.carType && <p>{details?.carType}</p>}
-      {details?.location && <p>{details?.location}</p>}
     </div>
   );
 };

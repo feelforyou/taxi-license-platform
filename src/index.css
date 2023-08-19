@@ -330,7 +330,8 @@ img {
 
   width: 100%;
 }
-.test-div-home {
+
+.home-filter-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -373,28 +374,38 @@ img {
   margin-bottom: 0.5rem;
   text-transform: uppercase;
 }
+.card-img-container {
+  overflow: hidden;
+  width: 100%;
+}
+.car-card:hover .car-image {
+  transform: scale(1.1); /* Zoom the image to 110% of its size */
+  transition: transform 0.3s; /* Smooth transition effect */
+}
 
 .car-image {
   width: 14rem;
   height: 8rem;
   object-fit: cover;
-  border-radius: 5px;
   margin-bottom: 0.5rem;
+  transition: transform 0.3s;
 }
-
-strong {
-  color: var(--COLOR-SECONDARY, #007bff);
+.moreInfo {
+  background-color: var(--BGCOLOR);
+  color: whitesmoke;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0.25rem 0rem;
 }
 
 /*|||||||| End Home PAGE |||||||||| */
 
 /*||||||||||||||||Start CARDETAIL PAGE|||||||||||||||||||*/
 .carddetail-container {
-  min-height: 70vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .carddetail-car-card {
@@ -405,13 +416,12 @@ strong {
   box-shadow: 0 4px 16px rgba(9, 1, 28, 0.1);
   margin-top: 1rem;
   padding: 1rem;
-  height: 25rem;
+  height: auto;
   width: 90%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  position: relative;
+  gap: 0.5rem;
 }
 
 .carddetail-card-title {
@@ -426,9 +436,15 @@ strong {
   object-fit: cover;
   margin-bottom: 0.5rem;
 }
-
-.carddetail-strong {
-  color: var(--COLOR-SECONDARY, #007bff);
+.carfetched-description {
+  width: 100%;
+  padding: 0.5rem;
+  min-height: 7rem;
+  border: 0.5px solid var(--BGCOLOR);
+  text-transform: capitalize;
+}
+.position-static {
+  position: static;
 }
 
 /*||||||||||||||||END CARDETAIL PAGE|||||||||||||||||||*/
@@ -475,21 +491,19 @@ strong {
   border-radius: 5px;
   border: 1px solid rgb(182, 180, 180);
   background-color: whitesmoke;
-  color: var(--COLOR-PRIMARY); /* default text color */
+  color: var(--BGCOLOR); /* default text color */
   transition: background-color 0.3s, color 0.3s; /* transition effect for both color and background-color */
   width: 80px;
   height: 30px;
 }
 
 .tab:hover {
-  background-color: var(
-    --COLOR-PRIMARY
-  ); /* slightly darker shade when hovered */
+  background-color: var(--BGCOLOR); /* slightly darker shade when hovered */
   color: whitesmoke;
 }
 
 .active-tab {
-  background-color: var(--COLOR-PRIMARY);
+  background-color: var(--BGCOLOR);
   color: whitesmoke;
 }
 
@@ -1019,3 +1033,27 @@ strong {
   margin: 3rem auto;
 }
 /* CURRENT SPINNER */
+
+/*||||||MODAL||||||*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal-content {
+  padding: 20px;
+  background-color: whitesmoke;
+  color: darkgreen;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/*||||||MODAL|||||*/

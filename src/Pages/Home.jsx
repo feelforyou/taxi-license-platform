@@ -31,7 +31,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="test-div-home">
+      <div className="home-filter-container">
         <h1>filter categories</h1>
         <p>sub heading</p>
       </div>

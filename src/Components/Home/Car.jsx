@@ -4,11 +4,14 @@ const Car = ({ details }) => {
   return (
     <div className="car-card">
       <h4 className="card-title">{details?.brand && details?.brand}</h4>
-      <img
-        src={details?.imageUrl}
-        alt={details?.carName}
-        className="car-image"
-      />
+      <div className="card-img-container">
+        <img
+          src={details?.imageUrl}
+          alt={details?.carName}
+          className="car-image"
+        />
+      </div>
+
       <div>
         <span style={{ fontWeight: "bold" }}>
           {details?.model && details?.model}
@@ -22,6 +25,7 @@ const Car = ({ details }) => {
 
       {details?.price && <p>Daily Rent: {details?.price}$</p>}
       {details?.location && <p>{details?.location}</p>}
+      <p className="moreInfo">MORE INFO</p>
       {details?.submissionDate && (
         <p className="card-date">{details?.submissionDate}</p>
       )}

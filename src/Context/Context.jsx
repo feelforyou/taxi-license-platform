@@ -18,8 +18,26 @@ const AppContext = ({ children }) => {
   } = useFirebaseAuth();
 
   const [carsList, setCarsList] = useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const showModal = (content) => {
+    setModalContent(content);
+    setModalVisible(true);
+    setTimeout(() => {
+      hideModal();
+    }, 3000);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+    setModalContent("");
+  };
 
   const value = {
+    isModalVisible,
+    modalContent,
+    showModal,
+    hideModal,
     user,
     signInWithGoogle,
     signInEmailPassword,
