@@ -1,21 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Car from "../Components/Home/Car";
 import { db } from "../FirebaseConfig/firebaseConfig";
 import { collection } from "firebase/firestore";
 import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection";
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../Context/Context";
+import { ChevronDown } from "../Data/data";
 
 const Home = () => {
-  const carsRef = collection(db, "cars");
-  const { data: cars, loading, error } = useFirestoreCollection(carsRef);
+  console.log("Home component rendering...");
+
+  const [sortField, setSortField] = useState("submissionDate");
+  const carsRef = useMemo(() => collection(db, "cars"), []);
+  const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
   const { carsList, setCarsList } = useGlobalContext();
+  console.log(
+    "Before sorting:",
+    rawCars.map((car) => car.submissionDate)
+  );
+
+  // Sort data on client side
+  const sortedCars = rawCars.sort((a, b) => {
+    switch (sortField) {
+      case "submissionDate":
+        return b.submissionDate.toMillis() - a.submissionDate.toMillis();
+      case "price":
+        return b.price - a.price;
+      case "year":
+        return b.year - a.year;
+      default:
+        return 0;
+    }
+  });
+
+  console.log(
+    "After sorting:",
+    sortedCars.map((car) => car.submissionDate)
+  );
+
+  const handleSortChange = (selectedField) => {
+    setSortField(selectedField);
+  };
 
   useEffect(() => {
-    if (cars) {
-      setCarsList(cars);
-    }
-  }, [cars]);
+    setCarsList(sortedCars);
+  }, [sortedCars]);
 
   if (loading) {
     return (
@@ -32,11 +61,22 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-filter-container">
-        <h1>filter categories</h1>
-        <p>sub heading</p>
+        <h1>List of Cars</h1>
+        <div className="select-wrapper">
+          <select
+            className="custom-select"
+            value={sortField}
+            onChange={(e) => handleSortChange(e.target.value)}
+          >
+            <option value="submissionDate">Sort by Date</option>
+            <option value="price">Sort by Price</option>
+            <option value="year">Sort by Year</option>
+          </select>
+          <ChevronDown className="select-chevron" />
+        </div>
       </div>
       <main className="home-main">
-        {cars?.map((car) => (
+        {sortedCars.map((car) => (
           <Link key={car.id} to={`/cardetail/${car.id}`}>
             <Car details={car} />
           </Link>

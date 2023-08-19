@@ -1,5 +1,3 @@
-// useFirestoreCollection.js
-
 import { useState, useEffect } from "react";
 import { getDocs } from "firebase/firestore";
 

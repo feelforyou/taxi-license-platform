@@ -1,6 +1,8 @@
 import React from "react";
+import { timestampToDate } from "../../../Utilities/timestampToDate";
 
 const CarListing = ({ car }) => {
+  const formattedDate = timestampToDate(car?.submissionDate);
   return (
     <div className="car-card">
       <h4 className="card-title">{car?.brand && car?.brand}</h4>
@@ -17,9 +19,7 @@ const CarListing = ({ car }) => {
 
       {car?.price && <p>Daily Rent: {car?.price}$</p>}
       {car?.location && <p>{car?.location}</p>}
-      {car?.submissionDate && (
-        <p className="card-date">{car?.submissionDate}</p>
-      )}
+      {formattedDate && <p className="card-date">{formattedDate}</p>}
     </div>
   );
 };

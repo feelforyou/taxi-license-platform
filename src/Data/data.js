@@ -10,6 +10,7 @@ import { HiUserCircle } from "react-icons/hi";
 import { BsFillTaxiFrontFill } from "react-icons/bs";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { FaImage } from "react-icons/fa";
+import { GoChevronDown } from "react-icons/go";
 
 export const links = [
   { id: "1", title: "main", url: "/" },
@@ -23,6 +24,7 @@ export const links = [
 
 export const GoogleSignIn = GoogleButton;
 export const BurgerMenu = GiHamburgerMenu;
+export const ChevronDown = GoChevronDown;
 export const CloseIcon = VscChromeClose;
 export const FooterIcon = BiNetworkChart;
 export const FaceBookIcon = FaFacebook;

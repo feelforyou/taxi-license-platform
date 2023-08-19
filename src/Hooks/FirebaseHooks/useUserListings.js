@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../../FirebaseConfig/firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
 const useUserListings = (uid) => {
   const [listings, setListings] = useState([]);
@@ -10,7 +10,11 @@ const useUserListings = (uid) => {
   useEffect(() => {
     if (uid) {
       const carsRef = collection(db, "cars");
-      const q = query(carsRef, where("addedByUID", "==", uid));
+      const q = query(
+        carsRef,
+        where("addedByUID", "==", uid),
+        orderBy("submissionDate", "desc") // Chain the orderBy to the query
+      );
 
       const fetchData = async () => {
         try {

@@ -1,7 +1,9 @@
 import React from "react";
 import { DefaultImage } from "../../Data/data";
+import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const CarFetched = ({ details }) => {
+  const formattedDate = timestampToDate(details?.submissionDate);
   return (
     <div className="carddetail-car-card">
       <h4 className="carddetail-card-title">{details?.brand}</h4>
@@ -37,10 +39,8 @@ const CarFetched = ({ details }) => {
       {details?.description && (
         <div className="carfetched-description">{details?.description}</div>
       )}
-      {details?.submissionDate && (
-        <p className="card-date position-static">
-          Added at: {details?.submissionDate}
-        </p>
+      {formattedDate && (
+        <p className="card-date position-static">Added at: {formattedDate}</p>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
 import { storage } from "../../../FirebaseConfig/firebaseConfig";
 import React, { useEffect, useState } from "react";
@@ -97,7 +97,8 @@ const FormikDummy = () => {
       }
 
       const currentDate = new Date();
-      const currentSubmissionDate = currentDate.toLocaleString();
+      // const currentSubmissionDate = currentDate.toLocaleString();
+      const currentSubmissionDate = Timestamp.fromDate(currentDate);
       const fileExtension = values.image.name.split(".").pop();
       const filenameWithoutExtension = values.image.name
         .split(".")
