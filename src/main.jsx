@@ -6,8 +6,10 @@ import "../src/index.css";
 import GlobalModal from "./GlobalModal.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AppContext>
-    <GlobalModal />
-    <App />
-  </AppContext>
+  <React.StrictMode>
+    <AppContext>
+      <GlobalModal />
+      <App />
+    </AppContext>
+  </React.StrictMode>
 );

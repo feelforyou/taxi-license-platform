@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGlobalContext } from "../Context/Context";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { doc } from "firebase/firestore";
 import useFirestoreDocument from "../Hooks/FirebaseHooks/useFirestoreDocument";
 import { db } from "../FirebaseConfig/firebaseConfig";
@@ -11,16 +11,22 @@ const CarDetail = () => {
   const { carsList } = useGlobalContext();
   const [carDetails, setCarDetails] = useState(null);
 
-  const carDocRef = doc(db, "cars", carID);
-  const { data, loading, error } = useFirestoreDocument(carDocRef);
+  const carDocRef = useMemo(() => doc(db, "cars", carID), [carID]);
+
+  // Conditional fetching
+  const shouldFetch = !carsList.some((car) => car.id === carID);
+  const { data, loading, error } = shouldFetch
+    ? useFirestoreDocument(carDocRef)
+    : {};
 
   useEffect(() => {
-    // If carsList has data, find the car from it
-    if (carsList.length) {
-      const foundCar = carsList.find((item) => item.id === carID);
-      setCarDetails(foundCar);
+    // Check carsList for the car
+    const carFromList = carsList.find((item) => item.id === carID);
+
+    if (carFromList) {
+      setCarDetails(carFromList);
     } else if (data && !loading) {
-      // If not found in carsList, use the data fetched by useFirestoreDocument
+      // If not found in carsList and data is available, use it
       setCarDetails(data);
     }
   }, [carID, carsList, data, loading]);
@@ -36,4 +42,5 @@ const CarDetail = () => {
     </div>
   );
 };
+
 export default CarDetail;

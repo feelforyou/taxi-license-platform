@@ -24,6 +24,7 @@ const useUserListings = (uid) => {
             ...doc.data(),
           }));
           setListings(data);
+          console.log("useUserListings", data);
         } catch (err) {
           setError(err);
           console.error("Error fetching user listings: ", err);

@@ -8,16 +8,10 @@ import { useGlobalContext } from "../Context/Context";
 import { ChevronDown } from "../Data/data";
 
 const Home = () => {
-  console.log("Home component rendering...");
-
   const [sortField, setSortField] = useState("submissionDate");
   const carsRef = useMemo(() => collection(db, "cars"), []);
   const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
   const { carsList, setCarsList } = useGlobalContext();
-  console.log(
-    "Before sorting:",
-    rawCars.map((car) => car.submissionDate)
-  );
 
   // Sort data on client side
   const sortedCars = rawCars.sort((a, b) => {
@@ -32,11 +26,6 @@ const Home = () => {
         return 0;
     }
   });
-
-  console.log(
-    "After sorting:",
-    sortedCars.map((car) => car.submissionDate)
-  );
 
   const handleSortChange = (selectedField) => {
     setSortField(selectedField);
