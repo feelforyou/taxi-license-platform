@@ -1,69 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Rowdies&display=swap");
+
+/* ============= GLOBAL CSS =============== */
+
 *,
-::before,
-::after {
+::after,
+::before {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/*chatgpt, it was not*/
-body::-webkit-scrollbar {
-  display: none;
+html {
+  font-size: 100%;
+} /*16px*/
+
+:root {
+  /* colors */
+  --primary-100: #e2e0ff;
+  --primary-200: #c1beff;
+  --primary-300: #a29dff;
+  --primary-400: #837dff;
+  --primary-500: #645cff;
+  --primary-600: #504acc;
+  --primary-700: #3c3799;
+  --primary-800: #282566;
+  --primary-900: #141233;
+
+  /* grey */
+  --grey-50: #f8fafc;
+  --grey-100: #f1f5f9;
+  --grey-200: #e2e8f0;
+  --grey-300: #cbd5e1;
+  --grey-400: #94a3b8;
+  --grey-500: #64748b;
+  --grey-600: #475569;
+  --grey-700: #334155;
+  --grey-800: #1e293b;
+  --grey-900: #0f172a;
+  /* rest of the colors */
+  --black: #222;
+  --white: #fff;
+  --red-light: #f8d7da;
+  --red-dark: #842029;
+  --green-light: #d1e7dd;
+  --green-dark: #0f5132;
+
+  --small-text: 0.875rem;
+  --extra-small-text: 0.7em;
+  /* rest of the vars */
+  --backgroundColor: var(--grey-50);
+  --textColor: var(--grey-900);
+  --borderRadius: 0.25rem;
+  --letterSpacing: 1px;
+  --transition: 0.3s ease-in-out all;
+  --max-width: 1120px;
+  --fixed-width: 800px;
+  --view-width: 90vw;
+  /* box shadow*/
+  --shadow-1: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  background: var(--backgroundColor);
+  font-family: Verdana, Geneva, Tahoma, sans-serif, "Roboto", system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--textColor);
+}
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: capitalize;
+  letter-spacing: var(--letterSpacing);
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 5rem); /* Large heading */
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 3rem); /* Medium heading */
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 2.5rem); /* Small heading */
+}
+
+h4 {
+  font-size: clamp(1rem, 2vw, 2rem); /* Extra small heading */
+}
+
+h5 {
+  font-size: clamp(0.875rem, 1.5vw, 1.5rem); /* Tiny heading */
+}
+
+small {
+  font-size: var(--small-text);
 }
 
 a {
-  text-decoration: none;
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits color from its parent */
+  cursor: pointer; /* Makes it appear clickable */
+  background-color: transparent; /* No background color */
+  outline: none; /* Removes focus outline */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight color on mobile devices */
+}
+
+a:visited {
+  color: inherit; /* Inherits visited link color from its parent */
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline; /* Underlines on hover or focus for better UX */
+}
+
+a:active {
+  color: inherit; /* Inherits active link color from its parent */
 }
 
 ul {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
 }
-
-body {
-  overflow-x: hidden; /*chatgpt, it was not this style*/
-  font-family: sans-serif, monospace, Arial, Helvetica;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-a {
+li {
   text-decoration: none;
-  color: inherit;
 }
 
-/*chatgpt suggestions*/
-
-html,
-body {
-  margin: 0;
-  padding: 0;
+.img {
   width: 100%;
-  color: var(--color);
-}
-
-.navbar,
-.Home,
-.moviedetail-container {
-  width: 100%;
-}
-
-/* chatgpt suggestions end */
-
-img {
   display: block;
   object-fit: cover;
-}
-/* VARIABLES */
-:root {
-  --BG-PRIMARY: whitesmoke;
-  --COLOR-PRIMARY: #000;
-  --COLOR-HOVER: hsla(267, 61%, 13%, 0.902);
-  --BGCOLOR: hsla(242, 86%, 8%, 0.902);
-  --BGCOLOR-HOVER: hsla(242, 86%, 22%, 0.902);
-  --color: #f5f5f5;
 }
 
 /*||||||||||||||||Start Navbar|||||||||||||||||||*/
@@ -81,7 +165,7 @@ img {
   align-items: center;
   justify-content: space-between;
   color: white;
-  background-color: hsl(245, 93%, 12%);
+  background-color: var(--primary-900);
   padding: 0.5rem 0rem;
   width: 100%;
   height: 70px;
@@ -90,12 +174,9 @@ img {
 .navlogo {
   width: 30px;
   height: 30px;
-  color: whitesmoke;
 }
 
 .Link {
-  text-decoration: none;
-  color: white;
   margin-left: 1rem;
   display: flex;
   align-items: center;
@@ -115,6 +196,7 @@ img {
   margin: 0.25rem;
   font-size: 1.2rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .list-item:hover {
@@ -586,7 +668,6 @@ img {
   position: relative;
   cursor: pointer;
 }
-
 .listing-car-title {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
@@ -601,35 +682,13 @@ img {
   margin-bottom: 0.5rem;
 }
 
-.dlt-upd-btn-container {
-  display: flex;
-  justify-content: space-between; /* This will put maximum space between the buttons */
+/* If you want to set specific styles for other elements inside the card, you can target them like this: */
 
-  padding: 0.5rem 0; /* Some padding on top and bottom for breathing space */
-  margin-bottom: 0.5rem;
-}
+/* .listing-car-card h4 {
+  /* styles for the car name */
 
-.icon-button {
-  display: flex;
-  align-items: center; /* Vertically align icon and text within button */
-  gap: 0.5rem; /* Space between icon and text, adjust as needed */
-  /* Example background color, adjust as needed */
-  border: 1px solid;
-  background-color: transparent;
-  padding: 0.25rem 0.5rem; /* Adjust padding as needed */
-  padding-left: 2px;
-  border-radius: 4px; /* Optional: Rounded corners */
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: opacity 0.3s; /* Optional: Smooth color transition on hover */
-}
-
-.icon-button:hover {
-  opacity: 0.5; /* Example hover color, adjust as needed */
-}
-.delete-btn {
-  color: red;
-}
+/* .listing-car-card p {
+  /* styles for the description and other paragraphs */
 
 .upload-form-container {
   display: flex;
@@ -1001,7 +1060,8 @@ img {
 
 .footer-nav a:hover,
 .footer-social a:hover {
-  color: hsl(120, 87%, 22%);
+  color: var(--BG-PRIMARY);
+  opacity: 0.8;
 }
 
 .footer-bottom {
@@ -1089,7 +1149,7 @@ img {
   height: 6rem;
   border: 5px solid lightgray;
   border-radius: 50%;
-  border-top-color: var(--BGCOLOR);
+  border-top-color: lightgreen;
   animation: spinner 0.6s linear infinite;
   margin: 3rem auto;
 }
@@ -1110,27 +1170,11 @@ img {
 }
 
 .modal-content {
-  width: 90%;
-  max-width: 500px;
-  text-align: center;
   padding: 20px;
   background-color: whitesmoke;
   color: darkgreen;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 15px;
-  cursor: auto;
-}
-.modal-actions button {
-  border: 1px solid var(--BGCOLOR);
-  padding: 0.25rem 0.5rem;
-  color: var(--BGCOLOR);
-  border-radius: 5px;
 }
 
 /*||||||MODAL|||||*/

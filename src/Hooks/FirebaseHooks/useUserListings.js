@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { db } from "../../FirebaseConfig/firebaseConfig";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 
 const useUserListings = (uid) => {
   const [listings, setListings] = useState([]);
@@ -13,27 +19,28 @@ const useUserListings = (uid) => {
       const q = query(
         carsRef,
         where("addedByUID", "==", uid),
-        orderBy("submissionDate", "desc") // Chain the orderBy to the query
+        orderBy("submissionDate", "desc")
       );
 
-      const fetchData = async () => {
-        try {
-          const querySnapshot = await getDocs(q);
-          const data = querySnapshot.docs.map((doc) => ({
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
           setListings(data);
-          console.log("useUserListings", data);
-        } catch (err) {
-          setError(err);
-          console.error("Error fetching user listings: ", err);
-        } finally {
           setLoading(false);
+        },
+        (err) => {
+          setError(err);
+          setLoading(false);
+          console.error("Error fetching user listings: ", err);
         }
-      };
+      );
 
-      fetchData();
+      // This will unsubscribe from the snapshot listener when the component using the hook unmounts
+      return () => unsubscribe();
     } else {
       setLoading(false);
     }

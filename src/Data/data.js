@@ -11,6 +11,8 @@ import { BsFillTaxiFrontFill } from "react-icons/bs";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { FaImage } from "react-icons/fa";
 import { GoChevronDown } from "react-icons/go";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { AiOutlineEdit } from "react-icons/ai";
 
 export const links = [
   { id: "1", title: "main", url: "/" },
@@ -35,3 +37,5 @@ export const ProfileAvatar = HiUserCircle;
 export const NavLogo = BsFillTaxiFrontFill;
 export const Messenger = FaFacebookMessenger;
 export const DefaultImage = FaImage;
+export const DeleteIcon = MdOutlineDeleteOutline;
+export const EditIcon = AiOutlineEdit;
