@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Context/Context";
 import { carBrandsAndModels } from "../Data/CarData";
 import { validationSchema } from "./FormValidation";
@@ -8,7 +7,6 @@ import { submitToFirebase } from "./FirebaseOperations";
 
 const FormikForm = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { user, showModal } = useGlobalContext();
 
   const formik = useFormik({
@@ -39,7 +37,6 @@ const FormikForm = () => {
       try {
         await submitToFirebase(values, user);
         formik.resetForm();
-        navigate("/");
         showModal("Successfully submitted!");
       } catch (error) {
         console.error("Error: ", error);

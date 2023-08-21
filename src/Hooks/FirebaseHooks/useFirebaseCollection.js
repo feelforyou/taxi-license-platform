@@ -14,7 +14,6 @@ const useFirestoreCollection = (collectionRef) => {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log("useFirebaseCollection", fetchedData);
 
         setData(fetchedData);
       } catch (err) {

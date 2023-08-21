@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const validationSchema = Yup.object({
+export const editValidationSchema = Yup.object({
   name: Yup.string()
     .max(25, "Name cannot exceed 25 characters")
     .matches(
@@ -49,12 +49,12 @@ export const validationSchema = Yup.object({
   fuelType: Yup.string().required("Fuel type is required"),
 
   image: Yup.mixed()
-    .required("An image is required")
+    .nullable()
     .test("fileFormat", "Unsupported Format", (value) => {
       if (value) {
         const validImageTypes = ["image/jpeg", "image/png"];
         return validImageTypes.includes(value.type);
       }
       return true;
-    }),
+    }), // I've removed the ".required()" part for the image
 });

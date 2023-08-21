@@ -1,73 +1,16 @@
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
-import { storage } from "../../../FirebaseConfig/firebaseConfig";
+// import { storage } from "../../../FirebaseConfig/firebaseConfig";
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../Context/Context";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+// import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { carBrandsAndModels } from "../../../Data/CarData";
-import { useNavigate } from "react-router-dom";
-
-const validationSchema = Yup.object({
-  name: Yup.string()
-    .max(25, "Name cannot exceed 25 characters")
-    .matches(
-      /^[A-Za-z\s]+$/,
-      "Name can only contain alphabetic characters and spaces"
-    )
-    .required("Name is required"),
-  email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
-  description: Yup.string()
-    .max(500, "Description cannot exceed 500 characters")
-    .required("Description is required"),
-  phoneNumber: Yup.string()
-    .matches(
-      /^5[0-9]{8}$/,
-      "Phone number must start with 5 and have 9 digits in total"
-    )
-    .required("Phone number is required"),
-
-  price: Yup.number()
-    .positive("Must be a positive number")
-    .required("Price is required"),
-  location: Yup.string()
-    .oneOf(["Tbilisi", "Kutaisi", "Batumi", "Rustavi"], "Invalid location")
-    .required("Location is required"),
-  brand: Yup.string().required("Brand is required"),
-  model: Yup.string().when("brand", {
-    is: true,
-    //  (brand) => Boolean(brand),
-    then: Yup.string().required("Model is required when Brand is selected"),
-  }),
-  year: Yup.number()
-    .min(1995, `Year must be after 1995`)
-    .max(
-      new Date().getFullYear(),
-      `Year must be before or equal to ${new Date().getFullYear()}`
-    )
-    .required("Year is required"),
-  mileage: Yup.number()
-    .min(0, "Mileage must be at least 0km")
-    .max(500000, "Mileage must be below or equal to 500000km")
-    .required("Mileage is required"),
-  fuelType: Yup.string().required("Fuel type is required"),
-  image: Yup.mixed()
-    .required("An image is required")
-    .test("fileFormat", "Unsupported Format", (value) => {
-      if (value) {
-        const validImageTypes = ["image/jpeg", "image/png"];
-        return validImageTypes.includes(value.type);
-      }
-      return true;
-    }),
-});
+import { validationSchema } from "../../../Forms/FormValidation";
+import { uploadImageToFirebase } from "../../../Forms/UploadImageToFirebase";
 
 const FormikDummy = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { user, showModal } = useGlobalContext();
   const carRef = collection(db, "cars");
 
@@ -86,81 +29,50 @@ const FormikDummy = () => {
       fuelType: "",
       image: null,
     },
-
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
+
       if (!user || !user.uid) {
         formik.setStatus("User not authenticated.");
         setLoading(false);
         return;
       }
 
-      const currentDate = new Date();
-      // const currentSubmissionDate = currentDate.toLocaleString();
-      const currentSubmissionDate = Timestamp.fromDate(currentDate);
-      const fileExtension = values.image.name.split(".").pop();
-      const filenameWithoutExtension = values.image.name
-        .split(".")
-        .slice(0, -1)
-        .join(".");
-      const resizedFilename = `${filenameWithoutExtension}_800x600.${fileExtension}`;
+      try {
+        // Use the helper function to handle the image upload
+        const downloadURL = await uploadImageToFirebase(user.uid, values.image);
 
-      const storageRef = ref(
-        storage,
-        `car_images/${user.uid}/${values.image.name}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, values.image);
+        const currentDate = new Date();
+        const currentSubmissionDate = Timestamp.fromDate(currentDate);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error("Error uploading image: ", error);
-          setLoading(false);
-        },
-        async () => {
-          await new Promise((res) => setTimeout(res, 5000));
+        const newCar = {
+          submissionDate: currentSubmissionDate,
+          name: values.name,
+          description: values.description,
+          phoneNumber: values.phoneNumber,
+          price: values.price,
+          location: values.location,
+          imageUrl: downloadURL,
+          addedByUID: user.uid,
+          brand: values.brand,
+          model: values.model,
+          year: values.year,
+          mileage: values.mileage,
+          fuelType: values.fuelType,
+          email: values.email,
+        };
 
-          const resizedImageRef = ref(
-            storage,
-            `car_images/${user.uid}/${resizedFilename}`
-          );
-          getDownloadURL(resizedImageRef)
-            .then(async (downloadURL) => {
-              const newCar = {
-                submissionDate: currentSubmissionDate,
-                name: values.name,
-                description: values.description,
-                phoneNumber: values.phoneNumber,
-                price: values.price,
-                location: values.location,
-                imageUrl: downloadURL,
-                addedByUID: user.uid,
-                brand: values.brand,
-                model: values.model,
-                year: values.year,
-                mileage: values.mileage,
-                fuelType: values.fuelType,
-              };
+        console.log("Saving new car: ", newCar);
 
-              try {
-                await addDoc(carRef, newCar);
-                formik.resetForm();
-                navigate("/"); //navigating user to home page
-                showModal("Successfully submitted!");
-              } catch (error) {
-                console.error("Error adding car: ", error);
-              } finally {
-                setLoading(false);
-              }
-            })
-            .catch((error) => {
-              console.error("Error getting download URL: ", error);
-              setLoading(false);
-            });
-        }
-      );
+        await addDoc(carRef, newCar);
+        formik.resetForm();
+        showModal("Successfully submitted!");
+      } catch (error) {
+        console.error("Error: ", error);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -393,3 +305,99 @@ const FormikDummy = () => {
 };
 
 export default FormikDummy;
+
+// ...
+
+// const formik = useFormik({
+//   initialValues: {
+//     name: "",
+//     email: "",
+//     description: "",
+//     phoneNumber: "",
+//     price: "",
+//     location: "",
+//     brand: "",
+//     model: "",
+//     year: "",
+//     mileage: "",
+//     fuelType: "",
+//     image: null,
+//   },
+
+//   validationSchema: validationSchema,
+//   onSubmit: async (values) => {
+//     setLoading(true);
+//     if (!user || !user.uid) {
+//       formik.setStatus("User not authenticated.");
+//       setLoading(false);
+//       return;
+//     }
+
+//     const currentDate = new Date();
+//     const currentSubmissionDate = Timestamp.fromDate(currentDate);
+
+//     const fileExtension = values.image.name.split(".").pop();
+//     const filenameWithoutExtension = values.image.name
+//       .split(".")
+//       .slice(0, -1)
+//       .join(".");
+//     const resizedFilename = `${filenameWithoutExtension}_800x600.${fileExtension}`;
+
+//     const storageRef = ref(
+//       storage,
+//       `car_images/${user.uid}/${values.image.name}`
+//     );
+//     const uploadTask = uploadBytesResumable(storageRef, values.image);
+
+//     uploadTask.on(
+//       "state_changed",
+//       (snapshot) => {},
+//       (error) => {
+//         console.error("Error uploading image: ", error);
+//         setLoading(false);
+//       },
+//       async () => {
+//         await new Promise((res) => setTimeout(res, 5000));
+
+//         const resizedImageRef = ref(
+//           storage,
+//           `car_images/${user.uid}/${resizedFilename}`
+//         );
+//         getDownloadURL(resizedImageRef)
+//           .then(async (downloadURL) => {
+//             const newCar = {
+//               submissionDate: currentSubmissionDate,
+//               name: values.name,
+//               description: values.description,
+//               phoneNumber: values.phoneNumber,
+//               price: values.price,
+//               location: values.location,
+//               imageUrl: downloadURL,
+//               addedByUID: user.uid,
+//               brand: values.brand,
+//               model: values.model,
+//               year: values.year,
+//               mileage: values.mileage,
+//               fuelType: values.fuelType,
+//               email: values.email,
+//             };
+//             console.log("Saving new car: ", newCar);
+
+//             try {
+//               await addDoc(carRef, newCar);
+//               formik.resetForm();
+//               showModal("Successfully submitted!");
+//             } catch (error) {
+//               console.error("Error adding car: ", error);
+//             } finally {
+//               setLoading(false);
+//             }
+//           })
+//           .catch((error) => {
+//             console.error("Error getting download URL: ", error);
+//             setLoading(false);
+//           });
+//       }
+//     );
+//   },
+// });

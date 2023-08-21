@@ -4,12 +4,14 @@ import { DeleteIcon, EditIcon } from "../../../Data/data";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
 import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { useGlobalContext } from "../../../Context/Context";
+import EditCarModal from "./EditCarModal";
 
 const CarListing = ({ car }) => {
   const { showModal } = useGlobalContext();
 
   // State for modal visibility and selected car for deletion
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
 
   const deleteCar = async (id) => {
@@ -32,6 +34,10 @@ const CarListing = ({ car }) => {
   const handleDeleteClick = (id) => {
     setSelectedCarId(id);
     setDeleteModalOpen(true);
+  };
+
+  const handleEditClick = () => {
+    setEditModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -62,7 +68,7 @@ const CarListing = ({ car }) => {
       {car?.location && <p>{car?.location}</p>}
       {formattedDate && <p className="card-date">{formattedDate}</p>}
       <div className="dlt-upd-btn-container">
-        <button className="icon-button">
+        <button onClick={handleEditClick} className="icon-button">
           <EditIcon />
           UPDATE
         </button>
@@ -85,6 +91,9 @@ const CarListing = ({ car }) => {
             </div>
           </div>
         </div>
+      )}
+      {isEditModalOpen && (
+        <EditCarModal car={car} onClose={() => setEditModalOpen(false)} />
       )}
     </div>
   );

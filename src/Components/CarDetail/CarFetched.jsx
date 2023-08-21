@@ -4,6 +4,8 @@ import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const CarFetched = ({ details }) => {
   const formattedDate = timestampToDate(details?.submissionDate);
+  const editDate = timestampToDate(details?.editedDate);
+
   return (
     <div className="carddetail-car-card">
       <h4 className="carddetail-card-title">{details?.brand}</h4>
@@ -40,7 +42,10 @@ const CarFetched = ({ details }) => {
         <div className="carfetched-description">{details?.description}</div>
       )}
       {formattedDate && (
-        <p className="card-date position-static">Added at: {formattedDate}</p>
+        <p className="card-date position-static">added: {formattedDate}</p>
+      )}
+      {editDate && (
+        <p className="card-date position-static">updated: {editDate}</p>
       )}
     </div>
   );

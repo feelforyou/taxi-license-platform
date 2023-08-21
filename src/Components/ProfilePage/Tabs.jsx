@@ -3,7 +3,7 @@ import ProfileSection from "./ProfileSection";
 import Listings from "./Listings/Listings";
 import FormikForm from "../../Forms/FormikForm";
 function Tabs() {
-  const [activeTab, setActiveTab] = useState("upload"); // default to 'myprofile' tab
+  const [activeTab, setActiveTab] = useState("myprofile"); // default to 'myprofile' tab
 
   return (
     <div className="tabs-container">

@@ -3,6 +3,7 @@ import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const Car = ({ details }) => {
   const formattedDate = timestampToDate(details?.submissionDate);
+
   return (
     <div className="car-card">
       <h4 className="card-title">{details?.brand && details?.brand}</h4>
@@ -28,6 +29,7 @@ const Car = ({ details }) => {
       {details?.price && <p>Daily Rent: {details?.price}$</p>}
       {details?.location && <p>{details?.location}</p>}
       <p className="moreInfo">MORE INFO</p>
+
       {formattedDate && <p className="card-date">{formattedDate}</p>}
     </div>
   );
