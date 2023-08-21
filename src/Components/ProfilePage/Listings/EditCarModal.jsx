@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { updateToFirebase } from "../../../Forms/updateToFirebase";
 import { useFormik } from "formik";
 import { carBrandsAndModels } from "../../../Data/CarData";
-import { uploadImageToFirebase } from "../../../Forms/UploadImageToFirebase";
+import { uploadImageToFirebase } from "../../../Forms/uploadImageToFirebase";
 import { useGlobalContext } from "../../../Context/Context";
 import { Timestamp } from "firebase/firestore";
 import { editValidationSchema } from "../../../Forms/EditValidation";
