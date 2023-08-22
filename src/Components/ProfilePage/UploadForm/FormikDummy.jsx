@@ -7,7 +7,7 @@ import { useGlobalContext } from "../../../Context/Context";
 // import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { carBrandsAndModels } from "../../../Data/CarData";
 import { validationSchema } from "../../../Forms/FormValidation";
-import { uploadImageToFirebase } from "../../../Forms/UploadImageToFirebase";
+import { uploadImageToFirebase } from "../../../Forms/uploadImageToFirebase";
 
 const FormikDummy = () => {
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ const FormikDummy = () => {
   }, [formik.values.brand]);
 
   return (
-    <>
+    <div className="scroll-container">
       <form className="upload-form-container" onSubmit={formik.handleSubmit}>
         {formik.status && (
           <p className="submit-error-message">{formik.status}</p>
@@ -173,7 +173,7 @@ const FormikDummy = () => {
         {formik.touched.fuelType && formik.errors.fuelType && (
           <div className="formik-error">{formik.errors.fuelType}</div>
         )}
-        <div>
+        <div className="fueltype-container">
           {["Petrol", "Hybrid", "Gas", "Electric"].map((type) => (
             <label className="radio-btn" key={type}>
               <input
@@ -246,6 +246,7 @@ const FormikDummy = () => {
           <div className="formik-error">{formik.errors.image}</div>
         )}
         <input
+          style={{ padding: "10px" }}
           type="file"
           name="image"
           onChange={(event) => {
@@ -300,7 +301,7 @@ const FormikDummy = () => {
           {loading ? <span className="spinner-upload-form"></span> : "Add Car"}
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

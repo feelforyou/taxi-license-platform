@@ -43,6 +43,10 @@ body {
   width: 100%;
   color: var(--color);
 }
+body {
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+}
 
 .navbar,
 .Home,
@@ -64,6 +68,11 @@ img {
   --BGCOLOR: hsla(242, 86%, 8%, 0.902);
   --BGCOLOR-HOVER: hsla(242, 86%, 22%, 0.902);
   --color: #f5f5f5;
+}
+/*UTILITIES*/
+.page-content-container {
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 /*||||||||||||||||Start Navbar|||||||||||||||||||*/
@@ -634,32 +643,57 @@ img {
 .upload-form-container {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
   width: 95%;
   max-width: 700px;
-  padding: 20px;
+  padding: 10px;
   margin: 0.5rem auto;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds a light shadow for better depth */
   border-radius: 10px; /* Optional: adds rounded corners to the container */
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .upload-form-container input,
 .upload-form-container textarea,
 .upload-form-container button,
 .upload-form-container select {
-  margin-bottom: 15px; /* Adds a gap between form fields */
-  padding: 10px; /* Makes the input, textarea, and button larger and more clickable */
-  border: 1px solid #e1e1e1; /* Gives a border to distinguish the form fields */
-  border-radius: 5px; /* Optional: Rounded corners for the input fields and button */
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+}
+.upload-form-container textarea {
+  min-height: 7rem;
+}
+.upload-form-container input[type="file"] {
+  /* Workaround to make the input more visually appealing */
+  border: 1px solid #e1e1e1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px; /* only vertical padding */
+  text-align: center; /* centers the text */
+  cursor: pointer;
+  background-color: transparent;
 }
 
 .upload-form-container button {
-  background-color: #007bff; /* Gives a blue background color to the button */
-  color: white; /* Text color of the button */
-  cursor: pointer; /* Changes cursor to hand icon when hovering over button */
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer; /* Hand cursor on hover */
+  background-color: #007bff; /* Sample primary color */
+  color: white;
+  border: none;
+  transition: background-color 0.3s; /* Smooth transition on hover */
 }
 
 .upload-form-container button:hover {
-  background-color: #0056b3; /* Darkens the button on hover for better user feedback */
+  background-color: #0056b3; /* Darken on hover */
+}
+
+.upload-form-container button:active {
+  background-color: #003d7a; /* Darken even more on active press */
 }
 .formik-error {
   color: red;
@@ -1142,27 +1176,73 @@ img {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
+  background-color: transparent;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 100;
+  top: 5rem;
 }
 .edit-modal-content {
   width: 90%;
   max-width: 500px;
+  min-height: 80%;
+  max-height: 100%;
+  overflow-y: auto; /* make it scrollable*/
   text-align: center;
-  padding: 20px;
+  padding: 10px;
   background-color: whitesmoke;
-  color: var(--BGCOLOR);
+  color: black;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 101;
 }
 .edit-upload-form-container {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+}
+.fueltype-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .edit-img {
-  width: 30%;
-  margin-bottom: 0.5rem;
+  width: 50%;
+  margin: 0 auto 15px;
+  border-radius: 10px;
+}
+.edit-upload-form-container input,
+.edit-upload-form-container select,
+.edit-upload-form-container textarea {
+  width: 100%;
+  padding: 10px 15px; /* Added padding for better touch targets */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px; /* Increase font-size for better readability */
+  margin-bottom: 10px; /* Spacing between input elements */
+}
+.edit-upload-form-container button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer; /* Hand cursor on hover */
+  background-color: #007bff; /* Sample primary color */
+  color: white;
+  border: none;
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.edit-upload-form-container button:hover {
+  background-color: #0056b3; /* Darken on hover */
+}
+
+.edit-upload-form-container button:active {
+  background-color: #003d7a; /* Darken even more on active press */
+}
+
+@media screen and (min-width: 670px) {
+  .edit-modal-overlay {
+    top: 7rem;
+  }
 }
 
 /*EDIT MODAL*/
