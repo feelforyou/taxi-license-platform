@@ -53,7 +53,11 @@ const Navbar = () => {
               const { id, url, title } = link;
               return (
                 <li key={id} className="list-item">
-                  <Link className="link-hover" to={url}>
+                  <Link
+                    onClick={() => setIsOpen(false)}
+                    className="link-hover"
+                    to={url}
+                  >
                     <p>{title}</p>
                   </Link>
                 </li>
@@ -65,6 +69,7 @@ const Navbar = () => {
               <div className="user-info">
                 <div className="login-horizontal-wrapper">
                   <Link
+                    onClick={() => setIsOpen(false)}
                     className="user-avatar-link link-hover"
                     to={`/${user.uid}`}
                   >
@@ -85,7 +90,12 @@ const Navbar = () => {
                       {user.name || user.email}
                     </span>
                   </Link>
-                  <li onClick={signOut} className="sign-out-btn ">
+                  <li
+                    onClick={() => {
+                      signOut(), setIsOpen(false);
+                    }}
+                    className="sign-out-btn "
+                  >
                     <span className="span-hover">Sign Out</span>
                   </li>
                 </div>
@@ -94,11 +104,21 @@ const Navbar = () => {
           ) : (
             <div className="login-container-navbar">
               <li className="navbar-link">
-                <Link className="link-hover" to="/login">
+                <Link
+                  onClick={() => setIsOpen(false)}
+                  className="link-hover"
+                  to="/login"
+                >
                   log in
                 </Link>
               </li>
-              <li className="google-btn" onClick={handleSignIn}>
+              <li
+                className="google-btn"
+                onClick={() => {
+                  handleSignIn();
+                  setIsOpen(false);
+                }}
+              >
                 <GoogleSignIn />
               </li>
             </div>
