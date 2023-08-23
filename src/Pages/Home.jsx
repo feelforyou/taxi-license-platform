@@ -6,12 +6,14 @@ import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../Context/Context";
 import { ChevronDown } from "../Data/data";
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
   const [sortField, setSortField] = useState("submissionDate");
   const carsRef = useMemo(() => collection(db, "cars"), []);
   const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
   const { setCarsList } = useGlobalContext();
+  const location = useLocation();
 
   // Sort data on client side
   const sortedCars = rawCars.sort((a, b) => {
@@ -32,6 +34,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (location.hash === "#home-container") {
+      const element = document.getElementById("home-container");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
+  useEffect(() => {
     setCarsList(sortedCars);
   }, [sortedCars]);
 
@@ -48,7 +59,7 @@ const Home = () => {
   }
 
   return (
-    <div className="home-container">
+    <div id="home-container" className="home-container">
       <div className="home-filter-container">
         <h1>List of Cars</h1>
         <div className="select-wrapper">

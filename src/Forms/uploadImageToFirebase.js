@@ -21,12 +21,11 @@ export const uploadImageToFirebase = async (uid, imageFile) => {
     throw new Error("Both UID and image file are required");
   }
 
-  const fileExtension = imageFile.name.split(".").pop();
   const filenameWithoutExtension = imageFile.name
     .split(".")
     .slice(0, -1)
     .join(".");
-  const resizedFilename = `${filenameWithoutExtension}_800x600.${fileExtension}`;
+  const resizedFilenameWebP = `${filenameWithoutExtension}_800x600.webp`;
 
   const storageRef = ref(storage, `car_images/${uid}/${imageFile.name}`);
   const uploadTask = uploadBytesResumable(storageRef, imageFile);
@@ -42,7 +41,7 @@ export const uploadImageToFirebase = async (uid, imageFile) => {
       async () => {
         const resizedImageRef = ref(
           storage,
-          `car_images/${uid}/${resizedFilename}`
+          `car_images/${uid}/${resizedFilenameWebP}`
         );
         try {
           const downloadURL = await getDownloadURLWithRetry(resizedImageRef);

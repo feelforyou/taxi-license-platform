@@ -69,7 +69,7 @@ const FormikDummy = () => {
         await addDoc(carRef, newCar);
         formik.resetForm();
         showModal("Successfully submitted!");
-        navigate("/");
+        navigate("/#home-container");
       } catch (error) {
         console.error("Error: ", error);
       } finally {
