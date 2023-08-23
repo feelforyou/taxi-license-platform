@@ -11,7 +11,7 @@ const Home = () => {
   const [sortField, setSortField] = useState("submissionDate");
   const carsRef = useMemo(() => collection(db, "cars"), []);
   const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
-  const { carsList, setCarsList } = useGlobalContext();
+  const { setCarsList } = useGlobalContext();
 
   // Sort data on client side
   const sortedCars = rawCars.sort((a, b) => {
