@@ -12,7 +12,6 @@ const Car = ({ details }) => {
           src={details?.imageUrl}
           alt={details?.carName}
           className="car-image"
-          loading="lazy"
         />
       </div>
 
