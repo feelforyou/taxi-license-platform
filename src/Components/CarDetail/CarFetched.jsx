@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { DefaultImage } from "../../Data/data";
 import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const CarFetched = ({ details }) => {
+  const [imageLoading, setImageLoading] = useState(true);
   const formattedDate = timestampToDate(details?.submissionDate);
   const editDate = timestampToDate(details?.editedDate);
 
   return (
     <div className="carddetail-car-card">
       <h4 className="carddetail-card-title">{details?.brand}</h4>
-      {details?.imageUrl ? (
-        <img
-          src={details?.imageUrl}
-          alt={details?.carName}
-          className="carddetail-car-image"
-        />
-      ) : (
-        <DefaultImage
-          style={{ color: "darkBlue" }}
-          className="carddetail-car-image"
-        />
-      )}
+      {
+        details?.imageUrl && (
+          <div
+            className={`card-img-container ${imageLoading ? "skeleton" : ""}`}
+          >
+            <img
+              src={details?.imageUrl}
+              alt={details?.carName}
+              className="carddetail-car-image"
+              onLoad={() => setImageLoading(false)}
+              onError={(e) => {
+                setImageLoading(false);
+                e.target.onerror = null;
+                e.target.src = "/path/to/default-image.jpg";
+              }}
+            />
+          </div>
+        )
+
+        // <DefaultImage
+        //   style={{ color: "darkBlue" }}
+        //   className="carddetail-car-image"
+        // />
+      }
 
       <div>
         <span style={{ fontWeight: "bold" }}>

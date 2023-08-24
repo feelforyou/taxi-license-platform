@@ -13,6 +13,7 @@ const CarListing = ({ car }) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
+  const [imageLoading, setImageLoading] = useState(true);
 
   const deleteCar = async (id) => {
     try {
@@ -54,8 +55,18 @@ const CarListing = ({ car }) => {
     <div className="car-card">
       <h4 className="card-title">{car?.brand && car?.brand}</h4>
 
-      <div className="card-img-container">
-        <img src={car?.imageUrl} alt={car?.brand} className="car-image" />
+      <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>
+        <img
+          src={car?.imageUrl}
+          alt={car?.brand}
+          className="car-image"
+          onLoad={() => setImageLoading(false)}
+          onError={(e) => {
+            setImageLoading(false);
+            e.target.onerror = null;
+            e.target.src = "/path/to/default-image.jpg";
+          }}
+        />
       </div>
 
       <div>

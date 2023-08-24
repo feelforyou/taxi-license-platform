@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const Car = ({ details }) => {
   const formattedDate = timestampToDate(details?.submissionDate);
+  const [imageLoading, setImageLoading] = useState(true);
 
   return (
     <div className="car-card">
       <h4 className="card-title">{details?.brand && details?.brand}</h4>
-      <div className="card-img-container">
+      <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>
         <img
           src={details?.imageUrl}
           alt={details?.carName}
+          onLoad={() => setImageLoading(false)}
           className="car-image"
+          onError={(e) => {
+            setImageLoading(false);
+            e.target.onerror = null;
+            e.target.src = "/path/to/default-image.jpg";
+          }}
         />
       </div>
 
