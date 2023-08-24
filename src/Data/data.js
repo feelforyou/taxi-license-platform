@@ -16,8 +16,8 @@ import { AiOutlineEdit } from "react-icons/ai";
 
 export const links = [
   { id: "1", title: "main", url: "/" },
-  { id: "2", title: "project", url: "/about" },
-  { id: "3", title: "about", url: "/about" },
+
+  { id: "2", title: "about", url: "/about" },
 
   // { id: "2", title: "კაბინეტი", url: "/:userID" },
 

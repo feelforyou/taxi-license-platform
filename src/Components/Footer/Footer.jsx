@@ -1,7 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
-  links,
   FaceBookIcon,
   TwitterIcon,
   InstagramIcon,
@@ -11,63 +9,37 @@ import {
 const Footer = () => {
   return (
     <div className="footer-container">
-      <div className="footer-content">
-        <div className="footer-logo">
-          <a
-            href="https://www.facebook.com/groups/914945609916304"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Messenger />
-          </a>
-        </div>
+      <div className="footer-social-container">
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaceBookIcon size={40} className="footer-social-icon" />
+        </a>
 
-        <div className="footer-nav">
-          <h3>Navigation</h3>
-          <ul>
-            {links.map((link) => (
-              <li key={link.id}>
-                <Link to={link.url}>{link.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <TwitterIcon size={40} className="footer-social-icon" />
+        </a>
 
-        <div className="footer-social">
-          <h3>Follow Us</h3>
-          <ul>
-            <li>
-              <a
-                href="https://www.facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaceBookIcon size={20} />
-                <span>Facebook</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <TwitterIcon size={20} />
-                <span>Twitter</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <InstagramIcon size={20} />
-                <span>Instagram</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <InstagramIcon size={40} className="footer-social-icon" />
+        </a>
+        <a
+          href="https://www.facebook.com/groups/914945609916304"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Messenger size={40} className="footer-social-icon" />
+        </a>
       </div>
 
       <div className="footer-bottom">
