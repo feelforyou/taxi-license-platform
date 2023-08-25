@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { GoogleSignIn } from "../Data/data";
 import { useGlobalContext } from "../Context/Context";
 import { Link, useNavigate } from "react-router-dom";
+import PasswordResetModal from "../Components/Home/PasswordResetModal";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -78,7 +80,7 @@ const LogIn = () => {
       )
         .then((response) => response.json())
         .then(async (data) => {
-          console.log("Firebase Response:", data);
+          // console.log("Firebase Response:", data);
           if (data.emailVerified) {
             await refreshUser();
             setError("Email successfully verified! You can now log in.");
@@ -93,9 +95,9 @@ const LogIn = () => {
         })
         .catch((error) => {
           console.error("Fetch Error:", error);
-          setError(
-            "There was an error verifying your email. Please try again."
-          );
+          // setError(
+          //   "There was an error verifying your email. Please try again."
+          // );
         })
         .finally(() => {
           setIsVerifying(false);
@@ -161,11 +163,20 @@ const LogIn = () => {
         <Link className="link-wrapper" to="/signup">
           <button className="register-btn">Register</button>
         </Link>
-
+        <div
+          className="forgot-pass-container"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <a>forgot password?</a>
+        </div>
         <div className="google-btn" onClick={handleGoogleSignIn}>
           <GoogleSignIn />
         </div>
       </main>
+      <PasswordResetModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

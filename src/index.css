@@ -841,10 +841,26 @@ a {
   color: var(--COLOR-PRIMARY);
   width: 100%;
 }
+.forgot-pass-container {
+  cursor: pointer;
+  color: rgb(66, 133, 244);
+  display: flex;
+  width: 80%;
+  transition: all ease-in-out 0.3s;
+}
+
+.forgot-pass-container:hover {
+  color: hsl(
+    217,
+    60%,
+    42%
+  ); /* slightly darker shade of blue on hover for the text */
+}
 
 .google-btn {
   margin: 1rem 0;
 }
+
 .error-message {
   color: red;
   margin-top: 1rem;
@@ -1176,6 +1192,19 @@ a {
   .edit-modal-overlay {
     top: 7rem;
   }
+}
+
+/* password reset */
+.pass-reset-header {
+  color: var(--BGCOLOR);
+  margin-bottom: 1rem;
+}
+.pass-reset-btn {
+  margin: 1rem 0rem;
+  margin-top: 0rem;
+}
+.pass-reset-msg {
+  color: var(--BGCOLOR);
 }
 
 /*EDIT MODAL*/
