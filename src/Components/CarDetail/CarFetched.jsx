@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DefaultImage } from "../../Data/data";
 import { timestampToDate } from "../../Utilities/timestampToDate";
 
 const CarFetched = ({ details }) => {
@@ -9,32 +8,23 @@ const CarFetched = ({ details }) => {
 
   return (
     <div className="carddetail-car-card">
+      {console.log("carFetched")}
       <h4 className="carddetail-card-title">{details?.brand}</h4>
-      {
-        details?.imageUrl && (
-          <div
-            className={`card-img-container ${imageLoading ? "skeleton" : ""}`}
-          >
-            <img
-              src={details?.imageUrl}
-              alt={details?.carName}
-              className="carddetail-car-image"
-              onLoad={() => setImageLoading(false)}
-              onError={(e) => {
-                setImageLoading(false);
-                e.target.onerror = null;
-                e.target.src = "/path/to/default-image.jpg";
-              }}
-            />
-          </div>
-        )
-
-        // <DefaultImage
-        //   style={{ color: "darkBlue" }}
-        //   className="carddetail-car-image"
-        // />
-      }
-
+      {details?.imageUrl && (
+        <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>
+          <img
+            src={details?.imageUrl}
+            alt={details?.carName}
+            className="carddetail-car-image"
+            onLoad={() => setImageLoading(false)}
+            onError={(e) => {
+              setImageLoading(false);
+              e.target.onerror = null;
+              e.target.src = "/path/to/default-image.jpg";
+            }}
+          />
+        </div>
+      )}
       <div>
         <span style={{ fontWeight: "bold" }}>
           Model: {details?.model && details?.model}

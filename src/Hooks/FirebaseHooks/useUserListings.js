@@ -21,7 +21,6 @@ const useUserListings = (uid) => {
         where("addedByUID", "==", uid),
         orderBy("submissionDate", "desc")
       );
-
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {

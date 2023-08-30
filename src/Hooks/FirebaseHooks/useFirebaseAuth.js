@@ -87,7 +87,7 @@ const useFirebaseAuth = () => {
           uid: currentUser.uid,
           emailVerified: currentUser.emailVerified,
         });
-        setIsAuthenticated(true); // Set the flag here
+        setIsAuthenticated(true);
       } else {
         setUser({
           name: "",
@@ -96,7 +96,7 @@ const useFirebaseAuth = () => {
           uid: "",
           emailVerified: false,
         });
-        setIsAuthenticated(false); // Set the flag here
+        setIsAuthenticated(false);
       }
       setIsLoading(false);
     });

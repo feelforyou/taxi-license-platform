@@ -86,18 +86,10 @@ const LogIn = () => {
             setError("Email successfully verified! You can now log in.");
           } else {
             console.log(data.error);
-            // setError(
-            //   data.error
-            //     ? data.error.message
-            //     : "There was an error verifying your email. Please try again."
-            // );
           }
         })
         .catch((error) => {
           console.error("Fetch Error:", error);
-          // setError(
-          //   "There was an error verifying your email. Please try again."
-          // );
         })
         .finally(() => {
           setIsVerifying(false);
@@ -111,7 +103,7 @@ const LogIn = () => {
       if (result && result.user) {
         setTimeout(() => {
           navigate(`/${result.user.uid}`);
-        }, 100); // Delaying by half a second
+        }, 100); // Delaying
       }
     } catch (error) {
       setError(error.message);

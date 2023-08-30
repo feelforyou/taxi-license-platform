@@ -1,7 +1,7 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import GoogleButton from "react-google-button";
 import { VscChromeClose } from "react-icons/vsc";
-import { BiNetworkChart } from "react-icons/bi";
+import { BiNetworkChart, BiSquareRounded } from "react-icons/bi";
 import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -15,17 +15,14 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 
 export const links = [
-  { id: "1", title: "main", url: "/" },
+  { id: "1", title: "HOME", url: "/" },
 
-  { id: "2", title: "about", url: "/about" },
-
-  // { id: "2", title: "კაბინეტი", url: "/:userID" },
-
-  // { id: "4", title: "შესვლა", url: "/login" },
+  { id: "2", title: "CARS", url: "/cars" },
 ];
 
 export const GoogleSignIn = GoogleButton;
 export const BurgerMenu = GiHamburgerMenu;
+export const SquareRounded = BiSquareRounded;
 export const ChevronDown = GoChevronDown;
 export const CloseIcon = VscChromeClose;
 export const FooterIcon = BiNetworkChart;

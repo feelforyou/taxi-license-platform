@@ -1,17 +1,18 @@
 import { useFormik } from "formik";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
-// import { storage } from "../../../FirebaseConfig/firebaseConfig";
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../Context/Context";
-// import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { carBrandsAndModels } from "../../../Data/CarData";
 import { validationSchema } from "../../../Forms/FormValidation";
 import { uploadImageToFirebase } from "../../../Forms/uploadImageToFirebase";
 import { useNavigate } from "react-router-dom";
+
 const FormikDummy = () => {
   const [loading, setLoading] = useState(false);
+
   const { user, showModal } = useGlobalContext();
+
   const carRef = collection(db, "cars");
   const navigate = useNavigate();
 
@@ -69,7 +70,8 @@ const FormikDummy = () => {
         await addDoc(carRef, newCar);
         formik.resetForm();
         showModal("Successfully submitted!");
-        navigate("/#home-container");
+        navigate(`/${user.uid}`);
+        window.scrollTo(0, 0);
       } catch (error) {
         console.error("Error: ", error);
       } finally {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ProfileSection from "./ProfileSection";
 import Listings from "./Listings/Listings";
-// import FormikForm from "../../Forms/FormikForm";
 import FormikDummy from "./UploadForm/FormikDummy";
 function Tabs() {
   const [activeTab, setActiveTab] = useState("myprofile"); // default to 'myprofile' tab
@@ -21,38 +20,19 @@ function Tabs() {
         >
           Upload
         </div>
-        {/* <div
-          className={`tab ${activeTab === "reviews" ? "active-tab" : ""}`}
-          onClick={() => setActiveTab("reviews")}
-        >
-          Reviews
-        </div> */}
+
         <div
           className={`tab ${activeTab === "myprofile" ? "active-tab" : ""}`}
           onClick={() => setActiveTab("myprofile")}
         >
           Profile
         </div>
-        {/* <div
-          className={`tab ${activeTab === "settings" ? "active-tab" : ""}`}
-          onClick={() => setActiveTab("settings")}
-        >
-          Settings
-        </div> */}
       </div>
 
       <div className="tabs-content">
         {activeTab === "myprofile" && <ProfileSection />}
         {activeTab === "listings" && <Listings />}
-        {/* {activeTab === "upload" && <FormikForm />} */}
         {activeTab === "upload" && <FormikDummy />}
-
-        {/* {activeTab === "reviews" && (
-          <div>Reviews from other users will appear here.</div>
-        )}
-        {activeTab === "settings" && (
-          <div>Profile Settings form will appear here.</div>
-        )} */}
       </div>
     </div>
   );

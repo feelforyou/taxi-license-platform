@@ -1,87 +1,50 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Car from "../Components/Home/Car";
-import { db } from "../FirebaseConfig/firebaseConfig";
-import { collection } from "firebase/firestore";
-import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection";
-import { Link } from "react-router-dom";
-import { useGlobalContext } from "../Context/Context";
-import { ChevronDown } from "../Data/data";
-import { useLocation } from "react-router-dom";
+import React from "react";
+import { tesla, mersedes, toyota } from "../Images/index";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [sortField, setSortField] = useState("submissionDate");
-  const carsRef = useMemo(() => collection(db, "cars"), []);
-  const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
-  const { setCarsList } = useGlobalContext();
-  const location = useLocation();
-
-  // Sort data on client side
-  const sortedCars = rawCars.sort((a, b) => {
-    switch (sortField) {
-      case "submissionDate":
-        return b.submissionDate.toMillis() - a.submissionDate.toMillis();
-      case "price":
-        return b.price - a.price;
-      case "year":
-        return b.year - a.year;
-      default:
-        return 0;
-    }
-  });
-
-  const handleSortChange = (selectedField) => {
-    setSortField(selectedField);
+  const navigate = useNavigate();
+  const redirect = () => {
+    navigate("/cars");
+    window.scrollTo(0, 0);
   };
-
-  useEffect(() => {
-    if (location.hash === "#home-container") {
-      const element = document.getElementById("home-container");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [location]);
-
-  useEffect(() => {
-    setCarsList(sortedCars);
-  }, [sortedCars]);
-
-  if (loading) {
-    return (
-      <div className="home-container">
-        <div className="loading"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
   return (
-    <div id="home-container" className="home-container">
-      <div className="home-filter-container">
-        <h1>List of Cars</h1>
-        <div className="select-wrapper">
-          <select
-            className="custom-select"
-            value={sortField}
-            onChange={(e) => handleSortChange(e.target.value)}
-          >
-            <option value="submissionDate">Sort by Date</option>
-            <option value="price">Sort by Price</option>
-            <option value="year">Sort by Year</option>
-          </select>
-          <ChevronDown className="select-chevron" />
+    <div className="home-container">
+      <header className="home-header">
+        <h1>CarRenta</h1>
+        <p>Your journey starts here.</p>
+      </header>
+
+      <section className="home-section">
+        <h2>Explore Our Fleet</h2>
+        <p className="paragraph">
+          Browse through our wide selection of vehicles and pick the one that's
+          perfect for you.
+        </p>
+
+        <div className="car-grid">
+          <div className="car-item">
+            <img src={tesla} alt="tesla" />
+            <p>TESLA</p>
+          </div>
+          <div className="car-item">
+            <img src={mersedes} alt="mersedes" />
+            <p>MERSEDES</p>
+          </div>
+          <div className="car-item">
+            <img src={toyota} alt="toyota" />
+            <p>TOYOTA</p>
+          </div>
         </div>
-      </div>
-      <main className="home-main">
-        {sortedCars.map((car) => (
-          <Link key={car.id} to={`/cardetail/${car.id}`}>
-            <Car details={car} />
-          </Link>
-        ))}
-      </main>
+      </section>
+
+      <section className="cta-section">
+        <h2 className="heading-ready">Ready to hit the road?</h2>
+
+        <button onClick={redirect} className="rent-now-btn">
+          Rent Now
+        </button>
+      </section>
     </div>
   );
 };

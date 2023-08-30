@@ -6,6 +6,7 @@ import { uploadImageToFirebase } from "../../../Forms/uploadImageToFirebase";
 import { useGlobalContext } from "../../../Context/Context";
 import { Timestamp } from "firebase/firestore";
 import { editValidationSchema } from "../../../Forms/EditValidation";
+import { useNavigate } from "react-router-dom";
 
 //utility function
 function hasChanged(initialValues, currentValues) {
@@ -15,6 +16,9 @@ function hasChanged(initialValues, currentValues) {
 }
 
 const EditCarModal = ({ car, onClose }) => {
+  console.log("EditCarModal");
+  const navigate = useNavigate();
+
   const { showModal, user } = useGlobalContext();
   // Assuming car is the car data passed down as a prop.
   const [loading, setLoading] = useState(false); // added loading state
@@ -45,6 +49,9 @@ const EditCarModal = ({ car, onClose }) => {
       if (!hasChanged(formik.initialValues, values)) {
         onClose();
         showModal("No changes made to the car details.");
+        navigate("/");
+        window.scrollTo(0, 0);
+
         setLoading(false);
         return; // Exit out of the function without updating Firebase
       }
@@ -63,6 +70,9 @@ const EditCarModal = ({ car, onClose }) => {
         await updateToFirebase(values, car.id);
 
         // Show success message (if you have a method to display messages, otherwise skip this step)
+        navigate("/");
+        window.scrollTo(0, 0);
+
         showModal("Car details updated successfully!");
 
         // Close the modal after saving

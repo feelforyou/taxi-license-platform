@@ -16,12 +16,6 @@ function ProfileSection() {
       )}
       <div className="profile-name">{user.name}</div>
       <div className="profile-detail">{user.email}</div>
-
-      {/* <div className="profile-detail">Experience: 5 years</div>
-      <div className="profile-detail">
-        Brief Bio: Experienced driver with a passion for service.
-      </div> */}
-      {/* <div className="profile-detail">Rating: ★★★★☆</div> */}
     </div>
   );
 }

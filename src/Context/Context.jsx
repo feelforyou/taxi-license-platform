@@ -1,25 +1,14 @@
 // AppContext.js
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import useFirebaseAuth from "../Hooks/FirebaseHooks/useFirebaseAuth";
 
 const GlobalContext = createContext();
 
 const AppContext = ({ children }) => {
-  const {
-    user,
-    signInWithGoogle,
-    signInEmailPassword,
-    isLoading,
-    isAuthenticated,
-    isVerifying,
-    setIsVerifying,
-    refreshUser,
-  } = useFirebaseAuth();
-
-  const [carsList, setCarsList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
+
   const showModal = (content) => {
     setModalContent(content);
     setModalVisible(true);
@@ -33,11 +22,7 @@ const AppContext = ({ children }) => {
     setModalContent("");
   };
 
-  const value = {
-    isModalVisible,
-    modalContent,
-    showModal,
-    hideModal,
+  const {
     user,
     signInWithGoogle,
     signInEmailPassword,
@@ -46,9 +31,38 @@ const AppContext = ({ children }) => {
     isVerifying,
     setIsVerifying,
     refreshUser,
-    carsList,
-    setCarsList,
-  };
+  } = useFirebaseAuth();
+
+  const value = useMemo(
+    () => ({
+      isModalVisible,
+      modalContent,
+      showModal,
+      hideModal,
+      user,
+      signInWithGoogle,
+      signInEmailPassword,
+      isLoading,
+      isAuthenticated,
+      isVerifying,
+      setIsVerifying,
+      refreshUser,
+    }),
+    [
+      isModalVisible,
+      modalContent,
+      user,
+      isLoading,
+      isAuthenticated,
+      isVerifying,
+      showModal,
+      hideModal,
+      signInWithGoogle,
+      signInEmailPassword,
+      setIsVerifying,
+      refreshUser,
+    ]
+  );
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

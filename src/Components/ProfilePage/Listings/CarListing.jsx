@@ -8,8 +8,8 @@ import EditCarModal from "./EditCarModal";
 
 const CarListing = ({ car }) => {
   const { showModal } = useGlobalContext();
-
   // State for modal visibility and selected car for deletion
+
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
@@ -26,6 +26,7 @@ const CarListing = ({ car }) => {
       }
 
       await deleteDoc(docRef);
+
       showModal("Document successfully deleted!");
     } catch (error) {
       console.error("Error deleting document: ", error);
@@ -53,6 +54,7 @@ const CarListing = ({ car }) => {
 
   return (
     <div className="car-card">
+      {console.log("carlisting rendered")}
       <h4 className="card-title">{car?.brand && car?.brand}</h4>
 
       <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>

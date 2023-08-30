@@ -1,12 +1,9 @@
-/////Lazy Loading Approach
-
 import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Pages/Home";
-
-const About = React.lazy(() => import("./Pages/About"));
+const CarsForRent = React.lazy(() => import("./Pages/CarsForRent"));
 const LogIn = React.lazy(() => import("./Pages/LogIn"));
 const SignUp = React.lazy(() => import("./Pages/SignUp"));
 const CarDetail = React.lazy(() => import("./Pages/CarDetail"));
@@ -26,7 +23,7 @@ const App = () => {
       >
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/about" element={<About />} />
+          <Route exact path="/cars" element={<CarsForRent />} />
           <Route exact path="/login" element={<LogIn />} />
           <Route exact path="/signup" element={<SignUp />} />
           <Route path="/cardetail/:carID" element={<CarDetail />} />

@@ -8,12 +8,12 @@ const Car = ({ details }) => {
   return (
     <div className="car-card">
       <h4 className="card-title">{details?.brand && details?.brand}</h4>
-      <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>
+      <div className={`card-img-container  ${imageLoading ? "skeleton" : ""}`}>
         <img
           src={details?.imageUrl}
           alt={details?.carName}
-          onLoad={() => setImageLoading(false)}
           className="car-image"
+          onLoad={() => setImageLoading(false)}
           onError={(e) => {
             setImageLoading(false);
             e.target.onerror = null;
