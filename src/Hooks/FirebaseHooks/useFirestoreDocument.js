@@ -12,7 +12,6 @@ const useFirestoreDocument = (docRef) => {
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists) {
           setData({ id: docSnapshot.id, ...docSnapshot.data() });
-          console.log("useFirestoreDocument:", docSnapshot);
         } else {
           console.error("No such document!");
         }

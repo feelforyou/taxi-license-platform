@@ -54,7 +54,6 @@ import { db } from "../FirebaseConfig/firebaseConfig";
 import CarFetched from "../Components/CarDetail/CarFetched";
 
 const CarDetail = () => {
-  console.log("CarDetail");
   const { carID } = useParams();
   const [carDetails, setCarDetails] = useState(null);
 

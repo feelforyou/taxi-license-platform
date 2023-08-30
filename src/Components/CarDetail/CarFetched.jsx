@@ -8,7 +8,6 @@ const CarFetched = ({ details }) => {
 
   return (
     <div className="carddetail-car-card">
-      {console.log("carFetched")}
       <h4 className="carddetail-card-title">{details?.brand}</h4>
       {details?.imageUrl && (
         <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>

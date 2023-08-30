@@ -3,7 +3,7 @@ import Car from "../Components/Home/Car";
 import { db } from "../FirebaseConfig/firebaseConfig";
 import { collection } from "firebase/firestore";
 import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "../Data/data";
 
 const CarsForRent = () => {
@@ -11,6 +11,13 @@ const CarsForRent = () => {
 
   const carsRef = useMemo(() => collection(db, "cars"), []);
   const { data: rawCars, loading, error } = useFirestoreCollection(carsRef);
+  const navigate = useNavigate();
+
+  //scroll to the top of a page when navigated to the car page
+  const handleCarClick = (carId) => {
+    navigate(`/cardetail/${carId}`);
+    window.scrollTo(0, 0);
+  };
 
   // Sort data on client side
   const sortedCars = rawCars.sort((a, b) => {
@@ -61,9 +68,9 @@ const CarsForRent = () => {
       </div>
       <main className="carsrent-main">
         {sortedCars.map((car) => (
-          <Link key={car.id} to={`/cardetail/${car.id}`}>
+          <div key={car.id} onClick={() => handleCarClick(car.id)}>
             <Car details={car} />
-          </Link>
+          </div>
         ))}
       </main>
     </div>
