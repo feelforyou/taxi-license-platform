@@ -13,6 +13,7 @@ import { FaImage } from "react-icons/fa";
 import { GoChevronDown } from "react-icons/go";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
+import { HiOutlinePlus } from "react-icons/hi";
 
 export const links = [
   { id: "1", title: "HOME", url: "/" },
@@ -22,6 +23,7 @@ export const links = [
 
 export const GoogleSignIn = GoogleButton;
 export const BurgerMenu = GiHamburgerMenu;
+export const AddCar = HiOutlinePlus;
 export const SquareRounded = BiSquareRounded;
 export const ChevronDown = GoChevronDown;
 export const CloseIcon = VscChromeClose;

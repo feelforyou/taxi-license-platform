@@ -6,6 +6,7 @@ import {
   where,
   onSnapshot,
   orderBy,
+  doc,
 } from "firebase/firestore";
 
 const useUserListings = (uid) => {
@@ -16,9 +17,12 @@ const useUserListings = (uid) => {
   useEffect(() => {
     if (uid) {
       const carsRef = collection(db, "cars");
+      // Create a reference to the user's document
+      const userDocRef = doc(db, "users", uid);
       const q = query(
         carsRef,
-        where("addedByUID", "==", uid),
+        // where("addedByUID", "==", uid),
+        where("addedByUID", "==", userDocRef),
         orderBy("submissionDate", "desc")
       );
       const unsubscribe = onSnapshot(

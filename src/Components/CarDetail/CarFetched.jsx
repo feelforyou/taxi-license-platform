@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { timestampToDate } from "../../Utilities/timestampToDate";
+import { Link } from "react-router-dom";
 
 const CarFetched = ({ details }) => {
   const [imageLoading, setImageLoading] = useState(true);
@@ -38,6 +39,9 @@ const CarFetched = ({ details }) => {
       {details?.price && <p>Daily Rent: {details?.price}$</p>}
       {details?.location && <p>Location: {details?.location}</p>}
       {details?.name && <p>Owner's name: {details?.name}</p>}
+      <Link to={`/owner/${details?.addedByUID.id}`}>
+        <p style={{ color: "darkBlue" }}>View Owner Details</p>
+      </Link>
       {details?.phoneNumber && <p>Phone: {details?.phoneNumber}</p>}
       <p>Description:</p>
       {details?.description && (

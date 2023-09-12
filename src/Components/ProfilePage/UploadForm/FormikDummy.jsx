@@ -1,5 +1,12 @@
 import { useFormik } from "formik";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDoc,
+  setDoc,
+  doc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../../../FirebaseConfig/firebaseConfig";
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../Context/Context";
@@ -12,7 +19,7 @@ const FormikDummy = () => {
   const [loading, setLoading] = useState(false);
 
   const { user, showModal } = useGlobalContext();
-
+  const usersRef = collection(db, "users"); // Reference to the 'users' collection
   const carRef = collection(db, "cars");
   const navigate = useNavigate();
 
@@ -41,12 +48,38 @@ const FormikDummy = () => {
         return;
       }
 
+      // Get the unique name based on auth status
+      let uniqueName = user.name || user.email.split("@")[0];
+
       try {
         // Use the helper function to handle the image upload
         const downloadURL = await uploadImageToFirebase(user.uid, values.image);
-
         const currentDate = new Date();
         const currentSubmissionDate = Timestamp.fromDate(currentDate);
+
+        /////////////////////
+
+        // Ensure user exists in users collection or create it
+        const userDocRef = doc(usersRef, user.uid); // Create a reference to the user's document
+        const userDoc = await getDoc(userDocRef); // Try to fetch the user's document
+
+        if (!userDoc.document) {
+          // If the user's document doesn't exist, create it
+
+          try {
+            await setDoc(userDocRef, {
+              name: values.name,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              avatar: user.avatar,
+              uniqueName, // Storing the unique name in the user's document
+            });
+          } catch (error) {
+            console.error("Error creating user document:", error);
+          }
+        }
+
+        ////////////////////
 
         const newCar = {
           submissionDate: currentSubmissionDate,
@@ -56,16 +89,16 @@ const FormikDummy = () => {
           price: values.price,
           location: values.location,
           imageUrl: downloadURL,
-          addedByUID: user.uid,
+          // addedByUID: user.uid,
+          addedByUID: userDocRef,
           brand: values.brand,
           model: values.model,
           year: values.year,
           mileage: values.mileage,
           fuelType: values.fuelType,
           email: values.email,
+          uniqueName, // Storing the unique name in the user's document
         };
-
-        console.log("Saving new car: ", newCar);
 
         await addDoc(carRef, newCar);
         formik.resetForm();
@@ -269,6 +302,7 @@ const FormikDummy = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          autoComplete="name"
         />
 
         {/* Phone Number */}
@@ -284,6 +318,7 @@ const FormikDummy = () => {
           value={formik.values.phoneNumber}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          autoComplete="tel"
         />
 
         {/* Email */}
@@ -297,6 +332,7 @@ const FormikDummy = () => {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          autoComplete="email"
         />
 
         {/* Submit Button */}

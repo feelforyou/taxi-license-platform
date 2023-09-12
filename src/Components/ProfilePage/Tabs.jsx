@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import ProfileSection from "./ProfileSection";
 import Listings from "./Listings/Listings";
 import FormikDummy from "./UploadForm/FormikDummy";
-function Tabs() {
-  const [activeTab, setActiveTab] = useState("myprofile"); // default to 'myprofile' tab
+import RealtimeChat from "./Messages/RealtimeChat";
+function Tabs({ initialTab }) {
+  const [activeTab, setActiveTab] = useState(initialTab || "myprofile");
 
   return (
     <div className="tabs-container">
@@ -18,7 +19,7 @@ function Tabs() {
           className={`tab ${activeTab === "upload" ? "active-tab" : ""}`}
           onClick={() => setActiveTab("upload")}
         >
-          Upload
+          Add Car +
         </div>
 
         <div
@@ -27,10 +28,19 @@ function Tabs() {
         >
           Profile
         </div>
+        <div
+          className={`tab ${activeTab === "messages" ? "active-tab" : ""}`}
+          onClick={() => setActiveTab("messages")}
+        >
+          Messages
+        </div>
       </div>
 
       <div className="tabs-content">
         {activeTab === "myprofile" && <ProfileSection />}
+        {/* {activeTab === "messages" && <MessagesList />} */}
+        {activeTab === "messages" && <RealtimeChat />}
+
         {activeTab === "listings" && <Listings />}
         {activeTab === "upload" && <FormikDummy />}
       </div>

@@ -4,7 +4,8 @@ import { db } from "../FirebaseConfig/firebaseConfig";
 import { collection } from "firebase/firestore";
 import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown } from "../Data/data";
+import { AddCar, ChevronDown } from "../Data/data";
+import { auth } from "../FirebaseConfig/firebaseConfig";
 
 const CarsForRent = () => {
   const [sortField, setSortField] = useState("submissionDate");
@@ -16,6 +17,11 @@ const CarsForRent = () => {
   //scroll to the top of a page when navigated to the car page
   const handleCarClick = (carId) => {
     navigate(`/cardetail/${carId}`);
+    window.scrollTo(0, 0);
+  };
+
+  const redirect = () => {
+    navigate(`/${auth?.currentUser?.uid}/upload`);
     window.scrollTo(0, 0);
   };
 
@@ -52,9 +58,16 @@ const CarsForRent = () => {
   return (
     <div className="carsrent-container">
       <div className="carsrent-filter-container">
-        <h1>List of Cars</h1>
+        <header className="addcar-container">
+          <h1>New Cars</h1>
+          <button className="addcar-btn" onClick={redirect}>
+            Add Car <AddCar />
+          </button>
+        </header>
+
         <div className="select-wrapper">
           <select
+            id="sort-cars"
             className="custom-select"
             value={sortField}
             onChange={(e) => handleSortChange(e.target.value)}

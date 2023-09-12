@@ -54,7 +54,6 @@ const CarListing = ({ car }) => {
 
   return (
     <div className="car-card">
-      {console.log("carlisting rendered")}
       <h4 className="card-title">{car?.brand && car?.brand}</h4>
 
       <div className={`card-img-container ${imageLoading ? "skeleton" : ""}`}>

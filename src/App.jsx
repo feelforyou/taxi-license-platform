@@ -9,6 +9,7 @@ const SignUp = React.lazy(() => import("./Pages/SignUp"));
 const CarDetail = React.lazy(() => import("./Pages/CarDetail"));
 const Error = React.lazy(() => import("./Pages/Error"));
 const ProtectedRoute = React.lazy(() => import("./Utilities/ProtectedRoute"));
+const OwnerDetail = React.lazy(() => import("./Pages/OwnerDetail"));
 
 const App = () => {
   return (
@@ -27,7 +28,10 @@ const App = () => {
           <Route exact path="/login" element={<LogIn />} />
           <Route exact path="/signup" element={<SignUp />} />
           <Route path="/cardetail/:carID" element={<CarDetail />} />
-          <Route path="/:userID" element={<ProtectedRoute />} />
+          {/* <Route path="/:userID" element={<ProtectedRoute />} /> */}
+          <Route path="/owner/:ownerID" element={<OwnerDetail />} />
+          <Route path="/:userID/:tab?" element={<ProtectedRoute />} />
+
           <Route path="*" element={<Error />} />
         </Routes>
       </Suspense>
