@@ -1,15 +1,21 @@
 import React, { useState, useEffect, memo, useRef } from "react";
 import { doc, getFirestore, getDoc } from "firebase/firestore";
-import { getDatabase, ref, onValue, set, push, off } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  off,
+  get,
+} from "firebase/database";
 import { auth } from "../../../FirebaseConfig/firebaseConfig";
 import fallbackAvatar from "../../../assets/fallback-avatar.png";
 import { renderMessageWithLinks } from "../../../Utilities/renderMessageWithLinks";
 
 const RealtimeChat = () => {
   const [fetchedNames, setFetchedNames] = useState({});
-
   const [clearTextArea, setClearTextArea] = useState(false);
-
   const [messages, setMessages] = useState([]);
   const [threads, setThreads] = useState([]);
   const [activeThread, setActiveThread] = useState(null);
@@ -22,24 +28,11 @@ const RealtimeChat = () => {
     auth?.currentUser?.displayName || auth?.currentUser?.email?.split("@")[0];
   const currentUserAvatar = auth?.currentUser?.photoURL || fallbackAvatar;
 
-  const ownerID = localStorage.getItem("ownerID");
-
   const fetchNameFromFirestore = async (id) => {
-    // Try fetching from `ownerDetails-USER_ID` format.
-    let ownerDetail = localStorage.getItem(`ownerDetails-${id}`);
-    if (ownerDetail) {
-      return JSON.parse(ownerDetail).uniqueName;
-    }
+    if (!id) return "Unknown";
+    // Check cache first
+    if (fetchedNames[id]) return fetchedNames[id];
 
-    // If not found, try fetching from `ownerDetails` object format.
-    let allOwnerDetails = JSON.parse(
-      localStorage.getItem("ownerDetails") || "{}"
-    );
-    if (allOwnerDetails[id] && allOwnerDetails[id].uniqueName) {
-      return allOwnerDetails[id].uniqueName;
-    }
-
-    // If still not found, fetch from Firestore.
     const firestoreDB = getFirestore();
     const userRef = doc(firestoreDB, "users", id);
     const userDoc = await getDoc(userRef);
@@ -47,95 +40,88 @@ const RealtimeChat = () => {
     if (userDoc.exists()) {
       const userName = userDoc.data().uniqueName;
       if (userName) {
-        // Store in the `ownerDetails-USER_ID` format.
-        localStorage.setItem(
-          `ownerDetails-${id}`,
-          JSON.stringify({ uniqueName: userName })
-        );
+        setFetchedNames((prev) => ({ ...prev, [id]: userName }));
         return userName;
       }
     }
-
-    return null;
+    return "Unknown";
   };
 
-  const handleKeyDown = (event) => {
-    // Check for Enter key without Shift
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // Prevents default newline behavior of Enter key in textarea
-      handleSendMessage();
-    }
-  };
-
-  // Temp storage for fetched names
-  const tempFetchedNamesRef = useRef({ ...fetchedNames });
-
+  // Effect to handle initiating a new chat from another page
   useEffect(() => {
-    if (!currentUserID || !ownerID || currentUserID === ownerID) {
-      return;
+    const newChatOwnerID = localStorage.getItem("ownerID");
+    if (newChatOwnerID && currentUserID && newChatOwnerID !== currentUserID) {
+      const sortedIds = [currentUserID, newChatOwnerID].sort();
+      const threadID = sortedIds.join("_");
+
+      // Immediately set the new chat as active
+      setActiveThread(threadID);
+
+      // Define the welcome message
+      const welcomeMessage = {
+        sender: "system",
+        text: "Welcome to the chat! Start your conversation here.",
+        timestamp: Date.now(),
+      };
+
+      // Ensure the thread exists for the current user
+      const user1ThreadRef = ref(
+        db,
+        `threads/${currentUserID}/${threadID}/messages`
+      );
+      get(user1ThreadRef).then((snapshot) => {
+        if (!snapshot.exists()) {
+          push(user1ThreadRef, welcomeMessage);
+        }
+      });
+
+      // Ensure the thread exists for the other user
+      const user2ThreadRef = ref(
+        db,
+        `threads/${newChatOwnerID}/${threadID}/messages`
+      );
+      get(user2ThreadRef).then((snapshot) => {
+        if (!snapshot.exists()) {
+          push(user2ThreadRef, welcomeMessage);
+        }
+      });
+
+      // Clean up local storage
+      localStorage.removeItem("ownerID");
     }
+  }, [currentUserID, db]);
 
-    const sortedIds = [currentUserID, ownerID].sort();
-    const potentialThreadID = sortedIds.join("_");
-    const potentialThreadRef = ref(
-      db,
-      `threads/${currentUserID}/${potentialThreadID}/messages`
-    );
-
-    onValue(potentialThreadRef, (snapshot) => {
-      if (!snapshot.val()) {
-        const initialMessage = {
-          sender: "system",
-          text: "Welcome to the chat! Start your conversation here.",
-          timestamp: Date.now(),
-        };
-        const newMessageRef = push(potentialThreadRef);
-        set(newMessageRef, initialMessage);
-      }
-    });
-
-    return () => off(potentialThreadRef);
-  }, [currentUserID, ownerID]);
-
+  // Effect to fetch all of the user's chat threads
   useEffect(() => {
-    if(!currentUserID) return;
+    if (!currentUserID) return;
+
     const threadsRef = ref(db, `threads/${currentUserID}`);
-    onValue(threadsRef, async (snapshot) => {
+    const listener = onValue(threadsRef, async (snapshot) => {
       const data = snapshot.val();
-
       if (data) {
-        const relevantThreads = Object.keys(data).map(async (threadID) => {
-          // Extract user IDs from the thread ID
+        const threadPromises = Object.keys(data).map(async (threadID) => {
           const userIds = threadID.split("_");
           const otherUserId = userIds.find((id) => id !== currentUserID);
-
-          const name = await fetchNameFromFirestore(otherUserId);
-          tempFetchedNamesRef.current[otherUserId] = name || "Unknown";
+          const otherUserName = await fetchNameFromFirestore(otherUserId);
 
           return {
             id: threadID,
-            otherUserName: name,
+            otherUserName,
             lastMessage: data[threadID].messages
               ? Object.values(data[threadID].messages).pop()
               : null,
-            unread: false,
           };
         });
-
-        const resolvedThreads = await Promise.all(relevantThreads);
+        const resolvedThreads = await Promise.all(threadPromises);
         setThreads(resolvedThreads);
-        const newNames = { ...tempFetchedNamesRef.current };
-        if (JSON.stringify(newNames) !== JSON.stringify(fetchedNames)) {
-          setFetchedNames(newNames);
-        }
       }
     });
 
-    return () => off(threadsRef);
-  }, [currentUserID]);
+    return () => off(threadsRef, "value", listener);
+  }, [currentUserID, db]);
 
+  // Effect to fetch messages for the currently active chat thread
   useEffect(() => {
-    // If there's no active thread or user, clear messages and do nothing.
     if (!activeThread || !currentUserID) {
       setMessages([]);
       return;
@@ -145,87 +131,31 @@ const RealtimeChat = () => {
       db,
       `threads/${currentUserID}/${activeThread}/messages`
     );
-    onValue(threadRef, (snapshot) => {
+    const listener = onValue(threadRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
-        const loadedMessages = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        setMessages(loadedMessages);
-      } else {
-        // If the thread is empty, make sure to clear any old messages.
-        setMessages([]);
-      }
+      const loadedMessages = data
+        ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
+        : [];
+      setMessages(loadedMessages);
     });
 
-    // Cleanup function to detach the listener.
-    return () => off(threadRef);
-  }, [activeThread, currentUserID, db]); // Corrected dependency array
+    return () => off(threadRef, "value", listener);
+  }, [activeThread, currentUserID, db]);
 
-  useEffect(() => {
-    async function fetchNamesForMessages() {
-      const uniqueSenders = [...new Set(messages.map((m) => m.sender))].filter(
-        (sender) => !fetchedNames[sender] && sender !== "system"
-      );
-      for (let sender of uniqueSenders) {
-        if (sender !== currentUserID) {
-          const fetchedName = await fetchNameFromFirestore(sender);
-          if (fetchedName) {
-            setFetchedNames((prev) => ({
-              ...prev,
-              [sender]: fetchedName,
-            }));
-          }
-        }
-      }
-    }
-
-    fetchNamesForMessages();
-  }, [messages]);
-
+  // Effect to scroll to the latest message
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   }, [messages]);
 
-  useEffect(() => {
-    async function fetchNamesForThread() {
-      if (!activeThread) return;
-
-      // Extract user IDs from the thread ID
-      const userIds = activeThread.split("_");
-      for (let id of userIds) {
-        if (!fetchedNames[id]) {
-          const fetchedName = await fetchNameFromFirestore(id);
-          if (fetchedName) {
-            setFetchedNames((prev) => ({
-              ...prev,
-              [id]: fetchedName,
-            }));
-          }
-        }
-      }
-    }
-
-    fetchNamesForThread();
-  }, [activeThread]);
-
   const handleSendMessage = () => {
     if (!textRef.current.value.trim() || !activeThread) return;
 
-    // Derive the recipient ID from the activeThread
     const userIds = activeThread.split("_");
     const recipientID = userIds.find((id) => id !== currentUserID);
 
-    if (!recipientID) {
-      console.error("Cannot derive a valid recipient ID.");
-      return;
-    }
-
-    const sortedIds = [currentUserID, recipientID].sort();
-    const potentialThreadID = sortedIds.join("_");
+    if (!recipientID) return;
 
     const message = {
       sender: currentUserID,
@@ -235,49 +165,41 @@ const RealtimeChat = () => {
       timestamp: Date.now(),
     };
 
-    // For the current user
-    const currentUserMessageRef = push(
-      ref(db, `threads/${currentUserID}/${potentialThreadID}/messages`)
+    // Write message to both users' threads
+    const currentUserMessageRef = ref(
+      db,
+      `threads/${currentUserID}/${activeThread}/messages`
     );
-    set(currentUserMessageRef, message);
+    push(currentUserMessageRef, message);
 
-    // For the recipient/user2
-    const recipientUserMessageRef = push(
-      ref(db, `threads/${recipientID}/${potentialThreadID}/messages`)
+    const recipientUserMessageRef = ref(
+      db,
+      `threads/${recipientID}/${activeThread}/messages`
     );
-    set(recipientUserMessageRef, message);
+    push(recipientUserMessageRef, message);
 
-    setClearTextArea(true);
+    textRef.current.value = "";
   };
 
-  useEffect(() => {
-    if (clearTextArea) {
-      textRef.current.value = "";
-      setClearTextArea(false); // Reset the trigger after clearing
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSendMessage();
     }
-  }, [clearTextArea]);
+  };
 
   return (
     <div className="messenger-container">
       <div className="threads-list-container">
-        {threads.map((thread) => {
-          const isUnread =
-            thread.lastMessage &&
-            thread.lastMessage.sender !== currentUserID &&
-            activeThread !== thread.id;
-          return (
-            <div
-              key={thread.id}
-              className={`thread ${activeThread === thread.id ? "active" : ""}`}
-              onClick={() => {
-                setActiveThread(activeThread !== thread.id ? thread.id : null);
-              }}
-            >
-              {thread.otherUserName}
-              {isUnread && <span className="unread-indicator">🔵</span>}
-            </div>
-          );
-        })}
+        {threads.map((thread) => (
+          <div
+            key={thread.id}
+            className={`thread ${activeThread === thread.id ? "active" : ""}`}
+            onClick={() => setActiveThread(thread.id)}
+          >
+            {thread.otherUserName}
+          </div>
+        ))}
       </div>
       {activeThread && (
         <div className="chat-container">
@@ -289,16 +211,18 @@ const RealtimeChat = () => {
                   message.sender === currentUserID ? "sender" : "recipient"
                 }
               >
-                {message.sender !== currentUserID && message.senderAvatar && (
-                  <img
-                    src={message.senderAvatar}
-                    alt={`${message.senderName}'s avatar`}
-                    className="message-avatar"
-                  />
-                )}
-
-                {message.sender !== currentUserID
-                  ? `${message?.senderName}: ${renderMessageWithLinks(
+                {message.sender !== "system" &&
+                  message.sender !== currentUserID && (
+                    <img
+                      src={message.senderAvatar || fallbackAvatar}
+                      alt={`${message.senderName}'s avatar`}
+                      className="message-avatar"
+                    />
+                  )}
+                {message.sender === "system"
+                  ? message.text
+                  : message.sender !== currentUserID
+                  ? `${fetchedNames[message.sender] || "User"}: ${renderMessageWithLinks(
                       message?.text
                     )}`
                   : renderMessageWithLinks(message?.text)}
