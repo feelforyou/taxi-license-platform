@@ -4,7 +4,6 @@ import {
   getDatabase,
   ref,
   onValue,
-  set,
   push,
   off,
   get,
@@ -16,7 +15,6 @@ import { renderMessageWithLinks } from "../../../Utilities/renderMessageWithLink
 
 const RealtimeChat = () => {
   const [fetchedNames, setFetchedNames] = useState({});
-  const [clearTextArea, setClearTextArea] = useState(false);
   const [messages, setMessages] = useState([]);
   const [threads, setThreads] = useState([]);
   const [activeThread, setActiveThread] = useState(null);
@@ -31,7 +29,6 @@ const RealtimeChat = () => {
 
   const fetchNameFromFirestore = async (id) => {
     if (!id) return "Unknown";
-    // Check cache first
     if (fetchedNames[id]) return fetchedNames[id];
 
     const firestoreDB = getFirestore();
@@ -48,51 +45,46 @@ const RealtimeChat = () => {
     return "Unknown";
   };
 
-  // Effect to handle initiating a new chat from another page
   useEffect(() => {
-    const newChatOwnerID = localStorage.getItem("ownerID");
-    if (newChatOwnerID && currentUserID && newChatOwnerID !== currentUserID) {
-      const sortedIds = [currentUserID, newChatOwnerID].sort();
-      const threadID = sortedIds.join("_");
+    const startNewChat = async () => {
+      const newChatOwnerID = localStorage.getItem("ownerID");
+      if (newChatOwnerID && currentUserID && newChatOwnerID !== currentUserID) {
+        localStorage.removeItem("ownerID");
 
-      // Immediately set the new chat as active
-      setActiveThread(threadID);
+        const sortedIds = [currentUserID, newChatOwnerID].sort();
+        const threadID = sortedIds.join("_");
 
-      // Define the welcome message
-      const welcomeMessage = {
-        sender: "system",
-        text: "Welcome to the chat! Start your conversation here.",
-        timestamp: Date.now(),
-      };
+        const threadRef = ref(db, `threads/${currentUserID}/${threadID}`);
+        const threadSnapshot = await get(threadRef);
 
-      // Ensure the thread exists for the current user
-      const user1ThreadRef = ref(
-        db,
-        `threads/${currentUserID}/${threadID}/messages`
-      );
-      get(user1ThreadRef).then((snapshot) => {
-        if (!snapshot.exists()) {
-          push(user1ThreadRef, welcomeMessage);
+        if (!threadSnapshot.exists()) {
+          const welcomeMessage = {
+            sender: "system",
+            text: "Welcome to the chat! Start your conversation here.",
+            timestamp: Date.now(),
+          };
+
+          const newMessageRef = push(
+            ref(db, `threads/${currentUserID}/${threadID}/messages`)
+          );
+          const messageKey = newMessageRef.key;
+
+          const updates = {};
+          updates[`threads/${currentUserID}/${threadID}/messages/${messageKey}`] =
+            welcomeMessage;
+          updates[`threads/${newChatOwnerID}/${threadID}/messages/${messageKey}`] =
+            welcomeMessage;
+
+          await update(ref(db), updates);
         }
-      });
 
-      // Ensure the thread exists for the other user
-      const user2ThreadRef = ref(
-        db,
-        `threads/${newChatOwnerID}/${threadID}/messages`
-      );
-      get(user2ThreadRef).then((snapshot) => {
-        if (!snapshot.exists()) {
-          push(user2ThreadRef, welcomeMessage);
-        }
-      });
+        setActiveThread(threadID);
+      }
+    };
 
-      // Clean up local storage
-      localStorage.removeItem("ownerID");
-    }
+    startNewChat();
   }, [currentUserID, db]);
 
-  // Effect to fetch all of the user's chat threads
   useEffect(() => {
     if (!currentUserID) return;
 
@@ -121,7 +113,6 @@ const RealtimeChat = () => {
     return () => off(threadsRef, "value", listener);
   }, [currentUserID, db]);
 
-  // Effect to fetch messages for the currently active chat thread
   useEffect(() => {
     if (!activeThread || !currentUserID) {
       setMessages([]);
@@ -143,7 +134,6 @@ const RealtimeChat = () => {
     return () => off(threadRef, "value", listener);
   }, [activeThread, currentUserID, db]);
 
-  // Effect to scroll to the latest message
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
@@ -166,20 +156,17 @@ const RealtimeChat = () => {
       timestamp: Date.now(),
     };
 
-    // Generate a unique key for the new message
     const newMessageRef = push(
       ref(db, `threads/${currentUserID}/${activeThread}/messages`)
     );
     const messageKey = newMessageRef.key;
 
-    // Create a multi-path update object
     const updates = {};
     updates[`threads/${currentUserID}/${activeThread}/messages/${messageKey}`] =
       message;
     updates[`threads/${recipientID}/${activeThread}/messages/${messageKey}`] =
       message;
 
-    // Atomically update both locations
     update(ref(db), updates);
 
     textRef.current.value = "";
