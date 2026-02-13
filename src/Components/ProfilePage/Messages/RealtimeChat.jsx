@@ -4,7 +4,6 @@ import {
   getDatabase,
   ref,
   onValue,
-  onChildAdded,
   push,
   off,
   get,
@@ -108,8 +107,6 @@ const RealtimeChat = () => {
         });
         const resolvedThreads = await Promise.all(threadPromises);
         setThreads(resolvedThreads);
-      } else {
-        setThreads([]);
       }
     });
 
@@ -126,16 +123,15 @@ const RealtimeChat = () => {
       db,
       `threads/${currentUserID}/${activeThread}/messages`
     );
-
-    setMessages([]);
-
-    const listener = onChildAdded(threadRef, (snapshot) => {
-      setMessages((prevMessages) => [...prevMessages, { id: snapshot.key, ...snapshot.val() }]);
+    const listener = onValue(threadRef, (snapshot) => {
+      const data = snapshot.val();
+      const loadedMessages = data
+        ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
+        : [];
+      setMessages(loadedMessages);
     });
 
-    return () => {
-      off(threadRef, "child_added", listener);
-    };
+    return () => off(threadRef, "value", listener);
   }, [activeThread, currentUserID, db]);
 
   useEffect(() => {
