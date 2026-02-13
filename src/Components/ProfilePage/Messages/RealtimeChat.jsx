@@ -15,7 +15,6 @@ import fallbackAvatar from "../../../assets/fallback-avatar.png";
 import { renderMessageWithLinks } from "../../../Utilities/renderMessageWithLinks";
 
 const RealtimeChat = () => {
-  const [authUser, setAuthUser] = useState(auth.currentUser);
   const [fetchedNames, setFetchedNames] = useState({});
   const [messages, setMessages] = useState([]);
   const [threads, setThreads] = useState([]);
@@ -23,18 +22,11 @@ const RealtimeChat = () => {
   const messagesEndRef = useRef(null);
   const textRef = useRef("");
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setAuthUser(user);
-    });
-    return () => unsubscribe();
-  }, []);
-
   const db = getDatabase();
-  const currentUserID = authUser?.uid;
+  const currentUserID = auth?.currentUser?.uid;
   const currentUserName =
-    authUser?.displayName || authUser?.email?.split("@")[0];
-  const currentUserAvatar = authUser?.photoURL || fallbackAvatar;
+    auth?.currentUser?.displayName || auth?.currentUser?.email?.split("@")[0];
+  const currentUserAvatar = auth?.currentUser?.photoURL || fallbackAvatar;
 
   const fetchNameFromFirestore = async (id) => {
     if (!id) return "Unknown";
