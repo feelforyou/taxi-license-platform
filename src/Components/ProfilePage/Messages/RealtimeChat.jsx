@@ -98,7 +98,6 @@ const RealtimeChat = () => {
   }, [currentUserID, ownerID]);
 
   useEffect(() => {
-    if(!currentUserID) return;
     const threadsRef = ref(db, `threads/${currentUserID}`);
     onValue(threadsRef, async (snapshot) => {
       const data = snapshot.val();
@@ -135,11 +134,7 @@ const RealtimeChat = () => {
   }, [currentUserID]);
 
   useEffect(() => {
-    // If there's no active thread or user, clear messages and do nothing.
-    if (!activeThread || !currentUserID) {
-      setMessages([]);
-      return;
-    }
+    if (!activeThread) return;
 
     const threadRef = ref(
       db,
@@ -153,15 +148,11 @@ const RealtimeChat = () => {
           ...data[key],
         }));
         setMessages(loadedMessages);
-      } else {
-        // If the thread is empty, make sure to clear any old messages.
-        setMessages([]);
       }
     });
 
-    // Cleanup function to detach the listener.
     return () => off(threadRef);
-  }, [activeThread, currentUserID, db]); // Corrected dependency array
+  }, [activeThread]);
 
   useEffect(() => {
     async function fetchNamesForMessages() {
