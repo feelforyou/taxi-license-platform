@@ -8,7 +8,6 @@ import {
   push,
   off,
   get,
-  update,
 } from "firebase/database";
 import { auth } from "../../../FirebaseConfig/firebaseConfig";
 import fallbackAvatar from "../../../assets/fallback-avatar.png";
@@ -166,21 +165,18 @@ const RealtimeChat = () => {
       timestamp: Date.now(),
     };
 
-    // Generate a unique key for the new message
-    const newMessageRef = push(
-      ref(db, `threads/${currentUserID}/${activeThread}/messages`)
+    // Write message to both users' threads
+    const currentUserMessageRef = ref(
+      db,
+      `threads/${currentUserID}/${activeThread}/messages`
     );
-    const messageKey = newMessageRef.key;
+    push(currentUserMessageRef, message);
 
-    // Create a multi-path update object
-    const updates = {};
-    updates[`threads/${currentUserID}/${activeThread}/messages/${messageKey}`] =
-      message;
-    updates[`threads/${recipientID}/${activeThread}/messages/${messageKey}`] =
-      message;
-
-    // Atomically update both locations
-    update(ref(db), updates);
+    const recipientUserMessageRef = ref(
+      db,
+      `threads/${recipientID}/${activeThread}/messages`
+    );
+    push(recipientUserMessageRef, message);
 
     textRef.current.value = "";
   };
