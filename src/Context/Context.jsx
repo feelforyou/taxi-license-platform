@@ -11,11 +11,11 @@ import useFirebaseAuth from "../Hooks/FirebaseHooks/useFirebaseAuth";
 
 const GlobalContext = createContext();
 
-const AppContext = ({ children }) => {
+// სახელი შევცვალეთ AppProvider-ით, რაც უფრო სტანდარტულია
+const AppProvider = ({ children }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
-  // ტაიმერის ID-ის შესანახად, რათა არ მოხდეს კონფლიქტი სწრაფ გახსნაზე
   const timerRef = useRef(null);
 
   const hideModal = useCallback(() => {
@@ -24,12 +24,14 @@ const AppContext = ({ children }) => {
 
     if (timerRef.current) {
       clearTimeout(timerRef.current);
+      timerRef.current = null; // რეფერენსის გასუფთავება
     }
   }, []);
 
   const showModal = useCallback(
-    (content) => {
-      // თუ ძველი ტაიმერი არსებობს, ვასუფთავებთ
+    (content, duration = 3000) => {
+      // დრო პარამეტრად გავიტანეთ (default 3000)
+      // თუ ტაიმერი უკვე ჩართულია, ვასუფთავებთ
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
@@ -37,31 +39,24 @@ const AppContext = ({ children }) => {
       setModalContent(content);
       setModalVisible(true);
 
-      // ვინახავთ ტაიმერის ID-ს რეფერენსში
       timerRef.current = setTimeout(() => {
         hideModal();
-      }, 3000);
+      }, duration);
     },
     [hideModal],
-  ); // hideModal არის dependency
+  );
 
-  // კომპონენტის მოხსნისას (unmount) ტაიმერის გასუფთავება
+  // Unmount-ის დროს ტაიმერის გასუფთავება
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
     };
   }, []);
 
-  const {
-    user,
-    signInWithGoogle,
-    signInEmailPassword,
-    isLoading,
-    isAuthenticated,
-    isVerifying,
-    setIsVerifying,
-    refreshUser,
-  } = useFirebaseAuth();
+  // Auth მონაცემების წამოღება
+  const authData = useFirebaseAuth();
 
   const value = useMemo(
     () => ({
@@ -69,28 +64,14 @@ const AppContext = ({ children }) => {
       modalContent,
       showModal,
       hideModal,
-      user,
-      signInWithGoogle,
-      signInEmailPassword,
-      isLoading,
-      isAuthenticated,
-      isVerifying,
-      setIsVerifying,
-      refreshUser,
+      ...authData, // პირდაპირ ვშლით ობიექტს, უფრო სუფთაა
     }),
     [
       isModalVisible,
       modalContent,
       showModal,
       hideModal,
-      user,
-      isLoading,
-      isAuthenticated,
-      isVerifying,
-      signInWithGoogle,
-      signInEmailPassword,
-      setIsVerifying,
-      refreshUser,
+      authData, // მთლიანი ობიექტი დავამატეთ დიპენდენსებში
     ],
   );
 
@@ -99,5 +80,13 @@ const AppContext = ({ children }) => {
   );
 };
 
-export default AppContext;
-export const useGlobalContext = () => useContext(GlobalContext);
+export default AppProvider; // Export სახელი შეიცვალა
+
+// ჰუკი უცვლელია
+export const useGlobalContext = () => {
+  const context = useContext(GlobalContext);
+  if (!context) {
+    throw new Error("useGlobalContext must be used within an AppProvider");
+  }
+  return context;
+};
