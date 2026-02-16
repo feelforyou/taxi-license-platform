@@ -43,7 +43,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2023 Taxi Driver's Hub. All rights reserved.</p>
+        <p>&copy; 2024 Taxi Driver's Hub. All rights reserved.</p>
       </div>
     </div>
   );

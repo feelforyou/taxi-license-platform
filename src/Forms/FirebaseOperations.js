@@ -1,8 +1,7 @@
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../FirebaseConfig/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 //////////update imports //////
-import { updateDoc } from "firebase/firestore";
 import { deleteObject } from "firebase/storage";
 
 export const submitToFirebase = async (values, user) => {
@@ -18,7 +17,7 @@ export const submitToFirebase = async (values, user) => {
 
   const storageRef = ref(
     storage,
-    `car_images/${user.uid}/${values.image.name}`
+    `car_images/${user.uid}/${resizedFilename}`
   );
   const uploadTask = uploadBytesResumable(storageRef, values.image);
 
@@ -105,7 +104,7 @@ export const updateToFirebase = async (
 
     const storageRef = ref(
       storage,
-      `car_images/${user.uid}/${values.image.name}`
+      `car_images/${user.uid}/${resizedFilename}`
     );
     const uploadTask = uploadBytesResumable(storageRef, values.image);
 
