@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500&family=Oswald&family=Roboto&family=Rowdies&display=swap");
+
 *,
 ::before,
 ::after {
@@ -7,6 +9,7 @@
 }
 /*||||||||||          Variables               ||||||||||*/
 :root {
+  --GEO-FONT-NOTO: "Noto Sans Georgian", sans-serif;
   --BG-PRIMARY: whitesmoke;
   --COLOR-PRIMARY: #000;
   --COLOR-HOVER: hsla(267, 61%, 13%, 0.902);
@@ -18,6 +21,7 @@
 body {
   overflow-x: hidden;
   font-family: sans-serif, monospace, Arial, Helvetica;
+  font-family: var(--GEO-FONT-NOTO);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
@@ -770,6 +774,7 @@ h2 {
 .home-container {
   min-height: 100vh;
   font-family: Arial, sans-serif;
+  font-family: var(--GEO-FONT-NOTO);
   color: var(--BGCOLOR);
   max-width: 1200px;
   margin: 0 auto;
@@ -866,6 +871,7 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-family: var(--GEO-FONT-NOTO);
 }
 
 .rent-now-btn:hover {
@@ -1521,12 +1527,13 @@ h2 {
 .edit-upload-form-container select,
 .edit-upload-form-container textarea {
   width: 100%;
-  padding: 10px 15px;
+  padding: 20px 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
   margin-bottom: 10px;
 }
+
 .edit-upload-form-container button {
   padding: 10px 15px;
   border-radius: 5px;

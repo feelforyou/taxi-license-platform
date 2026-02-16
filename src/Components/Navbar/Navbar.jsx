@@ -101,7 +101,7 @@ const Navbar = () => {
                     }}
                     className="sign-out-btn "
                   >
-                    <span className="span-hover">Sign Out</span>
+                    <span className="span-hover">გამოსვლა</span>
                   </li>
                 </div>
               </div>
@@ -114,7 +114,7 @@ const Navbar = () => {
                   className="link-hover"
                   to="/login"
                 >
-                  log in
+                  შესვლა
                 </Link>
               </li>
               <li

@@ -59,9 +59,9 @@ const CarsForRent = () => {
     <div className="carsrent-container">
       <div className="carsrent-filter-container">
         <header className="addcar-container">
-          <h1>New Cars</h1>
+          <h1>ახალი მანქანები</h1>
           <button className="addcar-btn" onClick={redirect}>
-            Add Car <AddCar />
+            დაამატე <AddCar />
           </button>
         </header>
 

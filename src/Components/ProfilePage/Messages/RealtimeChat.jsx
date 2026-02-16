@@ -7,12 +7,12 @@ import { renderMessageWithLinks } from "../../../Utilities/renderMessageWithLink
 
 const RealtimeChat = () => {
   const [fetchedNames, setFetchedNames] = useState({});
-
-  const [clearTextArea, setClearTextArea] = useState(false);
+  // ❌ ამოღებულია: const [clearTextArea, setClearTextArea] = useState(false);
 
   const [messages, setMessages] = useState([]);
   const [threads, setThreads] = useState([]);
   const [activeThread, setActiveThread] = useState(null);
+
   const messagesEndRef = useRef(null);
   const textRef = useRef("");
 
@@ -25,21 +25,18 @@ const RealtimeChat = () => {
   const ownerID = localStorage.getItem("ownerID");
 
   const fetchNameFromFirestore = async (id) => {
-    // Try fetching from `ownerDetails-USER_ID` format.
     let ownerDetail = localStorage.getItem(`ownerDetails-${id}`);
     if (ownerDetail) {
       return JSON.parse(ownerDetail).uniqueName;
     }
 
-    // If not found, try fetching from `ownerDetails` object format.
     let allOwnerDetails = JSON.parse(
-      localStorage.getItem("ownerDetails") || "{}"
+      localStorage.getItem("ownerDetails") || "{}",
     );
     if (allOwnerDetails[id] && allOwnerDetails[id].uniqueName) {
       return allOwnerDetails[id].uniqueName;
     }
 
-    // If still not found, fetch from Firestore.
     const firestoreDB = getFirestore();
     const userRef = doc(firestoreDB, "users", id);
     const userDoc = await getDoc(userRef);
@@ -47,29 +44,26 @@ const RealtimeChat = () => {
     if (userDoc.exists()) {
       const userName = userDoc.data().uniqueName;
       if (userName) {
-        // Store in the `ownerDetails-USER_ID` format.
         localStorage.setItem(
           `ownerDetails-${id}`,
-          JSON.stringify({ uniqueName: userName })
+          JSON.stringify({ uniqueName: userName }),
         );
         return userName;
       }
     }
-
     return null;
   };
 
   const handleKeyDown = (event) => {
-    // Check for Enter key without Shift
     if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // Prevents default newline behavior of Enter key in textarea
+      event.preventDefault();
       handleSendMessage();
     }
   };
 
-  // Temp storage for fetched names
   const tempFetchedNamesRef = useRef({ ...fetchedNames });
 
+  // 1. Initial Setup (System Message)
   useEffect(() => {
     if (!currentUserID || !ownerID || currentUserID === ownerID) {
       return;
@@ -79,7 +73,7 @@ const RealtimeChat = () => {
     const potentialThreadID = sortedIds.join("_");
     const potentialThreadRef = ref(
       db,
-      `threads/${currentUserID}/${potentialThreadID}/messages`
+      `threads/${currentUserID}/${potentialThreadID}/messages`,
     );
 
     onValue(potentialThreadRef, (snapshot) => {
@@ -97,6 +91,7 @@ const RealtimeChat = () => {
     return () => off(potentialThreadRef);
   }, [currentUserID, ownerID]);
 
+  // 2. Fetch Threads List
   useEffect(() => {
     const threadsRef = ref(db, `threads/${currentUserID}`);
     onValue(threadsRef, async (snapshot) => {
@@ -104,7 +99,6 @@ const RealtimeChat = () => {
 
       if (data) {
         const relevantThreads = Object.keys(data).map(async (threadID) => {
-          // Extract user IDs from the thread ID
           const userIds = threadID.split("_");
           const otherUserId = userIds.find((id) => id !== currentUserID);
 
@@ -130,15 +124,18 @@ const RealtimeChat = () => {
       }
     });
 
-    return () => off(threadsRef);
+    return () => {
+      off(threadsRef);
+    };
   }, [currentUserID]);
 
+  // 3. Active Thread Messages Listener
   useEffect(() => {
     if (!activeThread) return;
 
     const threadRef = ref(
       db,
-      `threads/${currentUserID}/${activeThread}/messages`
+      `threads/${currentUserID}/${activeThread}/messages`,
     );
     onValue(threadRef, (snapshot) => {
       const data = snapshot.val();
@@ -154,10 +151,11 @@ const RealtimeChat = () => {
     return () => off(threadRef);
   }, [activeThread]);
 
+  // 4. Fetch Names for Messages
   useEffect(() => {
     async function fetchNamesForMessages() {
       const uniqueSenders = [...new Set(messages.map((m) => m.sender))].filter(
-        (sender) => !fetchedNames[sender] && sender !== "system"
+        (sender) => !fetchedNames[sender] && sender !== "system",
       );
       for (let sender of uniqueSenders) {
         if (sender !== currentUserID) {
@@ -175,17 +173,18 @@ const RealtimeChat = () => {
     fetchNamesForMessages();
   }, [messages]);
 
+  // 5. Auto Scroll
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // 6. Fetch Names for Thread List (Initial)
   useEffect(() => {
     async function fetchNamesForThread() {
       if (!activeThread) return;
 
-      // Extract user IDs from the thread ID
       const userIds = activeThread.split("_");
       for (let id of userIds) {
         if (!fetchedNames[id]) {
@@ -203,10 +202,10 @@ const RealtimeChat = () => {
     fetchNamesForThread();
   }, [activeThread]);
 
+  // ✅ განახლებული ფუნქცია:
   const handleSendMessage = () => {
     if (!textRef.current.value.trim() || !activeThread) return;
 
-    // Derive the recipient ID from the activeThread
     const userIds = activeThread.split("_");
     const recipientID = userIds.find((id) => id !== currentUserID);
 
@@ -226,27 +225,25 @@ const RealtimeChat = () => {
       timestamp: Date.now(),
     };
 
-    // For the current user
+    // Current User Update
     const currentUserMessageRef = push(
-      ref(db, `threads/${currentUserID}/${potentialThreadID}/messages`)
+      ref(db, `threads/${currentUserID}/${potentialThreadID}/messages`),
     );
     set(currentUserMessageRef, message);
 
-    // For the recipient/user2
+    // Recipient Update
     const recipientUserMessageRef = push(
-      ref(db, `threads/${recipientID}/${potentialThreadID}/messages`)
+      ref(db, `threads/${recipientID}/${potentialThreadID}/messages`),
     );
     set(recipientUserMessageRef, message);
 
-    setClearTextArea(true);
+    // ✅ ვასუფთავებთ პირდაპირ რეფს (არ იწვევს რენდერს)
+    textRef.current.value = "";
+
+    // ❌ setClearTextArea(true);  <-- ეს აღარ გვინდა
   };
 
-  useEffect(() => {
-    if (clearTextArea) {
-      textRef.current.value = "";
-      setClearTextArea(false); // Reset the trigger after clearing
-    }
-  }, [clearTextArea]);
+  // ❌ ამოღებულია: useEffect(() => { if (clearTextArea) ... }, [clearTextArea]);
 
   return (
     <div className="messenger-container">
@@ -290,7 +287,7 @@ const RealtimeChat = () => {
 
                 {message.sender !== currentUserID
                   ? `${message?.senderName}: ${renderMessageWithLinks(
-                      message?.text
+                      message?.text,
                     )}`
                   : renderMessageWithLinks(message?.text)}
               </p>

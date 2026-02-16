@@ -1,6 +1,12 @@
-// AppContext.js
-
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
 import useFirebaseAuth from "../Hooks/FirebaseHooks/useFirebaseAuth";
 
 const GlobalContext = createContext();
@@ -9,18 +15,42 @@ const AppContext = ({ children }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
-  const showModal = (content) => {
-    setModalContent(content);
-    setModalVisible(true);
-    setTimeout(() => {
-      hideModal();
-    }, 3000);
-  };
+  // ტაიმერის ID-ის შესანახად, რათა არ მოხდეს კონფლიქტი სწრაფ გახსნაზე
+  const timerRef = useRef(null);
 
-  const hideModal = () => {
+  const hideModal = useCallback(() => {
     setModalVisible(false);
     setModalContent("");
-  };
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  }, []);
+
+  const showModal = useCallback(
+    (content) => {
+      // თუ ძველი ტაიმერი არსებობს, ვასუფთავებთ
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
+      setModalContent(content);
+      setModalVisible(true);
+
+      // ვინახავთ ტაიმერის ID-ს რეფერენსში
+      timerRef.current = setTimeout(() => {
+        hideModal();
+      }, 3000);
+    },
+    [hideModal],
+  ); // hideModal არის dependency
+
+  // კომპონენტის მოხსნისას (unmount) ტაიმერის გასუფთავება
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const {
     user,
@@ -51,17 +81,17 @@ const AppContext = ({ children }) => {
     [
       isModalVisible,
       modalContent,
+      showModal,
+      hideModal,
       user,
       isLoading,
       isAuthenticated,
       isVerifying,
-      showModal,
-      hideModal,
       signInWithGoogle,
       signInEmailPassword,
       setIsVerifying,
       refreshUser,
-    ]
+    ],
   );
 
   return (

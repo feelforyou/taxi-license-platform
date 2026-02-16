@@ -16,10 +16,10 @@ const Home = () => {
       </header>
 
       <section className="home-section">
-        <h2>Explore Our Fleet</h2>
+        <h2>იპოვე შენი სასურველი მანქანა</h2>
         <p className="paragraph">
-          Browse through our wide selection of vehicles and pick the one that's
-          perfect for you.
+          დაათვალიერეთ ავტომობილების ფართო არჩევანი და შეარჩიეთ ის, რომელიც
+          თქვენთვის იდეალურია.
         </p>
 
         <div className="car-grid">
@@ -39,10 +39,10 @@ const Home = () => {
       </section>
 
       <section className="cta-section">
-        <h2 className="heading-ready">Ready to hit the road?</h2>
+        <h2 className="heading-ready">ეძებ სანდო მანქანას?</h2>
 
         <button onClick={redirect} className="rent-now-btn">
-          Rent Now
+          იქირავე
         </button>
       </section>
     </div>
