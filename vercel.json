@@ -1,15 +1,23 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
-  {
-    "key": "Cross-Origin-Opener-Policy",
-    "value": "unsafe-none"
-  },
-  {
-    "key": "Cross-Origin-Embedder-Policy",
-    "value": "unsafe-none"
-  }
-]
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "unsafe-none"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "unsafe-none"
+        }
+      ]
+    }
+  ]
 }
