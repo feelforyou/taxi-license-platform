@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../Context/Context";
 import { auth } from "../../FirebaseConfig/firebaseConfig";
-import styles from "./Navbar.module.css";
+import styles from "./navbar.module.css";
 
 // Data-დან
 import {

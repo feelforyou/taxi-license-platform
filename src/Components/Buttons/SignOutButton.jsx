@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Buttons.module.css";
+import styles from "./buttons.module.css";
 
 const SignOutButton = ({ onClick, className }) => {
   return (
