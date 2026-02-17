@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./userAvatar.module.css";
+import styles from "./avatar.module.css";
 // აქ შემომაქვს შენი დეფოლტ აიქონი და ვარქმევ DefaultIcon-ს, რომ სახელები არ აირიოს
 import { UserAvatar as DefaultIcon } from "../../Data/data";
 
