@@ -1,0 +1,216 @@
+.navbar {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  background-color: hsl(245, 93%, 12%);
+  padding: 0.5rem 0rem;
+  width: 100%;
+  height: 70px;
+}
+
+.navLogo {
+  width: 70px;
+  height: 70px;
+  color: whitesmoke;
+  animation: rotate360 2s ease-in-out;
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* "Link" შევცვალე "brandLink"-ით რომ უფრო გასაგები იყოს */
+.brandLink {
+  text-decoration: none;
+  color: white;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  margin-bottom: 15rem;
+}
+
+.listItem {
+  padding: 0.25rem;
+  margin: 0.25rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.listItem:hover {
+  opacity: 0.8;
+}
+
+.menuIcon {
+  cursor: pointer;
+  margin-right: 0.25rem;
+  color: whitesmoke;
+  width: 40px;
+  height: 40px;
+}
+
+/* Make the list container behave like a sidebar */
+.listContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 70%;
+  min-height: 100%;
+  background-color: hsl(245, 93%, 12%);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 2;
+  width: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.show {
+  transform: translateX(0);
+}
+
+/* Adjust the ul within list-container for mobile view */
+.listContainer ul {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.navbarLink {
+  margin-bottom: 0.25rem;
+  padding: 0;
+  list-style: none;
+  font-size: 1.2rem;
+}
+
+.navbarLink:hover {
+  opacity: 0.8;
+}
+
+/* Adjust list items for better visibility and interaction in mobile view */
+.listItem {
+  padding: 1rem 0;
+  border-right: none;
+  margin-left: 0rem;
+  font-size: 1.5rem;
+  border-bottom: 1px solid whitesmoke;
+}
+
+.userAvatarLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loginHorizontalWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userInfo {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Google SignIn button styling */
+
+.navbarLink:hover,
+.linkHover:hover {
+  opacity: 0.8;
+}
+
+/* Media Queries */
+
+@media screen and (max-width: 670px) {
+  .menuIcon {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  /* აქაც განახლდა brandLink-ზე */
+  .navbar > .brandLink h3 {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 670px) {
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+  }
+  .menuIcon {
+    display: none;
+  }
+
+  .navbarLink {
+    padding: 0;
+    margin: 0;
+  }
+  .horizNavbarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .loginContainerNavbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .listContainer {
+    position: static;
+    transform: translateX(0);
+    background-color: transparent;
+    height: 100px;
+    display: flex;
+    padding: 0;
+  }
+
+  .listContainer ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .navbarLink {
+    margin-bottom: 0rem;
+  }
+
+  .navbar ul {
+    margin-bottom: 0rem;
+  }
+
+  .loginHorizontalWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    margin-right: 1.5rem;
+  }
+}

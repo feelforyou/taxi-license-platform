@@ -1,0 +1,49 @@
+/* src/Components/Buttons/Buttons.module.css */
+
+/* --- Google Login Button --- */
+.googleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  /* ნავბარის სპეციფიკა */
+  list-style: none;
+}
+
+/* --- Sign Out Button --- */
+.signOutBtn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s;
+  list-style: none;
+  font-size: 1.2rem;
+  /* ტექსტის ვერტიკალურად გასწორება */
+  display: flex;
+  align-items: center;
+}
+
+.signOutBtn:hover,
+.googleBtn:hover {
+  opacity: 0.8;
+}
+
+.spanHover {
+  /* თუ გინდა ტექსტზე ჰოვერის ეფექტი */
+  opacity: 0.8;
+}
+
+/* Media Queries - ღილაკების ადაპტაცია */
+@media screen and (min-width: 670px) {
+  .googleBtn {
+    transform: scale(0.7); /* scale ჯობია transform-ით */
+    padding: 0;
+    margin: 0;
+  }
+}

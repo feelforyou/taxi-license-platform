@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleSignIn, SquareRounded, links } from "../../Data/data";
-import { BurgerMenu } from "../../Data/data";
-import { CloseIcon } from "../../Data/data";
 import { useGlobalContext } from "../../Context/Context";
 import { auth } from "../../FirebaseConfig/firebaseConfig";
-import { UserAvatar } from "../../Data/data";
+import styles from "./navbar.module.css";
+
+// Data-დან
+import {
+  SquareRounded,
+  links,
+  BurgerMenu,
+  CloseIcon,
+  // GoogleSignIn - აღარ გვჭირდება აქ, რადგან კომპონენტშია!
+} from "../../Data/data";
+
+// კომპონენტები
+import UserAvatar from "../UserAvatar/UserAvatar";
+import GoogleLoginButton from "../Buttons/GoogleLoginButton"; // <--- ახალი
+import SignOutButton from "../Buttons/SignOutButton"; // <--- ახალი
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { user, signInWithGoogle } = useGlobalContext();
-
   const navigate = useNavigate();
 
   const redirect = (url) => {
@@ -25,6 +34,7 @@ const Navbar = () => {
     if (result && result.user) {
       navigate(`/${result.user.uid}`);
     }
+    setIsOpen(false); // ლოგინის მერე მენიუ დავხუროთ
   };
 
   const toggleMenu = () => {
@@ -33,99 +43,82 @@ const Navbar = () => {
 
   const signOut = () => {
     auth.signOut();
+    redirect("/"); // გამოსვლის მერე გადამისამართება
   };
 
   return (
-    <div className="navbar">
-      <Link to={"/"} className="Link" onClick={() => window.scrollTo(0, 0)}>
-        <SquareRounded className="navlogo" />
+    <div className={styles.navbar}>
+      <Link
+        to={"/"}
+        className={styles.brandLink}
+        onClick={() => window.scrollTo(0, 0)}
+      >
+        <SquareRounded className={styles.navLogo} />
         <h3>TAXI DRIVER's HUB</h3>
       </Link>
+
       <div onClick={toggleMenu}>
         {isOpen ? (
-          <CloseIcon className="menu-icon" />
+          <CloseIcon className={styles.menuIcon} />
         ) : (
-          <BurgerMenu className="menu-icon" />
+          <BurgerMenu className={styles.menuIcon} />
         )}
       </div>
 
-      <div className={`list-container ${isOpen ? "show" : ""}`}>
-        <div className="horiz-navbar-container">
-          <ul className="ul">
+      <div className={`${styles.listContainer} ${isOpen ? styles.show : ""}`}>
+        <div className={styles.horizNavbarContainer}>
+          <ul className={styles.ul}>
             {links.map((link) => {
               const { id, url, title } = link;
               return (
                 <Link
                   key={id}
                   onClick={() => redirect(url)}
-                  className="link-hover"
+                  className={styles.linkHover}
                   to={url}
                 >
-                  <li className="list-item">
+                  <li className={styles.listItem}>
                     <p>{title}</p>
                   </li>
                 </Link>
               );
             })}
           </ul>
+
           {user.name || user.uid ? (
             <div>
-              <div className="user-info">
-                <div className="login-horizontal-wrapper">
+              <div className={styles.userInfo}>
+                <div className={styles.loginHorizontalWrapper}>
                   <Link
                     onClick={() => redirect(`/${user.uid}`)}
-                    className="user-avatar-link link-hover"
+                    className={`${styles.userAvatarLink} ${styles.linkHover}`}
                     to={`/${user.uid}`}
                   >
-                    {user.avatar ? (
-                      <img
-                        src={user?.avatar}
-                        alt="User Avatar"
-                        className="user-avatar"
-                      />
-                    ) : (
-                      <UserAvatar
-                        style={{ color: "lightgreen" }}
-                        className="user-avatar"
-                      />
-                    )}
-
-                    <span className="username-span">
+                    <UserAvatar src={user?.avatar} />
+                    <span className={styles.usernameSpan}>
                       {user.name || user.email}
                     </span>
                   </Link>
-                  <li
-                    onClick={() => {
-                      signOut();
-                      redirect("/");
-                    }}
-                    className="sign-out-btn "
-                  >
-                    <span className="span-hover">გამოსვლა</span>
-                  </li>
+
+                  {/* ახალი ღილაკი: SignOut */}
+                  <SignOutButton onClick={signOut} />
                 </div>
               </div>
             </div>
           ) : (
-            <div className="login-container-navbar">
-              <li className="navbar-link">
+            <div className={styles.loginContainerNavbar}>
+              <li className={styles.navbarLink}>
                 <Link
                   onClick={() => redirect("/login")}
-                  className="link-hover"
+                  className={styles.linkHover}
                   to="/login"
                 >
                   შესვლა
                 </Link>
               </li>
-              <li
-                className="google-btn"
-                onClick={() => {
-                  handleSignIn();
-                  setIsOpen(false);
-                }}
-              >
-                <GoogleSignIn />
-              </li>
+
+              {/* ახალი ღილაკი: Google Login */}
+              <GoogleLoginButton onClick={handleSignIn} />
             </div>
           )}
         </div>
