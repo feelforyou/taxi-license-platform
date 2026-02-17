@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { GoogleSignIn } from "../Data/data";
 import { useGlobalContext } from "../Context/Context";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordResetModal from "../Components/Home/PasswordResetModal";
+import GoogleLoginButton from "../Components/Buttons/GoogleLoginButton"; // ჩვენი განახლებული კომპონენტი
+import styles from "./login.module.css";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
@@ -21,19 +22,18 @@ const LogIn = () => {
     refreshUser,
   } = useGlobalContext();
 
+  // მომხმარებლის გადამისამართება
   useEffect(() => {
-    // If the user is authenticated and their email is verified, redirect them
-    if (user.emailVerified) {
+    if (user?.emailVerified) {
       navigate(`/${user.uid}`);
     }
-  }, [user.uid]);
+  }, [user?.uid, navigate]);
 
   const handleEmailPasswordSignIn = async (e) => {
     e.preventDefault();
     try {
       const loggedInUser = await signInEmailPassword(email, password);
 
-      // Check if user's email is verified
       if (loggedInUser && !loggedInUser.emailVerified) {
         setError("Please verify your email before logging in.");
         return;
@@ -48,9 +48,10 @@ const LogIn = () => {
     }
   };
 
+  // ვერიფიკაციის შემოწმება
   useEffect(() => {
     if (isAuthenticated && isVerifying) {
-      if (user.emailVerified) {
+      if (user?.emailVerified) {
         navigate(`/${user.uid}`);
       } else {
         setError("Please verify your email before accessing your profile.");
@@ -58,6 +59,7 @@ const LogIn = () => {
     }
   }, [navigate, isAuthenticated, user, isVerifying]);
 
+  // URL-დან ვერიფიკაცია
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get("mode");
@@ -70,40 +72,29 @@ const LogIn = () => {
         `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${apiKey}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            oobCode: actionCode,
-          }),
-        }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ oobCode: actionCode }),
+        },
       )
         .then((response) => response.json())
         .then(async (data) => {
-          // console.log("Firebase Response:", data);
           if (data.emailVerified) {
             await refreshUser();
             setError("Email successfully verified! You can now log in.");
-          } else {
-            console.log(data.error);
           }
         })
-        .catch((error) => {
-          console.error("Fetch Error:", error);
-        })
-        .finally(() => {
-          setIsVerifying(false);
-        });
+        .catch((error) => console.error("Fetch Error:", error))
+        .finally(() => setIsVerifying(false));
     }
-  }, []);
+  }, [refreshUser, setIsVerifying]);
 
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithGoogle();
-      if (result && result.user) {
+      if (result?.user) {
         setTimeout(() => {
           navigate(`/${result.user.uid}`);
-        }, 100); // Delaying
+        }, 100);
       }
     } catch (error) {
       setError(error.message);
@@ -112,14 +103,12 @@ const LogIn = () => {
   };
 
   return (
-    <div className="login-container">
-      <main className="login-main">
+    <div className={styles.loginContainer}>
+      <main className={styles.loginMain}>
         {error && (
           <div
-            className={`${
-              error === "Email successfully verified! You can now log in."
-                ? "error-message success-msg"
-                : "error-message"
+            className={`${styles.errorMessage} ${
+              error.includes("successfully") ? styles.successMsg : ""
             }`}
           >
             {error}
@@ -128,43 +117,49 @@ const LogIn = () => {
 
         <h1>Log In</h1>
 
-        <form onSubmit={handleEmailPasswordSignIn} className="login-form">
-          <div className="login-inputs">
+        <form onSubmit={handleEmailPasswordSignIn} className={styles.loginForm}>
+          <div className={styles.loginInputs}>
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               type="email"
               placeholder="Email"
-              className="login-input"
-              autoComplete="login-email"
+              className={styles.loginInput}
+              autoComplete="username"
             />
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               type="password"
               placeholder="Password"
-              className="login-input"
-              autoComplete="login-password"
+              className={styles.loginInput}
+              autoComplete="current-password"
             />
           </div>
-          <button type="submit" className="login-btn">
+          <button type="submit" className={styles.loginBtn}>
             Log In
           </button>
         </form>
 
-        <Link className="link-wrapper" to="/signup">
-          <button className="register-btn">Register</button>
+        <Link className={styles.linkWrapper} to="/signup">
+          <button className={styles.registerBtn}>Register</button>
         </Link>
-        <div
-          className="forgot-pass-container"
-          onClick={() => setIsModalOpen(true)}
-        >
+
+        <div className={styles.forgotPass} onClick={() => setIsModalOpen(true)}>
           <a>forgot password?</a>
         </div>
-        <div className="google-btn" onClick={handleGoogleSignIn}>
-          <GoogleSignIn />
+
+        {/* --- ცვლილება აქ არის --- */}
+
+        <div className={styles.googleSection}>
+          <GoogleLoginButton
+            text="Sign in with Google"
+            className={styles.fullWidthBtn} // <--- აქ გადავაწოდეთ სიგანის კლასი
+            onClick={handleGoogleSignIn}
+          />
         </div>
       </main>
+
       <PasswordResetModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

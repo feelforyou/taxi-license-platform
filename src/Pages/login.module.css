@@ -1,0 +1,142 @@
+/* login.module.css */
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  width: 100%;
+  background-color: #f4f7f9; /* ოდნავ მოცისფრო რბილი ფონი */
+}
+
+.loginMain {
+  width: 95%;
+  max-width: 400px;
+  padding: 2.5rem 2rem;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  position: relative;
+  contain: layout;
+}
+
+.loginMain h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: #000033;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.loginInputs {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.loginInput {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin: 0.5rem 0;
+  border: 1.5px solid #e1e4e8;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.loginInput:focus {
+  border-color: #000033;
+  box-shadow: 0 0 0 3px rgba(0, 0, 51, 0.1);
+}
+
+.loginBtn {
+  width: 100%;
+  padding: 0.9rem;
+  margin: 1rem 0;
+  border: none;
+  background-color: #000033; /* მუქი ლურჯი */
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.loginBtn:hover {
+  background-color: #000055;
+  transform: translateY(-1px);
+}
+
+.linkWrapper {
+  width: 100%;
+  text-decoration: none;
+}
+
+.registerBtn {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1.5px solid #000033;
+  background-color: #fff;
+  color: #000033;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.registerBtn:hover {
+  background-color: rgba(0, 0, 51, 0.05);
+}
+
+.forgotPass {
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #000033;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.forgotPass:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.errorMessage {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #fff5f5;
+  color: #e03131;
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ffa8a8;
+  text-align: center;
+}
+
+.successMsg {
+  background-color: #ebfbee;
+  color: #2b8a3e;
+  border-color: #b2f2bb;
+}
+.googleSection {
+  margin-top: 1.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ეს კლასი გადაეცემა ჩვენს GoogleLoginButton-ს */
+.fullWidthBtn {
+  width: 100%;
+}

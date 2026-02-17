@@ -1,21 +1,44 @@
-/* src/Components/Buttons/Buttons.module.css */
+/* src/Components/Buttons/authButtons.module.css */
 
-/* --- Google Login Button --- */
+/* --- Google Login Button (უნივერსალური) --- */
 .googleBtn {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  border: none;
-  border-radius: 5px;
-  background-color: transparent;
-  color: white;
+  justify-content: center; /* ტექსტი და ლოგო ცენტრში */
+  gap: 10px; /* დაშორება ლოგოსა და ტექსტს შორის */
+
+  background-color: white; /* სტანდარტული თეთრი */
+  border: 1px solid #dadce0; /* ნაცრისფერი ჩარჩო */
+  border-radius: 8px; /* ლამაზი მომრგვალებული კუთხეები */
+
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3c4043; /* გუგლის სტანდარტული ტექსტის ფერი */
+
   cursor: pointer;
-  transition: background-color 0.2s;
-  /* ნავბარის სპეციფიკა */
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  /* ეს მნიშვნელოვანია: ღილაკი იყოს თავის ბუნებრივ ზომაზე, 
+     სანამ Login გვერდიდან არ ვეტყვით width: 100%-ს */
+  width: auto;
+  min-width: fit-content;
   list-style: none;
 }
 
-/* --- Sign Out Button --- */
+/* ჰოვერის ეფექტები (Google-ის სტილში) */
+.googleBtn:hover {
+  background-color: #f7f8f9;
+  border-color: #d2e3fc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.googleBtn:active {
+  background-color: #e8f0fe;
+}
+
+/* --- Sign Out Button (ეს დავტოვოთ როგორც იყო, ნავბარისთვის) --- */
 .signOutBtn {
   background-color: transparent;
   border: none;
@@ -24,26 +47,23 @@
   transition: color 0.2s;
   list-style: none;
   font-size: 1.2rem;
-  /* ტექსტის ვერტიკალურად გასწორება */
   display: flex;
   align-items: center;
 }
 
-.signOutBtn:hover,
-.googleBtn:hover {
+.signOutBtn:hover {
   opacity: 0.8;
 }
 
 .spanHover {
-  /* თუ გინდა ტექსტზე ჰოვერის ეფექტი */
   opacity: 0.8;
 }
 
-/* Media Queries - ღილაკების ადაპტაცია */
+/* Media Queries */
 @media screen and (min-width: 670px) {
+  /* აქ წავშალეთ transform: scale, რადგან Login გვერდზე 
+     ღილაკი არ უნდა დაპატარავდეს. */
   .googleBtn {
-    transform: scale(0.7); /* scale ჯობია transform-ით */
-    padding: 0;
     margin: 0;
   }
 }
