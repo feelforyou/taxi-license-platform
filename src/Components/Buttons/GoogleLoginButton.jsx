@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./buttons.module.css";
+import styles from "./authButtons.module.css";
 import { GoogleSignIn } from "../../Data/data"; // დარწმუნდი რომ გზა სწორია
 
 const GoogleLoginButton = ({ onClick, className }) => {
