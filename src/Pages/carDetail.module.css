@@ -1,0 +1,35 @@
+.cardDetailContainer {
+  min-height: 100vh;
+  padding: 2rem 1rem 5rem 1rem;
+  /* გლობალური ფონიდან ოდნავ მუქზე გადასვლა სიღრმისთვის */
+  background: linear-gradient(135deg, var(--BG-PRIMARY) 0%, #e2e8f0 100%);
+  display: flex;
+  justify-content: center;
+}
+
+.detailWrapper {
+  width: 100%;
+  max-width: 850px;
+}
+
+.backBtn {
+  padding: 10px 24px;
+  margin: 1rem 0 2rem 0;
+  cursor: pointer;
+  border-radius: 9999px;
+  border: 2px solid var(--BGCOLOR);
+  background-color: transparent;
+  color: var(--BGCOLOR);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backBtn:hover {
+  background-color: var(--BGCOLOR);
+  color: white;
+  transform: translateX(-4px);
+}

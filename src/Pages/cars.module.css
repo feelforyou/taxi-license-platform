@@ -1,0 +1,137 @@
+.carsRentContainer {
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  /* font-family წავშალეთ, იღებს გლობალურიდან */
+}
+
+.carsRentFilterContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.addCarContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.addCarContainer h1 {
+  font-size: 2rem;
+  color: var(--BGCOLOR); /* გლობალური ფერი */
+  margin: 0;
+  font-weight: 800;
+}
+
+.addCarBtn {
+  display: flex;
+  align-items: center;
+  background-color: var(--BGCOLOR); /* გლობალური ფერი */
+  color: var(--color);
+  border: none;
+  border-radius: 9999px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.addCarBtn:hover {
+  background-color: var(--BGCOLOR-HOVER); /* გლობალური hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.customSelect {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--BGCOLOR);
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.customSelect:hover {
+  border-color: var(--BGCOLOR-HOVER);
+}
+
+.carsRentMain {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.carCard {
+  cursor: pointer;
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.carCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  border-color: #cbd5e1;
+}
+
+.carImage {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.carInfo {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.carTitle {
+  margin: 0 0 0.5rem 0;
+  text-transform: capitalize;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--BGCOLOR);
+}
+
+.carPrice {
+  margin: 0.5rem 0 0 0;
+  color: var(
+    --COLOR-HOVER
+  ); /* შენი მეორე ბრენდ ფერი იდეალურად ჯდება აქცენტად */
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.carYear {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}

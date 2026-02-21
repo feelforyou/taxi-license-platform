@@ -1,0 +1,122 @@
+/* home.module.css */
+
+.homeContainer {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  font-family: var(--GEO-FONT-NOTO);
+  color: var(--BGCOLOR);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.paragraph {
+  margin: 2rem 0rem;
+}
+
+.headingReady {
+  margin: 0.5rem 0rem;
+}
+
+.homeHeader {
+  background-color: #4caf50;
+  color: white;
+  text-align: center;
+  padding: 60px 0;
+  margin-bottom: 50px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.homeHeader h1 {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+.homeHeader p {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.homeSection {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.homeSection h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* Car Grid and Items */
+.carGrid {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.carItem {
+  width: calc(33.33% - 20px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.carItem:hover {
+  transform: scale(1.05);
+}
+
+.carItem img {
+  width: 100%;
+  display: block;
+  border-radius: 8px 8px 0 0;
+}
+
+.carItem p {
+  text-align: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+  margin: 0;
+  font-weight: bold;
+  border-radius: 0 0 8px 8px;
+  color: #333; /* ფერი დავამატე, რომ ღია ფონზე კარგად გამოჩნდეს */
+}
+
+.ctaSection {
+  text-align: center;
+  padding: 40px 0;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rentNowBtn {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--GEO-FONT-NOTO);
+}
+
+.rentNowBtn:hover {
+  background-color: #45a049;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .carItem {
+    width: calc(50% - 10px);
+  }
+}
+
+@media (max-width: 480px) {
+  .carItem {
+    width: 100%;
+  }
+}
