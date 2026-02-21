@@ -61,13 +61,13 @@ const CarDetail = () => {
     <div className={styles.cardDetailContainer}>
       <div className={styles.detailWrapper}>
         <button onClick={() => navigate(-1)} className={styles.backBtn}>
-          ← უკან დაბრუნება
+          ← Back
         </button>
 
         {carDetails ? (
           <CarFetched details={carDetails} />
         ) : (
-          <p>მანქანა ვერ მოიძებნა</p>
+          <p>Car not found</p>
         )}
       </div>
     </div>
