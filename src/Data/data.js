@@ -16,9 +16,9 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlinePlus } from "react-icons/hi";
 
 export const links = [
-  { id: "1", title: "მთავარი", url: "/" },
+  { id: "1", title: "HOME", url: "/" },
 
-  { id: "2", title: "ავტომობილები", url: "/cars" },
+  { id: "2", title: "CARS", url: "/cars" },
 ];
 
 export const GoogleSignIn = GoogleButton;

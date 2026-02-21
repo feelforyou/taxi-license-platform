@@ -33,9 +33,9 @@ const Car = ({ details }) => {
       </div>
       {details?.fuelType && <p>{details?.fuelType}</p>}
 
-      {details?.price && <p>დღიური ქირა: {details?.price}$</p>}
+      {details?.price && <p>daily rent: {details?.price}$</p>}
       {details?.location && <p>{details?.location}</p>}
-      <p className="moreInfo">გაიგე მეტი</p>
+      <p className="moreInfo">more info</p>
 
       {formattedDate && <p className="card-date">{formattedDate}</p>}
     </div>

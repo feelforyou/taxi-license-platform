@@ -113,7 +113,7 @@ const Navbar = () => {
                   className={styles.linkHover}
                   to="/login"
                 >
-                  შესვლა
+                  sign in
                 </Link>
               </li>
 

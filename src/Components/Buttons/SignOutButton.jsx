@@ -4,7 +4,7 @@ import styles from "./authButtons.module.css";
 const SignOutButton = ({ onClick, className }) => {
   return (
     <li className={`${styles.signOutBtn} ${className || ""}`} onClick={onClick}>
-      <span className={styles.spanHover}>გამოსვლა</span>
+      <span className={styles.spanHover}>sign out</span>
     </li>
   );
 };
