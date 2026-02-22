@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { timestampToDate } from "../../Utilities/timestampToDate";
-import styles from "../../pages/cars.module.css"; // ჩვენი ახალი დიზაინი
+import styles from "../../Pages/cars.module.css"; // ჩვენი ახალი დიზაინი
 
 const Car = ({ details, onClick }) => {
   const formattedDate = timestampToDate(details?.submissionDate);
