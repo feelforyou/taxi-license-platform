@@ -1,0 +1,320 @@
+/* chat.module.css */
+
+.messengerContainer {
+  display: flex;
+  flex-direction: row;
+  height: 75vh;
+  min-height: 500px;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  font-family: inherit;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+/* ---------------- მარცხენა პანელი (დესკტოპზე) ---------------- */
+.threadsListContainer {
+  width: 280px;
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.threadsListContainer::-webkit-scrollbar {
+  width: 5px;
+}
+.threadsListContainer::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+
+.threadItem {
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  color: #334155;
+  border-left: 4px solid transparent;
+}
+
+.threadItem:hover {
+  background-color: #f1f5f9;
+}
+
+.threadItemActive {
+  background-color: #e0f2fe;
+  border-left: 4px solid var(--BGCOLOR, #0ea5e9);
+  color: var(--BGCOLOR, #0284c7);
+}
+
+.unreadIndicator {
+  width: 10px;
+  height: 10px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* ---------------- მთავარი ჩატი ---------------- */
+.chatContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  width: 100%;
+  min-height: 0; /* 💥 ეს არის მაგია N1: იცავს კონტეინერს გაწელვისგან */
+  overflow: hidden; /* 💥 მაგია N2: არ აძლევს მესიჯებს გარეთ გასვლის უფლებას */
+}
+
+.messagesArea {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background-color: #f8fafc;
+  min-height: 0; /* 💥 მაგია N3: რთავს შიდა სქროლს */
+}
+
+.messagesArea::-webkit-scrollbar {
+  width: 6px;
+}
+.messagesArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+.messagesArea::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+
+.messageBubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  font-size: 0.95rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.senderMsg {
+  align-self: flex-end;
+  background-color: var(--BGCOLOR, #0ea5e9);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.recipientMsg {
+  align-self: flex-start;
+  background-color: #ffffff;
+  color: #1e293b;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.messageAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------- Input არეალი ---------------- */
+.inputArea {
+  display: flex;
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  border-top: 1px solid #e2e8f0;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0; /* 💥 იცავს Input-ს გაჭყლეტვისგან და გაქრობისგან! */
+}
+
+.textArea {
+  flex: 1;
+  resize: none;
+  border: 1px solid #cbd5e1;
+  border-radius: 24px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  height: 48px;
+  line-height: 24px;
+  background-color: #f8fafc;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+  box-sizing: border-box;
+}
+
+.textArea:focus {
+  border-color: var(--BGCOLOR, #0ea5e9);
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.sendBtn {
+  flex-shrink: 0;
+  background-color: var(--BGCOLOR, #0ea5e9);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 0 24px;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.systemMsg {
+  align-self: center;
+  background-color: #e2e8f0;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* =========================================================
+   მობილური რესპონსივი (<768px)
+========================================================= */
+@media screen and (max-width: 768px) {
+  .messengerContainer {
+    flex-direction: column;
+    /* მობილურზე ვიყენებთ ფიქსირებულ სიმაღლეს და ვაშორებთ margin-ებს */
+    height: 80vh;
+    min-height: 400px;
+    margin: 1rem 0;
+    border-radius: 0; /* ეკრანის კიდეებზე მიჯრისთვის */
+    border-left: none;
+    border-right: none;
+  }
+
+  .threadsListContainer {
+    width: 100%;
+    height: 70px;
+    flex: 0 0 70px; /* სია მუდმივად 70px იქნება და არ შეიჭმუხნება */
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 1rem;
+    background-color: #f8fafc;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .threadsListContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .threadItem {
+    flex: 0 0 auto;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 30px;
+    padding: 8px 16px;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .threadItemActive {
+    background-color: var(--BGCOLOR, #0ea5e9);
+    color: #ffffff;
+    border-color: var(--BGCOLOR, #0ea5e9) !important;
+  }
+
+  .messagesArea {
+    padding: 1rem;
+  }
+
+  .messageBubble {
+    max-width: 88%;
+    font-size: 0.9rem;
+  }
+
+  .inputArea {
+    padding: 0.8rem;
+    gap: 8px;
+    background-color: #f8fafc;
+    flex-shrink: 0; /* Input არასდროს გაქრება */
+  }
+
+  .sendBtn {
+    padding: 0 16px;
+    height: 44px;
+  }
+}
+
+/* =========================================================
+   გლობალური Override - სქროლის და ისრების გაქრობა 
+========================================================= */
+/* ეს დაიმალება ყველგან და ყოველთვის! (დესკტოპზეც და მობილურზეც) */
+.textArea {
+  overflow: hidden !important;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.textArea::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* სპეციალურად მაგ ისრების გასაქრობად */
+.textArea::-webkit-scrollbar-button {
+  display: none !important;
+}

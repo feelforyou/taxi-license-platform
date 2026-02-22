@@ -1,10 +1,9 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../FirebaseConfig/firebaseConfig";
+import { db, auth } from "../FirebaseConfig/firebaseConfig";
 import OwnerListings from "../Components/OwnerDetail/OwnerListings";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../FirebaseConfig/firebaseConfig";
+import styles from "./ownerDetail.module.css"; // ✅ დავამატეთ იმპორტი
 
 const OwnerDetail = () => {
   const { ownerID } = useParams();
@@ -17,14 +16,12 @@ const OwnerDetail = () => {
       return;
     }
 
-    // Saving ownerID and name to localStorage
     localStorage.setItem("ownerID", ownerID);
 
-    // If the ownerDetails is available, save it in the specific format
     if (ownerDetails) {
       localStorage.setItem(
         `ownerDetails-${ownerID}`,
-        JSON.stringify(ownerDetails)
+        JSON.stringify(ownerDetails),
       );
     }
 
@@ -38,7 +35,6 @@ const OwnerDetail = () => {
       setOwnerDetails(JSON.parse(storedOwnerDetail));
     } else {
       async function fetchOwnerDetails() {
-        console.log("fetchOwner details");
         try {
           const ownerDocRef = doc(db, "users", ownerID);
           const ownerDocSnap = await getDoc(ownerDocRef);
@@ -46,11 +42,9 @@ const OwnerDetail = () => {
           if (ownerDocSnap.exists()) {
             const ownerData = ownerDocSnap.data();
             setOwnerDetails(ownerData);
-
-            // Save fetched details to the specific format in local storage
             localStorage.setItem(
               `ownerDetails-${ownerID}`,
-              JSON.stringify(ownerData)
+              JSON.stringify(ownerData),
             );
           } else {
             console.error("No such owner found!");
@@ -59,25 +53,34 @@ const OwnerDetail = () => {
           console.error("Error fetching owner details:", error);
         }
       }
-
       fetchOwnerDetails();
     }
   }, [ownerID]);
 
   return (
-    <div className="ownerpage-container">
-      <h1>Owner's Page</h1>
+    <div className={styles.container}>
+      <h1 className={styles.pageTitle}>Owner's Profile</h1>
+
       {ownerDetails && (
-        <div className="ownerpageinfo-container">
-          {ownerDetails.avatar && <img src={ownerDetails?.avatar} />}
-          <p>{ownerDetails?.uniqueName}</p>
-          <p>{ownerDetails?.email}</p>
-          <p>{ownerDetails?.phoneNumber}</p>
-          <button className="addcar-btn" onClick={handleTextMe}>
+        <div className={styles.profileCard}>
+          {ownerDetails.avatar && (
+            <img
+              src={ownerDetails.avatar}
+              alt="Avatar"
+              className={styles.avatar}
+            />
+          )}
+          <h2 className={styles.uniqueName}>{ownerDetails?.uniqueName}</h2>
+          <p className={styles.infoText}>{ownerDetails?.email}</p>
+          <p className={styles.infoText}>{ownerDetails?.phoneNumber}</p>
+
+          <button className={styles.chatBtn} onClick={handleTextMe}>
             Start Chat
           </button>
         </div>
       )}
+
+      {/* ქვემოთ გამოჩნდება ამ მფლობელის მანქანები */}
       <OwnerListings ownerID={ownerID} />
     </div>
   );

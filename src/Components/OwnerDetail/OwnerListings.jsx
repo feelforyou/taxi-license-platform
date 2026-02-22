@@ -1,63 +1,51 @@
-// OwnerListings.jsx
-
 import React from "react";
-import useUserListings from "../../Hooks/FirebaseHooks/useUserListings";
-import Car from "../../Components/Home/Car";
 import { useNavigate } from "react-router-dom";
+import useUserListings from "../../Hooks/FirebaseHooks/useUserListings";
+// ✅ ვაიმპორტებთ მთავარი გვერდის გრიდის სტილებს
+import gridStyles from "../../pages/cars.module.css";
+// ✅ ვაიმპორტებთ ჩვენს უნივერსალურ Car კომპონენტს
+import Car from "../../Components/Home/Car";
 
 const OwnerListings = ({ ownerID }) => {
   const { listings, loading, error } = useUserListings(ownerID);
-  const navigate = useNavigate(); // Step 2
+  const navigate = useNavigate();
 
   const handleCarClick = (carId) => {
-    // Scroll to the top
     window.scrollTo(0, 0);
-    // Navigate to the car detail page
     navigate(`/cardetail/${carId}`);
   };
+
   return (
-    <div className="owner-cars">
-      <h2>Owner's Cars:</h2>
+    <div style={{ width: "100%" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "2rem", color: "#333" }}>
+        Listed Cars:
+      </h2>
+
       {loading ? (
-        <div className="loading-container">
-          <div className="loading"></div>
-        </div>
+        <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>
       ) : error ? (
-        <div>Error fetching cars: {error.message}</div>
-      ) : listings.length ? (
-        <main className="carsrent-main">
+        <div style={{ color: "red", textAlign: "center" }}>
+          Error: {error.message}
+        </div>
+      ) : listings.length > 0 ? (
+        /* ✅ აქ ვიყენებთ carsRentMain-ს ულამაზესი ბადის (გრიდის) შესაქმნელად */
+        <div className={gridStyles.carsRentMain}>
           {listings.map((car) => (
-            <div key={car.id} onClick={() => handleCarClick(car.id)}>
-              <Car details={car} />
-            </div>
+            /* ✅ აქ კი ვიყენებთ ჩვენს უნივერსალურ Car ბარათს */
+            <Car
+              key={car.id}
+              details={car}
+              onClick={() => handleCarClick(car.id)}
+            />
           ))}
-        </main>
+        </div>
       ) : (
-        <p>This owner hasn't listed any cars yet.</p>
+        <p style={{ textAlign: "center", color: "#666", fontSize: "1.1rem" }}>
+          This owner hasn't listed any cars yet.
+        </p>
       )}
     </div>
   );
-  // return (
-  //   <div className="owner-cars">
-  //     <h3>Owner's Cars:</h3>
-  //     {loading ? (
-  //       <div className="loading-container">
-  //         <div className="loading"></div>
-  //       </div>
-  //     ) : error ? (
-  //       <div>Error fetching cars: {error.message}</div>
-  //     ) : listings.length ? (
-  //       listings.map((car) => (
-  //         // Step 3
-  //         <div key={car.id} onClick={() => handleCarClick(car.id)}>
-  //           <Car details={car} />
-  //         </div>
-  //       ))
-  //     ) : (
-  //       <p>This owner hasn't listed any cars yet.</p>
-  //     )}
-  //   </div>
-  // );
 };
 
 export default OwnerListings;
