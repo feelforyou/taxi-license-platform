@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../FirebaseConfig/firebaseConfig";
-import styles from "./signup.module.css"; // შემოდის ახალი სტილები
+import styles from "./signUp.module.css"; // შემოდის ახალი სტილები
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
