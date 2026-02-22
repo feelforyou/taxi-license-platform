@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useUserListings from "../../Hooks/FirebaseHooks/useUserListings";
 // ✅ ვაიმპორტებთ მთავარი გვერდის გრიდის სტილებს
-import gridStyles from "../../pages/cars.module.css";
+import gridStyles from "../../Pages/cars.module.css";
 // ✅ ვაიმპორტებთ ჩვენს უნივერსალურ Car კომპონენტს
 import Car from "../../Components/Home/Car";
 
