@@ -6,6 +6,8 @@ import useFirestoreCollection from "../Hooks/FirebaseHooks/useFirebaseCollection
 import { useNavigate } from "react-router-dom";
 import { AddCar } from "../Data/data";
 import { auth } from "../FirebaseConfig/firebaseConfig";
+// ✅ 1. დავაიმპორტეთ ჩვენი ახალი Spinner კომპონენტი
+import Spinner from "../Components/Spinner/Spinner";
 // ✅ დავაიმპორტეთ ჩვენი უნივერსალური Car კომპონენტი
 import Car from "../Components/Home/Car";
 
@@ -41,12 +43,7 @@ const CarsForRent = () => {
     });
   }, [rawCars, sortField]);
 
-  if (loading)
-    return (
-      <div className="loading-container">
-        <div className="loading"></div>
-      </div>
-    );
+  if (loading) return <Spinner />;
   if (error) return <div>ერორი: {error.message}</div>;
 
   return (

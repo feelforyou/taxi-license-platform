@@ -1,0 +1,59 @@
+/* profileSection.module.css */
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profileImage {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow:
+    0 8px 16px -4px rgba(0, 0, 0, 0.1),
+    0 4px 8px -4px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.2rem;
+  background-color: #f8fafc; /* თუ სურათი გამჭვირვალეა, ლამაზი ფონი ექნება */
+
+  /* ეს ეხმარება ProfileAvatar კომპონენტს (თუ SVG-ია), რომ ცენტრში დაჯდეს და ზომა მიიღოს */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--BGCOLOR, #0ea5e9);
+}
+
+.profileName {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 0.4rem;
+  text-transform: capitalize;
+}
+
+.profileDetail {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #64748b;
+  background-color: #f1f5f9;
+  padding: 0.4rem 1rem;
+  border-radius: 20px; /* იმეილს ლამაზ აბში მოაქცევს */
+  margin-top: 0.5rem;
+}

@@ -1,0 +1,6 @@
+/* profile.module.css */
+.profileContainer {
+  min-height: calc(100vh - 150px);
+  background-color: #f8fafc; /* მსუბუქი ფონი მთელი პროფილისთვის */
+  padding: 2rem 1rem;
+}

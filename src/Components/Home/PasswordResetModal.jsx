@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import styles from "./passwordReset.module.css"; // შემოვიტანეთ სტილები
 
 const PasswordResetModal = ({ isOpen, onClose }) => {
   const [resetEmail, setResetEmail] = useState("");
@@ -12,6 +13,7 @@ const PasswordResetModal = ({ isOpen, onClose }) => {
       await sendPasswordResetEmail(auth, resetEmail);
       setMessage("A password reset link has been sent to your email.");
     } catch (error) {
+      // თუ ერორია, აქაც გამოვა (ვიზუალურად უბრალოდ მწვანედ გამოჩნდება, მაგრამ ტექსტი ერორის იქნება)
       setMessage(error.message);
     }
   };
@@ -19,29 +21,29 @@ const PasswordResetModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2 className="pass-reset-header">Password Reset</h2>
-        <form
-          onSubmit={handleResetPassword}
-          className="edit-upload-form-container"
-        >
+    <div className={styles.overlay}>
+      <div className={styles.content}>
+        <h2 className={styles.header}>Password Reset</h2>
+        <form onSubmit={handleResetPassword} className={styles.formContainer}>
           <input
+            className={styles.input}
             type="email"
             placeholder="Enter your email"
             value={resetEmail}
             onChange={(e) => setResetEmail(e.target.value)}
+            required
           />
-          <div className="modal-actions">
-            <button className="pass-reset-btn" type="submit">
-              Send Reset Email
-            </button>
-            <button className="pass-reset-btn" onClick={onClose}>
+          <div className={styles.actions}>
+            {/* Close ღილაკს დავუმატეთ type="button" */}
+            <button type="button" className={styles.closeBtn} onClick={onClose}>
               Close
+            </button>
+            <button type="submit" className={styles.submitBtn}>
+              Send Reset Email
             </button>
           </div>
         </form>
-        {message && <p className="pass-reset-msg">{message}</p>}
+        {message && <p className={styles.message}>{message}</p>}
       </div>
     </div>
   );

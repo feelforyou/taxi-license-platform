@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Pages/Home";
+import Spinner from "./Components/Spinner/Spinner";
 const CarsForRent = React.lazy(() => import("./Pages/CarsForRent"));
 const LogIn = React.lazy(() => import("./Pages/LogIn"));
 const SignUp = React.lazy(() => import("./Pages/SignUp"));
@@ -15,13 +16,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <Suspense
-        fallback={
-          <div className="loading-container">
-            <div className="loading"></div>
-          </div>
-        }
-      >
+      <Suspense fallback={<Spinner />}>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/cars" element={<CarsForRent />} />

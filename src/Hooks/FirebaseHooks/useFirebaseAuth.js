@@ -37,7 +37,7 @@ const useFirebaseAuth = () => {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       const loggedInUser = userCredential.user;
       setUser({

@@ -1,0 +1,65 @@
+/* tabs.module.css */
+
+.tabsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  overflow: hidden; /* რომ შიდა კონტენტმა კუთხეები არ გადაფაროს */
+  border: 1px solid #f1f5f9;
+}
+
+.tabsBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 0 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab {
+  padding: 1.2rem 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent; /* უხილავი ხაზი, რომ ზომა არ იცვლებოდეს */
+  transition: all 0.3s ease;
+  margin-bottom: -2px; /* რომ ხაზი ზუსტად border-bottom-ზე დაჯდეს */
+}
+
+.tab:hover {
+  color: #334155;
+}
+
+.activeTab {
+  color: var(--BGCOLOR, #0ea5e9);
+  border-bottom: 3px solid var(--BGCOLOR, #0ea5e9);
+}
+
+.tabsContent {
+  padding: 2rem 1.5rem;
+  background-color: #ffffff;
+  min-height: 400px; /* რომ ტაბების გადართვისას გვერდი არ ხტოდეს */
+}
+
+/* მობილურის რესპონსივი ტაბებისთვის */
+@media screen and (max-width: 640px) {
+  .tabsBar {
+    justify-content: space-between;
+    padding: 0 0.5rem;
+  }
+
+  .tab {
+    padding: 1rem 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .tabsContent {
+    padding: 1.5rem 1rem;
+  }
+}

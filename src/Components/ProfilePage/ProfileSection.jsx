@@ -1,21 +1,29 @@
 import React from "react";
 import { useGlobalContext } from "../../Context/Context";
 import { ProfileAvatar } from "../../Data/data";
+import styles from "./profileSection.module.css"; // შემოდის სტილები
+
 function ProfileSection() {
   const { user } = useGlobalContext();
+
   return (
-    <div className="profile-section">
-      {user.avatar ? (
+    <div className={styles.profileSection}>
+      {/* ვამოწმებთ, აქვს თუ არა იუზერს ავატარი */}
+      {user?.avatar ? (
         <img
-          src={user.avatar || DefaultAvatar}
+          src={user.avatar}
           alt="Driver Profile"
-          className="profile-image"
+          className={styles.profileImage}
         />
       ) : (
-        <ProfileAvatar className="profile-image" />
+        <ProfileAvatar className={styles.profileImage} />
       )}
-      <div className="profile-name">{user.name}</div>
-      <div className="profile-detail">{user.email}</div>
+
+      {/* სახელი (თუ არ აქვს მითითებული, User-ს დავწერთ) */}
+      <div className={styles.profileName}>{user?.name || "User"}</div>
+
+      {/* იმეილი */}
+      <div className={styles.profileDetail}>{user?.email}</div>
     </div>
   );
 }

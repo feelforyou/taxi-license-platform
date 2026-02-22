@@ -1,18 +1,21 @@
 import React from "react";
+import { Link } from "react-router-dom"; // შემოვიტანეთ Link!
+import styles from "./error.module.css"; // შემოვიტანეთ სტილები
 
 const Error = () => {
   return (
-    <div className="error-container">
-      <div className="error-content">
-        <h1>404</h1>
-        <h2>Oops! Page Not Found</h2>
-        <p>
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <h1 className={styles.errorCode}>404</h1>
+        <h2 className={styles.title}>Oops! Page Not Found</h2>
+        <p className={styles.description}>
           We can't seem to find the page you're looking for. Check the URL or
           head back home.
         </p>
-        <a href="/" className="error-home-button">
+        {/* a ტეგის მაგივრად ვიყენებთ Link-ს სწრაფი ნავიგაციისთვის */}
+        <Link to="/" className={styles.homeBtn}>
           Go Home
-        </a>
+        </Link>
       </div>
     </div>
   );

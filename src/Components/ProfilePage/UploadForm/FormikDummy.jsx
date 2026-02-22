@@ -14,12 +14,13 @@ import { carBrandsAndModels } from "../../../Data/CarData";
 import { validationSchema } from "../../../Forms/FormValidation";
 import { uploadImageToFirebase } from "../../../Forms/uploadImageToFirebase";
 import { useNavigate } from "react-router-dom";
+import styles from "./uploadForm.module.css"; // შემოდის ახალი სტილები
 
 const FormikDummy = () => {
   const [loading, setLoading] = useState(false);
 
   const { user, showModal } = useGlobalContext();
-  const usersRef = collection(db, "users"); // Reference to the 'users' collection
+  const usersRef = collection(db, "users");
   const carRef = collection(db, "cars");
   const navigate = useNavigate();
 
@@ -48,38 +49,29 @@ const FormikDummy = () => {
         return;
       }
 
-      // Get the unique name based on auth status
       let uniqueName = user.name || user.email.split("@")[0];
 
       try {
-        // Use the helper function to handle the image upload
         const downloadURL = await uploadImageToFirebase(user.uid, values.image);
         const currentDate = new Date();
         const currentSubmissionDate = Timestamp.fromDate(currentDate);
 
-        /////////////////////
-
-        // Ensure user exists in users collection or create it
-        const userDocRef = doc(usersRef, user.uid); // Create a reference to the user's document
-        const userDoc = await getDoc(userDocRef); // Try to fetch the user's document
+        const userDocRef = doc(usersRef, user.uid);
+        const userDoc = await getDoc(userDocRef);
 
         if (!userDoc.document) {
-          // If the user's document doesn't exist, create it
-
           try {
             await setDoc(userDocRef, {
               name: values.name,
               email: values.email,
               phoneNumber: values.phoneNumber,
               avatar: user.avatar,
-              uniqueName, // Storing the unique name in the user's document
+              uniqueName,
             });
           } catch (error) {
             console.error("Error creating user document:", error);
           }
         }
-
-        ////////////////////
 
         const newCar = {
           submissionDate: currentSubmissionDate,
@@ -89,7 +81,6 @@ const FormikDummy = () => {
           price: values.price,
           location: values.location,
           imageUrl: downloadURL,
-          // addedByUID: user.uid,
           addedByUID: userDocRef,
           brand: values.brand,
           model: values.model,
@@ -97,7 +88,7 @@ const FormikDummy = () => {
           mileage: values.mileage,
           fuelType: values.fuelType,
           email: values.email,
-          uniqueName, // Storing the unique name in the user's document
+          uniqueName,
         };
 
         await addDoc(carRef, newCar);
@@ -107,6 +98,9 @@ const FormikDummy = () => {
         window.scrollTo(0, 0);
       } catch (error) {
         console.error("Error: ", error);
+        formik.setStatus(
+          "An error occurred while uploading. Please try again.",
+        );
       } finally {
         setLoading(false);
       }
@@ -120,17 +114,16 @@ const FormikDummy = () => {
   }, [formik.values.brand]);
 
   return (
-    <>
-      <form className="upload-form-container" onSubmit={formik.handleSubmit}>
-        {formik.status && (
-          <p className="submit-error-message">{formik.status}</p>
-        )}
+    <form className={styles.formContainer} onSubmit={formik.handleSubmit}>
+      {/* მთავარი ერორი სტატუსიდან */}
+      {formik.status && (
+        <p className={styles.submitErrorMessage}>{formik.status}</p>
+      )}
 
-        {/* Brand */}
-        {formik.touched.brand && formik.errors.brand && (
-          <div className="formik-error">{formik.errors.brand}</div>
-        )}
+      {/* Brand */}
+      <div className={styles.formGroup}>
         <select
+          className={styles.inputField}
           name="brand"
           value={formik.values.brand}
           onChange={formik.handleChange}
@@ -145,39 +138,42 @@ const FormikDummy = () => {
             </option>
           ))}
         </select>
-
-        {/* Model */}
-        {formik.values.brand && (
-          <>
-            {formik.touched.model && formik.errors.model && (
-              <div className="formik-error">{formik.errors.model}</div>
-            )}
-            <select
-              name="model"
-              value={formik.values.model || ""}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            >
-              <option value="" disabled>
-                Select Model
-              </option>
-              {(
-                carBrandsAndModels.find((b) => b.brand === formik.values.brand)
-                  ?.models || []
-              ).map((model) => (
-                <option key={model} value={model}>
-                  {model}
-                </option>
-              ))}
-            </select>
-          </>
+        {formik.touched.brand && formik.errors.brand && (
+          <div className={styles.errorMessage}>{formik.errors.brand}</div>
         )}
+      </div>
 
-        {/* Year */}
-        {formik.touched.year && formik.errors.year && (
-          <div className="formik-error">{formik.errors.year}</div>
-        )}
+      {/* Model */}
+      <div className={styles.formGroup}>
         <select
+          className={styles.inputField}
+          name="model"
+          value={formik.values.model || ""}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={!formik.values.brand} /* გავუთიშოთ თუ ბრენდი არაა არჩეული */
+        >
+          <option value="" disabled>
+            Select Model
+          </option>
+          {(
+            carBrandsAndModels.find((b) => b.brand === formik.values.brand)
+              ?.models || []
+          ).map((model) => (
+            <option key={model} value={model}>
+              {model}
+            </option>
+          ))}
+        </select>
+        {formik.touched.model && formik.errors.model && (
+          <div className={styles.errorMessage}>{formik.errors.model}</div>
+        )}
+      </div>
+
+      {/* Year */}
+      <div className={styles.formGroup}>
+        <select
+          className={styles.inputField}
           name="year"
           value={formik.values.year}
           onChange={formik.handleChange}
@@ -186,34 +182,43 @@ const FormikDummy = () => {
           <option value="" disabled>
             Select Year
           </option>
-          {Array.from({ length: 29 }, (_, i) => 1995 + i).map((year) => (
+          {Array.from({ length: 30 }, (_, i) => 1995 + i).map((year) => (
             <option key={year} value={year}>
               {year}
             </option>
           ))}
         </select>
-
-        {/* Price */}
-        {formik.touched.price && formik.errors.price && (
-          <div className="formik-error">{formik.errors.price}</div>
+        {formik.touched.year && formik.errors.year && (
+          <div className={styles.errorMessage}>{formik.errors.year}</div>
         )}
+      </div>
+
+      {/* Price */}
+      <div className={styles.formGroup}>
         <input
+          className={styles.inputField}
           type="number"
-          placeholder="Price"
+          placeholder="Price ($)"
           name="price"
           value={formik.values.price}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-
-        {/* Fuel Type */}
-        {formik.touched.fuelType && formik.errors.fuelType && (
-          <div className="formik-error">{formik.errors.fuelType}</div>
+        {formik.touched.price && formik.errors.price && (
+          <div className={styles.errorMessage}>{formik.errors.price}</div>
         )}
-        <div className="fueltype-container">
+      </div>
+
+      {/* Fuel Type */}
+      <div className={styles.formGroup}>
+        <div className={styles.fuelTypeContainer}>
           {["Petrol", "Hybrid", "Gas", "Electric"].map((type) => (
-            <label className="radio-btn" key={type}>
+            <label
+              key={type}
+              className={`${styles.radioLabel} ${formik.values.fuelType === type ? styles.radioChecked : ""}`}
+            >
               <input
+                className={styles.radioInput}
                 type="radio"
                 name="fuelType"
                 value={type}
@@ -225,12 +230,15 @@ const FormikDummy = () => {
             </label>
           ))}
         </div>
-
-        {/* Mileage */}
-        {formik.touched.mileage && formik.errors.mileage && (
-          <div className="formik-error">{formik.errors.mileage}</div>
+        {formik.touched.fuelType && formik.errors.fuelType && (
+          <div className={styles.errorMessage}>{formik.errors.fuelType}</div>
         )}
+      </div>
+
+      {/* Mileage */}
+      <div className={styles.formGroup}>
         <select
+          className={styles.inputField}
           name="mileage"
           value={formik.values.mileage}
           onChange={formik.handleChange}
@@ -245,12 +253,15 @@ const FormikDummy = () => {
             </option>
           ))}
         </select>
-
-        {/* Location */}
-        {formik.touched.location && formik.errors.location && (
-          <div className="formik-error">{formik.errors.location}</div>
+        {formik.touched.mileage && formik.errors.mileage && (
+          <div className={styles.errorMessage}>{formik.errors.mileage}</div>
         )}
+      </div>
+
+      {/* Location */}
+      <div className={styles.formGroup}>
         <select
+          className={styles.inputField}
           name="location"
           value={formik.values.location}
           onChange={formik.handleChange}
@@ -265,37 +276,15 @@ const FormikDummy = () => {
             </option>
           ))}
         </select>
-
-        {/* Description */}
-        {formik.touched.description && formik.errors.description && (
-          <div className="formik-error">{formik.errors.description}</div>
+        {formik.touched.location && formik.errors.location && (
+          <div className={styles.errorMessage}>{formik.errors.location}</div>
         )}
-        <textarea
-          placeholder="Description"
-          name="description"
-          value={formik.values.description}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
+      </div>
 
-        {/* Image */}
-        {formik.touched.image && formik.errors.image && (
-          <div className="formik-error">{formik.errors.image}</div>
-        )}
+      {/* Name */}
+      <div className={styles.formGroup}>
         <input
-          type="file"
-          name="image"
-          onChange={(event) => {
-            formik.setFieldValue("image", event.currentTarget.files[0]);
-          }}
-          onBlur={formik.handleBlur}
-        />
-
-        {/* Name */}
-        {formik.touched.name && formik.errors.name && (
-          <div className="formik-error">{formik.errors.name}</div>
-        )}
-        <input
+          className={styles.inputField}
           type="text"
           placeholder="Name"
           name="name"
@@ -304,12 +293,15 @@ const FormikDummy = () => {
           onBlur={formik.handleBlur}
           autoComplete="name"
         />
-
-        {/* Phone Number */}
-        {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-          <div className="formik-error">{formik.errors.phoneNumber}</div>
+        {formik.touched.name && formik.errors.name && (
+          <div className={styles.errorMessage}>{formik.errors.name}</div>
         )}
+      </div>
+
+      {/* Phone Number */}
+      <div className={styles.formGroup}>
         <input
+          className={styles.inputField}
           type="tel"
           placeholder="5xxxxxxxx"
           name="phoneNumber"
@@ -320,12 +312,15 @@ const FormikDummy = () => {
           onBlur={formik.handleBlur}
           autoComplete="tel"
         />
+        {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+          <div className={styles.errorMessage}>{formik.errors.phoneNumber}</div>
+        )}
+      </div>
 
-        {/* Email */}
-        {formik.touched.email && formik.errors.email ? (
-          <div className="formik-error">{formik.errors.email}</div>
-        ) : null}
+      {/* Email */}
+      <div className={styles.formGroup}>
         <input
+          className={styles.inputField}
           type="email"
           placeholder="Email"
           name="email"
@@ -334,13 +329,60 @@ const FormikDummy = () => {
           onBlur={formik.handleBlur}
           autoComplete="email"
         />
+        {formik.touched.email && formik.errors.email && (
+          <div className={styles.errorMessage}>{formik.errors.email}</div>
+        )}
+      </div>
 
-        {/* Submit Button */}
-        <button type="submit" disabled={formik.isSubmitting}>
-          {loading ? <span className="spinner-upload-form"></span> : "Add Car"}
+      {/* Image (მთელ სიგანეზე) */}
+      <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+        <input
+          className={styles.inputField}
+          type="file"
+          name="image"
+          onChange={(event) => {
+            formik.setFieldValue("image", event.currentTarget.files[0]);
+          }}
+          onBlur={formik.handleBlur}
+          style={{ cursor: "pointer", padding: "0.6rem 1rem" }}
+        />
+        {formik.touched.image && formik.errors.image && (
+          <div className={styles.errorMessage}>{formik.errors.image}</div>
+        )}
+      </div>
+
+      {/* Description (მთელ სიგანეზე) */}
+      <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+        <textarea
+          className={styles.inputField}
+          placeholder="Description"
+          name="description"
+          value={formik.values.description}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          rows="4"
+          style={{ resize: "vertical" }}
+        />
+        {formik.touched.description && formik.errors.description && (
+          <div className={styles.errorMessage}>{formik.errors.description}</div>
+        )}
+      </div>
+
+      {/* Submit Button (მთელ სიგანეზე) */}
+      <div className={styles.fullWidth}>
+        <button
+          className={styles.submitBtn}
+          type="submit"
+          disabled={formik.isSubmitting || loading}
+        >
+          {loading ? (
+            <span className={styles.spinnerUploadForm}></span>
+          ) : (
+            "Add Car"
+          )}
         </button>
-      </form>
-    </>
+      </div>
+    </form>
   );
 };
 

@@ -1,0 +1,27 @@
+/* spinner.module.css */
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 250px; /* რომ პატარა სივრცეში არ მოექცეს და ლამაზად იდგეს შუაში */
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e2e8f0; /* ღია ნაცრისფერი უკანა ფონი */
+  border-top-color: var(--BGCOLOR, #0ea5e9); /* შენი ბრენდის ფერი (ტრიალებს) */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

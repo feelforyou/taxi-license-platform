@@ -3,44 +3,46 @@ import ProfileSection from "./ProfileSection";
 import Listings from "./Listings/Listings";
 import FormikDummy from "./UploadForm/FormikDummy";
 import RealtimeChat from "./Messages/RealtimeChat";
+import styles from "./tabs.module.css"; // შემოვიტანეთ სტილები
+
 function Tabs({ initialTab }) {
   const [activeTab, setActiveTab] = useState(initialTab || "myprofile");
 
   return (
-    <div className="tabs-container">
-      <div className="tabs-bar">
+    <div className={styles.tabsContainer}>
+      <div className={styles.tabsBar}>
         <div
-          className={`tab ${activeTab === "listings" ? "active-tab" : ""}`}
+          className={`${styles.tab} ${activeTab === "listings" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("listings")}
         >
           Listings
         </div>
+
         <div
-          className={`tab ${activeTab === "upload" ? "active-tab" : ""}`}
+          className={`${styles.tab} ${activeTab === "upload" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("upload")}
         >
           Add Car +
         </div>
 
         <div
-          className={`tab ${activeTab === "myprofile" ? "active-tab" : ""}`}
+          className={`${styles.tab} ${activeTab === "myprofile" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("myprofile")}
         >
           Profile
         </div>
+
         <div
-          className={`tab ${activeTab === "messages" ? "active-tab" : ""}`}
+          className={`${styles.tab} ${activeTab === "messages" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("messages")}
         >
           Messages
         </div>
       </div>
 
-      <div className="tabs-content">
+      <div className={styles.tabsContent}>
         {activeTab === "myprofile" && <ProfileSection />}
-        {/* {activeTab === "messages" && <MessagesList />} */}
         {activeTab === "messages" && <RealtimeChat />}
-
         {activeTab === "listings" && <Listings />}
         {activeTab === "upload" && <FormikDummy />}
       </div>

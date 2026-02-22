@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../FirebaseConfig/firebaseConfig";
+import styles from "./signup.module.css"; // შემოდის ახალი სტილები
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ const SignUp = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       const user = userCredential.user;
 
@@ -41,19 +42,20 @@ const SignUp = () => {
     }
   };
 
+  // 1. წარმატებული რეგისტრაციის ეკრანი
   if (signupSuccess) {
     return (
-      <div className="signup-container">
-        <div className="signup-container-main">
-          <h2 className="signup-heading">Success!</h2>
-          <p className="signup-success-message">
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h2 className={styles.heading}>Success!</h2>
+          <p className={styles.successMessage}>
             Signup successful! Please check your email for a verification link
             to complete the registration. (Also, check the spam folder if you
             don't see it in your inbox).
           </p>
           <button
             onClick={() => navigate("/login")}
-            className="proceed-login-btn"
+            className={styles.submitBtn}
           >
             Proceed to Login
           </button>
@@ -62,18 +64,21 @@ const SignUp = () => {
     );
   }
 
+  // 2. რეგისტრაციის ფორმის ეკრანი
   return (
-    <div className="signup-container">
-      <div className="signup-container-main">
-        {error && <p className="signup-error-message">{error}</p>}
-        <h2 className="signup-heading">Sign Up</h2>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h2 className={styles.heading}>Sign Up</h2>
+
+        {error && <p className={styles.errorMessage}>{error}</p>}
+
         <form onSubmit={handleSubmit}>
-          <div className="signup-input-group">
-            <label className="signup-label" htmlFor="email">
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="email">
               Email
             </label>
             <input
-              className="signup-input"
+              className={styles.input}
               type="email"
               id="email"
               name="email"
@@ -81,14 +86,16 @@ const SignUp = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               autoComplete="new-email"
+              required
             />
           </div>
-          <div className="signup-input-group">
-            <label className="signup-label" htmlFor="password">
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="password">
               Password
             </label>
             <input
-              className="signup-input"
+              className={styles.input}
               type="password"
               id="password"
               name="password"
@@ -96,14 +103,16 @@ const SignUp = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               autoComplete="new-password"
+              required
             />
           </div>
-          <div className="signup-input-group">
-            <label className="signup-label" htmlFor="confirm-password">
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="confirm-password">
               Confirm Password
             </label>
             <input
-              className="signup-input"
+              className={styles.input}
               type="password"
               id="confirm-password"
               name="confirm-password"
@@ -111,9 +120,11 @@ const SignUp = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Re-enter your password"
               autoComplete="confirm-password"
+              required
             />
           </div>
-          <button className="signup-btn" type="submit">
+
+          <button className={styles.submitBtn} type="submit">
             Sign Up
           </button>
         </form>

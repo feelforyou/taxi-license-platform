@@ -1,0 +1,159 @@
+/* uploadForm.module.css */
+
+.formContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* მობილურზე 1 სვეტი */
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@media screen and (min-width: 768px) {
+  .formContainer {
+    grid-template-columns: 1fr 1fr; /* დესკტოპზე 2 სვეტი */
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ელემენტები, რომლებიც ორივე სვეტს დაიკავებენ */
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.inputField:focus {
+  border-color: var(--BGCOLOR, #0ea5e9);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.inputField:disabled {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* ერორის მესიჯი ველების ქვეშ */
+.errorMessage {
+  font-size: 0.85rem;
+  color: #ef4444;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* მთავარი ერორი (ფორმაზე) */
+.submitErrorMessage {
+  grid-column: 1 / -1;
+  background-color: #fef2f2;
+  color: #ef4444;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #fecaca;
+}
+
+/* Fuel Type რადიო ღილაკები (Pill დიზაინი) */
+.fuelTypeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.radioLabel {
+  flex: 1;
+  text-align: center;
+  padding: 0.7rem 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-width: 70px;
+}
+
+.radioInput {
+  display: none; /* ვმალავთ სტანდარტულ მრგვალ ღილაკს */
+}
+
+.radioChecked {
+  background-color: var(--BGCOLOR, #0ea5e9);
+  color: white;
+  border-color: var(--BGCOLOR, #0ea5e9);
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+}
+
+/* Submit ღილაკი და მისი სპინერი */
+.submitBtn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: var(--BGCOLOR, #0ea5e9);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: var(--BGCOLOR-HOVER, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+}
+
+.submitBtn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.spinnerUploadForm {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

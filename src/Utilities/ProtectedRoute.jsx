@@ -1,6 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useGlobalContext } from "../Context/Context";
 import ProfilePage from "../Pages/ProfilePage";
+import Spinner from "../Components/Spinner/Spinner";
 
 function ProtectedRoute() {
   const { user, isLoading, isAuthenticated } = useGlobalContext();
@@ -8,11 +9,7 @@ function ProtectedRoute() {
   const { userID, tab } = useParams();
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading"></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   // Check if the user is authenticated and the UID from the route matches the user's UID

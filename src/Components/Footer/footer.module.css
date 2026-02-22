@@ -1,0 +1,61 @@
+/* footer.module.css */
+
+.footerContainer {
+  background-color: #f8fafc; /* მსუბუქი ნაცრისფერი ფონი */
+  padding: 3rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto; /* თუ გვერდი ცარიელია, footer-ს სულ ბოლოში აგდებს */
+}
+
+.socialContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.socialLink:hover {
+  color: #ffffff;
+  background-color: var(--BGCOLOR, #0ea5e9);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.2);
+}
+
+.socialIcon {
+  /* თუ აიქონებს შიგნით სჭირდებათ ზომის/ფერის მემკვიდრეობით მიღება */
+  transition: color 0.3s ease;
+}
+
+.footerBottom {
+  width: 100%;
+  max-width: 1200px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+  text-align: center;
+}
+
+.footerBottom p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+}
