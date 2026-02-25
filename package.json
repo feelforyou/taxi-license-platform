@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@esbuild/linux-x64": "^0.27.3",
     "firebase": "^10.1.0",
     "formik": "^2.4.3",
     "react": "^18.2.0",
